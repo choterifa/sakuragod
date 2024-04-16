@@ -8,6 +8,8 @@
     --color-gris: #515051;
     --color-verde: #66d5aadb;
     --color-fondo: #dfdde3;
+    --color-azul: #5060e3;
+    --color-rojo: #fe4059;
 
 }
 
@@ -65,34 +67,32 @@
 
 .resumen {
     /*fondo de resumen*/
-    width: 80%;
-    /* background-color: rgba(190, 18, 18, 0.847); */
+    width: 100%;
     height: 100vh;
     background-color: var(--color-fondo);
 }
 
-.resumen__titulo{
+.resumen__titulo {
     margin: 30px 0px 0px 30px;
 }
 
-.resumen__cards { /*contenedor de las tarjetas*/
+.resumen__cards {
+    /*contenedor de las tarjetas*/
     display: flex;
     width: 100%;
-    justify-content: space-between;
-    padding: 20px;
-    /* background-color: yellow; */
+    justify-content: space-around;
+    padding: 18px;
+    margin: 10px 0 20px 0px;
 }
 
 .resumen__card__item {
     /*tarjetas*/
-    width:20%;
-    height: 150px;
+    width: 17%;
+    height: 120px;
     background-color: #f3f3f3;
     border-radius: 10px;
-    /* box-shadow: 5px 5px 10px 5px  rgb(74, 73, 73); */
+    box-shadow: 0px 0px 5px 0px rgba(73, 71, 71, 0.194);
 }
-
-
 
 .resumen__card__textos {
     display: flex;
@@ -104,7 +104,7 @@
 }
 
 .resumen__card__titulo {
-    font-size: 40px;
+    font-size: 36px;
     color: #66d5aadb;
 }
 
@@ -116,29 +116,53 @@
 }
 
 .resumen__paragraph {
-    font-size: 25px;
+    font-size: 19px;
     color: var(--color-gris);
     margin: 0;
 }
 
 .resumen__card__icon {
-    font-size: 20px;
+    font-size: 19px;
     color: var(--color-gris);
 }
 
-/*banderas*/
- .resumen__card__item--bandera{
-    width: 200px;
-    height: 75px;
-    border-radius: 5px;
- }
+.resumen__card__icon--modify {
+    font-size: 17px;
+}
 
- .resumen__card__textos--modify{
+/*banderas*/
+.container__banderas {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.resumen__card__item--bandera {
+    width: 200px;
+    height: 43%;
+    border-radius: 5px;
+}
+
+.resumen__card__textos--modify {
     flex-direction: row;
     align-items: center;
     justify-content: center;
     gap: 10px;
- }
+}
+
+.resumen__paragraph__bandera {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+.resumen__card__titulo__bandera {
+    margin: 0;
+    font-size: 20px;
+}
+
+
+
+
 /*parte 2*/
 
 .resumen__card__item2 {
@@ -148,32 +172,82 @@
     padding: 10px;
     background-color: #f3f3f3;
     border-radius: 10px;
-    /* box-shadow: 5px 5px 10px 5px  rgb(74, 73, 73); */
+    box-shadow: 0px 0px 5px 0px rgba(73, 71, 71, 0.194);
 }
 
-.resumen__card__items__vendidos{
+.resumen__card__titulo2 {
+    /*titulos widgets*/
+    margin: 5px 0 20px 25px;
+}
+
+.resumen__card__items__vendidos {
+    /*fotos*/
     display: flex;
     gap: 2px;
-
 }
 
-.resumen__card__items{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 33%;
-
-}
-.resumen__imagen__container{
-}
-
-.imagen{
+.imagen {
     width: 120px;
     height: 120px;
     display: block;
     object-fit: cover;
 }
 
-.resumen__card__titulo2{
-    margin: 5px 0 20px 25px;
+.resumen__card__items {
+    /*entre fotos*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 33%;
+    /* white-space: nowrap; */
+    overflow: hidden;
+    /* background-color: red; */
+    padding: 10px 15px;
+    text-align: center;
+
+}
+
+.resumen__paragraph2 {
+    /*todos los p 2*/
+    color: var(--color-gris);
+    margin: 0;
+}
+
+/*reembolso*/
+.resumen__cards--modify {
+    justify-content: space-between;
+    /* background-color: yellow; */
+    width: 95%;
+    margin-left: 17px;
+    
+}
+
+.resumen__card__item2--reebolso {
+    width: 25%;
+    height: 180px;
+    min-height: 10px;
+}
+
+.resumen__card__reembolso__flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+.resumen__paragraph__invertir {
+    font-size: 18px;
+    color: var(--color-gris);
+}
+
+.resumen__card__invertir {
+    font-size: 2.2rem;
+    color: var(--color-rojo);
+}
+
+.resumen__card__item2--ultimo{
+    min-height: 50px;
+    height: 100px;
 }

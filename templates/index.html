@@ -6,8 +6,8 @@
 {%block index%}
 <section class="resumen">
 
-    <h1 class="resumen__titulo">Actividad</h1>
-    
+    <h1 class="resumen__titulo">Movimientos</h1>
+
 
     <div class="resumen__cards">
 
@@ -25,7 +25,9 @@
             <div class="resumen__card__textos">
                 <h3 class="resumen__card__titulo">200</h3>
                 <div class="resumen__card__paragraph">
-                    <i class="bi bi-receipt resumen__card__icon"></i>
+                    <!-- <i class="bi bi-receipt "></i> -->
+                    <i class="bi bi-cash-stack resumen__card__icon"></i>
+
                     <p class="resumen__paragraph">Ganancia</p>
                 </div>
             </div>
@@ -35,8 +37,8 @@
             <div class="resumen__card__textos">
                 <h3 class="resumen__card__titulo">4</h3>
                 <div class="resumen__card__paragraph">
-                    <i class="bi bi-receipt resumen__card__icon"></i>
-                    <p class="resumen__paragraph">A enviar</p>
+                    <i class="bi bi-truck resumen__card__icon"></i>
+                    <p class="resumen__paragraph">Enviar</p>
                 </div>
             </div>
         </div>
@@ -45,32 +47,41 @@
             <div class="resumen__card__textos">
                 <h3 class="resumen__card__titulo">2</h3>
                 <div class="resumen__card__paragraph">
-                    <i class="bi bi-receipt resumen__card__icon"></i>
+                    <i class="bi bi-calendar resumen__card__icon resumen__card__icon--modify"></i>
                     <p class="resumen__paragraph">Apartados</p>
                 </div>
             </div>
         </div>
 
-        <div class="resumen__card__item  resumen__card__item--bandera">
-            <div class="resumen__card__textos resumen__card__textos--modify">
-                <h3 class="resumen__card__titulo">2</h3>
-                <div class="resumen__card__paragraph">
-                    <p class="resumen__paragraph">Apartadosasd</p>
+        <!--banderas-->
+        <div class="container__banderas">
+            <div class="resumen__card__item  resumen__card__item--bandera">
+                <div class="resumen__card__textos resumen__card__textos--modify">
+                    <p class="resumen__paragraph__bandera">Ventas del dia</p>
+                    <h3 class="resumen__card__titulo__bandera">20</h3>
                 </div>
             </div>
+
+            <div class="resumen__card__item  resumen__card__item--bandera">
+                <div class="resumen__card__textos resumen__card__textos--modify">
+                    <p class="resumen__paragraph__bandera">Total de items</p>
+                    <h3 class="resumen__card__titulo__bandera">200</h3>
+                </div>
+            </div>
+
         </div>
+
 
 
     </div>
 
     <!-- <h1 class="resumen__titulo">Resumen</h1> -->
 
-    <div class="resumen__cards resumen__cards--2">
+    <div class="resumen__cards">
 
         <div class="resumen__card__item2 ">
 
-            <h3 class="resumen__card__titulo2">3 mas vendidos</h3>
-
+            <h3 class="resumen__card__titulo2">3 Más vendidos</h3>
             <div class="resumen__card__items__vendidos">
 
                 <div class="resumen__card__items">
@@ -78,9 +89,8 @@
                         <img src="https://images.unsplash.com/photo-1569411032431-07598b0012c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTMyNTI5MzZ8&ixlib=rb-4.0.3&q=80&w=1080"
                             alt="" class="imagen">
                     </figure>
-                    <p class="resumen__paragraph2">Sabana</p>
-                    <h3 class="resumen__card__pzas">2 pzas</h3>
-
+                    <p class="resumen__paragraph2">Sabana </p>
+                    <h3 class="resumen__card__pzas">60 pzas</h3>
                 </div>
 
                 <div class="resumen__card__items">
@@ -89,10 +99,8 @@
                             alt="" class="imagen">
                     </figure>
                     <p class="resumen__paragraph2">Sabana</p>
-                    <h3 class="resumen__card__pzas">2 pzas</h3>
-
+                    <h3 class="resumen__card__pzas">40 pzas</h3>
                 </div>
-
 
                 <div class="resumen__card__items">
                     <figure>
@@ -100,15 +108,14 @@
                             alt="" class="imagen">
                     </figure>
                     <p class="resumen__paragraph2">Sabana</p>
-                    <h3 class="resumen__card__pzas">2 pzas</h3>
-                    
+                    <h3 class="resumen__card__pzas">30 pzas</h3>
                 </div>
-
 
             </div>
-
         </div>
 
+
+        <!-- Apartados  2-->
         <div class="resumen__card__item2">
             <div class="resumen__card__textos">
                 <h3 class="resumen__card__titulo">2</h3>
@@ -120,51 +127,20 @@
         </div>
     </div>
 
-    <div class="resumen__cards resumen__cards--2">
-    
-        <div class="resumen__card__item2 ">
-    
-            <h3 class="resumen__card__titulo2">3 mas vendidos</h3>
-    
-            <div class="resumen__card__items__vendidos">
-    
-                <div class="resumen__card__items">
-                    <figure class="resumen__imagen__container">
-                        <img src="https://images.unsplash.com/photo-1569411032431-07598b0012c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTMyNTI5MzZ8&ixlib=rb-4.0.3&q=80&w=1080"
-                            alt="" class="imagen">
-                    </figure>
-                    <p class="resumen__paragraph2">Sabana</p>
-                    <h3 class="resumen__card__pzas">2 pzas</h3>
-    
-                </div>
-    
-                <div class="resumen__card__items">
-                    <figure>
-                        <img src="https://images.unsplash.com/photo-1569411032431-07598b0012c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTMyNTI5MzZ8&ixlib=rb-4.0.3&q=80&w=1080"
-                            alt="" class="imagen">
-                    </figure>
-                    <p class="resumen__paragraph2">Sabana</p>
-                    <h3 class="resumen__card__pzas">2 pzas</h3>
-    
-                </div>
-    
-    
-                <div class="resumen__card__items">
-                    <figure>
-                        <img src="https://images.unsplash.com/photo-1569411032431-07598b0012c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTMyNTI5MzZ8&ixlib=rb-4.0.3&q=80&w=1080"
-                            alt="" class="imagen">
-                    </figure>
-                    <p class="resumen__paragraph2">Sabana</p>
-                    <h3 class="resumen__card__pzas">2 pzas</h3>
-    
-                </div>
-    
-    
+
+    <!--resurtir-->
+    <div class="resumen__cards resumen__cards--modify ">
+
+        <div class="resumen__card__item2 resumen__card__item2--reebolso">
+            <!-- <h3 class="resumen__card__titulo2">Proovedor</h3> -->
+            <div class="resumen__card__reembolso__flex">
+                <p class="resumen__paragraph__invertir">Dinero a invertir</p>
+                <h3 class="resumen__card__invertir">5000</h3>
             </div>
-    
         </div>
-    
-        <div class="resumen__card__item2">
+
+        <!--ultimo-->
+        <div class="resumen__card__item2 resumen__card__item2--ultimo">
             <div class="resumen__card__textos ">
                 <h3 class="resumen__card__titulo">2</h3>
                 <div class="resumen__card__paragraph">
@@ -173,7 +149,8 @@
                 </div>
             </div>
         </div>
-    </div>  
+
+    </div>
 
 
 
