@@ -1,0 +1,305 @@
+/* LETRAS */
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    /*outline: 1px solid red;*/
+}
+
+
+/* Aplicar la fuente Roboto al cuerpo del documento */
+body {
+    scroll-behavior: smooth;
+    font-family: 'Raleway', sans-serif;
+    color: #4B60EB;
+}
+
+/* vxcvxcvxcv */
+h1,
+h2,
+p {
+    font-family: 'Raleway', sans-serif;
+    color: #4B60EB;
+}
+
+
+/*seccion del login*/
+.container__signin {
+    margin: 0 auto;
+    width: 100%;
+    height: 100vh;
+    background-color: red;
+    background-image: linear-gradient(to right, #000000, #000000, #c7af9d);
+}
+
+.container__signin__flex {
+    /*flex imagen y titulos*/
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    /* margin-top: 10vh; */
+    height: 100%;
+    /* border-radius: 25px; */
+    /* gap: 15px; */
+    /* color: black; */
+    /* background-color: linear; */
+    width: 80vw;    
+    /* background-color: red; */
+
+
+
+}
+
+.container__sigin__titulos {
+    margin: 0 auto;
+    padding: 20px 40px;
+    border-radius: 12px;
+    background-color: #28033142;
+}
+
+.container__imagen__signin {
+    height: 100%;
+    width: 50%;
+    /* background-color: yellow; */
+}
+
+.imagen__signin {
+    width: 100%;
+    height: 100%;
+    border-radius: 25px 0 0 25px;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+.signin__titulo {
+    font-size: 60px;
+    color: rgba(0, 0, 0, 0.519);
+    color: white;
+    margin: 5px 0px;
+    padding: 10px 0px;
+}
+
+.form-control {
+    /*los formualrios*/
+    padding: 12.5px;
+    margin-top: 11px;
+}
+
+input,
+::placeholder {
+    font-family: "Raleway", sans-serif;
+}
+
+label {
+    color: white;
+}
+
+.forget {
+    color: white;
+    text-decoration: none;
+}
+
+.divisor {
+    color: white;
+}
+
+.btn__form {
+    width: 100%;
+    font-size: 1rem;
+    padding: 11.5px;
+}
+
+.btn_facebook {
+    width: 100%;
+    padding: 11.5px;
+    font-size: 1rem;
+    border: none;
+}
+
+.btn_twitter {
+    width: 100%;
+    padding: 11.5px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    border: none;
+}
+
+.btn_twitter:hover {
+    background-color: #3f9af5 !important;
+}
+
+.btn_facebook:hover {
+    background-color: #3759b6 !important;
+}
+
+.sigin__metodos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sigin__remember {
+    justify-content: space-around;
+}
+
+
+/*informacion*/
+
+.informacion {
+
+    width: 400px;
+    height: 200px;
+    background-image: linear-gradient(to right top, #00000060, #39032f79, #a38873df);
+    border-radius: 15px;
+    position: absolute;
+    top: 240px;
+    left: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: none;
+
+}
+
+.informacion:hover {
+    background-image: linear-gradient(to right top, #00000069, #50084287, #ad9482df);
+    background-size: 150% 150%;
+    /* Tamaño del gradiente */
+    animation: moverGradiente 5s infinite;
+}
+
+@keyframes moverGradiente {
+    0% {
+        background-position: 0% 0%;
+        /* Posición inicial del gradiente */
+    }
+
+    50% {
+        background-position: 100% 0%;
+        /* Posición final del gradiente */
+    }
+
+    100% {
+        background-position: 0% 0%;
+        /* Posición final del gradiente */
+    }
+}
+
+.informacion__mensaje {
+    font-size: 20px;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    width: 100%;
+    height: 100%;
+    line-height: 200px;
+    color: rgba(255, 255, 255, 0.846);
+
+}
+
+/*seccion del registro*/
+
+.container__singup {
+    margin: 0 auto;
+    width: 100%;
+    height: 90vh;
+    background-color: red;
+}
+
+.container__singup__flex {
+    /*flex imagen y titulos*/
+    display: flex;
+    align-items: center;
+    /* margin-top: 10vh; */
+    height: 100%;
+    /* border-radius: 25px; */
+    gap: 15px;
+    color: black;
+    background-image: linear-gradient(to right, #000000, #000000, #c7af9d);
+    /* background-color: linear; */
+
+}
+
+.container__singup__titulos {
+    margin: 0 auto;
+    padding: 20px 40px;
+    height: 95%;
+    border-radius: 12px;
+    background-color: #28033142;
+    /* background-color: white; */
+}
+
+.container__imagen__singup {
+    height: 100%;
+    width: 50%;
+    /* background-color: yellow; */
+
+}
+
+.imagen__signup {
+    width: 100%;
+    height: 100%;
+    border-radius: 25px 0 0 25px;
+    display: block;
+}
+
+
+.singup__titulo {
+    font-size: 50px;
+    color: whitesmoke;
+    margin: 5px 0px;
+    padding: 10px 0px;
+}
+
+.form-control {
+    /*los formualrios*/
+    margin: 10px 0;
+    padding: 11px;
+}
+
+.singup__password {}
+
+label {
+    color: white;
+}
+
+.divisor {
+    color: white;
+}
+
+.btn__form {
+    width: 100%;
+    font-size: 1rem;
+    padding: 11.5px;
+    margin: 0;
+}
+
+.btn_facebook {
+    width: 100%;
+    padding: 11.5px;
+    font-size: 1rem;
+    border: none;
+    margin: 0;
+}
+
+.btn_twitter {
+    width: 100%;
+    padding: 11.5px;
+    font-size: 1rem;
+    margin-bottom: 15px;
+    border: none;
+    margin: 0;
+}
+
+.singup__metodos {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}

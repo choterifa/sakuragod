@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}successful login{% endblock %}
+
+{% block style%}
+<style>
+    .navbar {
+        display: none;
+    }
+</style>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    setTimeout(function () {
+        window.location.href = "{{ url_for('index') }}";
+    }, 4500);
+</script>
+{% endblock %}
+
+{% block registro_exitoso %}
+<div class="container__exito">
+    <img class="fondo__exitoso" src="../static/imagenes/fondo exito.png" alt="check">
+    <div class="container__textos__exitoso">
+        <h1 class="featurette-heading fw-normal lh-1 exitoso__titulo" ;">Bienvenido {{session['name']}} </h1>
+        <p class="lead" style="font-size: 2vw;"> <span class="text-align exitoso__parrafo">Has ingresado con
+                exito</span></p>
+        <a href="/" rel="noopener noreferrer">
+            <button type="button" class="btn btn-primary hero__btn">Continuar
+                <i class="bi bi-arrow-right-circle-fill"></i>
+            </button>
+        </a>
+    </div>
+
+</div>
+{% endblock %}
