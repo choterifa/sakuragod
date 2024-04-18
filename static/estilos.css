@@ -76,6 +76,10 @@
     margin: 30px 0px 0px 30px;
 }
 
+.resumen__enlaces{
+    text-decoration: none;
+}
+
 .resumen__cards {
     /*contenedor de las tarjetas*/
     display: flex;
@@ -93,6 +97,16 @@
     border-radius: 10px;
     box-shadow: 0px 0px 5px 0px rgba(73, 71, 71, 0.194);
 }
+
+.resumen__card__item:hover {
+    /*tarjetas*/
+    transform: scale(1.05);
+    cursor: pointer;
+    background-color: #4af2a1;
+    color: #1c8d56;
+}
+
+
 
 .resumen__card__textos {
     display: flex;
@@ -219,12 +233,13 @@
     /* background-color: yellow; */
     width: 95%;
     margin-left: 17px;
-    
+
 }
 
 .resumen__card__item2--reebolso {
-    width: 25%;
-    height: 180px;
+    /*los 2 de abajo*/
+    width: 21%;
+    height: 160px;
     min-height: 10px;
 }
 
@@ -242,12 +257,31 @@
     color: var(--color-gris);
 }
 
-.resumen__card__invertir {
+.resumen__card__invertir { /*titulo*/
     font-size: 2.2rem;
     color: var(--color-rojo);
 }
 
-.resumen__card__item2--ultimo{
-    min-height: 50px;
-    height: 100px;
+
+/*objetivo */
+
+.resumen__card__objetivo{
+    margin: 10px 0px 15px;
 }
+
+.resumen__card__item2--ultimo {
+    min-height: 50px;
+    height: 110px;
+    padding: 10px 30px;
+}
+
+.tablita{
+    /* background-color: red; */
+    height: 80%;   
+
+}
+
+.tablita__nombre{
+    padding: 1px;
+    /* background-color: red; */
+}   

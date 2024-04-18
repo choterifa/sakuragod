@@ -12,45 +12,56 @@
     <div class="resumen__cards">
 
         <div class="resumen__card__item">
-            <div class="resumen__card__textos">
-                <h3 class="resumen__card__titulo">800</h3>
-                <div class="resumen__card__paragraph">
-                    <i class="bi bi-receipt resumen__card__icon"></i>
-                    <p class="resumen__paragraph">Vendido</p>
+            <a href="/iniciar_sesion" class="resumen__enlaces">
+
+                <div class="resumen__card__textos">
+                    <h3 class="resumen__card__titulo">800</h3>
+                    <div class="resumen__card__paragraph">
+                        <i class="bi bi-receipt resumen__card__icon"></i>
+                        <p class="resumen__paragraph">Vendido</p>
+                    </div>
                 </div>
-            </div>
+            </a>
+
         </div>
 
         <div class="resumen__card__item">
-            <div class="resumen__card__textos">
-                <h3 class="resumen__card__titulo">200</h3>
-                <div class="resumen__card__paragraph">
-                    <!-- <i class="bi bi-receipt "></i> -->
-                    <i class="bi bi-cash-stack resumen__card__icon"></i>
+            <a href="/iniciar_sesion" class="resumen__enlaces">
+                <div class="resumen__card__textos">
+                    <h3 class="resumen__card__titulo">200</h3>
+                    <div class="resumen__card__paragraph">
+                        <!-- <i class="bi bi-receipt "></i> -->
+                        <i class="bi bi-cash-stack resumen__card__icon"></i>
 
-                    <p class="resumen__paragraph">Ganancia</p>
+                        <p class="resumen__paragraph">Ganancia</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="resumen__card__item">
-            <div class="resumen__card__textos">
-                <h3 class="resumen__card__titulo">4</h3>
-                <div class="resumen__card__paragraph">
-                    <i class="bi bi-truck resumen__card__icon"></i>
-                    <p class="resumen__paragraph">Enviar</p>
+            <a href="/iniciar_sesion" class="resumen__enlaces">
+                <div class="resumen__card__textos">
+                    <h3 class="resumen__card__titulo">4</h3>
+                    <div class="resumen__card__paragraph">
+                        <i class="bi bi-truck resumen__card__icon"></i>
+                        <p class="resumen__paragraph">Enviar</p>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="resumen__card__item">
-            <div class="resumen__card__textos">
-                <h3 class="resumen__card__titulo">2</h3>
-                <div class="resumen__card__paragraph">
-                    <i class="bi bi-calendar resumen__card__icon resumen__card__icon--modify"></i>
-                    <p class="resumen__paragraph">Apartados</p>
+            <a href="/iniciar_sesion" class="resumen__enlaces">
+                <div class="resumen__card__textos">
+                    <h3 class="resumen__card__titulo">2</h3>
+                    <div class="resumen__card__paragraph">
+                        <i class="bi bi-calendar resumen__card__icon resumen__card__icon--modify"></i>
+                        <p class="resumen__paragraph">Apartados</p>
+                    </div>
                 </div>
-            </div>
+            </a>
+
         </div>
 
         <!--banderas-->
@@ -111,13 +122,57 @@
 
         <!-- Apartados  2-->
         <div class="resumen__card__item2">
-            <div class="resumen__card__textos">
-                <h3 class="resumen__card__titulo">2</h3>
-                <div class="resumen__card__paragraph">
+            <h3 class="resumen__card__titulo2">Vencen Pronto</h3>
+
+
+            <table class="table table-bordered table-hover tablita">
+                <thead> <!--titulos-->
+                    <tr> <!--fila-->
+                        <th scope="col" class="tablita__nombre">Nombre</th> <!--encabezado-->
+                        <th scope="col" class="tablita__nombre">Deuda</th>
+                        <th scope="col" class="tablita__nombre">Dias restantes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr>
+                        <th scope="row">{{ task[0] }}</th> id
+                        <td class="">
+                            <div class="flex__descripcion1">
+                                <p class="task1">{{ task[1] }}</p>
+                            </div>
+                        </td>
+                        <!--nombre -->
+
+                        <td>
+                            <div class="flex__descripcion">
+                                <a class="texto__enlace" href="{{ task[2] }}">{{ task[2] }}</a>
+                                <img class="imagen" src="../static/imagenes/img1.png" alt="" </td> <!--desc-->
+                                </>
+                        <td>
+                            <div class="flex__btns">
+                                <button type="button" class="btn__editar btn btn-primary btn-sm" data-bs-toggle="modal"
+                                    data-bs-target="#taskModal" data-bs-id="{{task[0]}}" data-bs-nombre="{{task[1]}}"
+                                    data-bs-descripcion="{{task[2]}}">Editar <i class="fas fa-edit"></i>
+                                </button>
+
+                                <form action="/delete_task" method="post" id="deleteTaskForm">
+                                    <input type="hidden" name="task_id" id="deleteTaskId" value="{{task[0]}}">
+                                    <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
+                                            class="fas fa-trash-alt"></i>
+                                    </button>
+                                </form>
+                            </div>
+
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- <div class="resumen__card__paragraph">
                     <i class="bi bi-receipt resumen__card__icon"></i>
                     <p class="resumen__paragraph">proxomios a vencer su pago</p>
-                </div>
-            </div>
+                </div> -->
         </div>
     </div>
 
@@ -126,22 +181,30 @@
     <div class="resumen__cards resumen__cards--modify ">
 
         <div class="resumen__card__item2 resumen__card__item2--reebolso">
-            <!-- <h3 class="resumen__card__titulo2">Proovedor</h3> -->
             <div class="resumen__card__reembolso__flex">
                 <p class="resumen__paragraph__invertir">Dinero a invertir</p>
                 <h3 class="resumen__card__invertir">5000</h3>
             </div>
         </div>
 
+        <div class="resumen__card__item2 resumen__card__item2--reebolso">
+            <div class="resumen__card__reembolso__flex">
+                <p class="resumen__paragraph__invertir">Dinero a invertir</p>
+                <h3 class="resumen__card__invertir">5000</h3>
+            </div>
+        </div>
         <!--ultimo-->
         <div class="resumen__card__item2 resumen__card__item2--ultimo">
-            <div class="resumen__card__textos ">
-                <h3 class="resumen__card__titulo">2</h3>
-                <div class="resumen__card__paragraph">
-                    <i class="bi bi-receipt resumen__card__icon"></i>
-                    <p class="resumen__paragraph">objetivo</p>
+
+            <h3 class="resumen__card__objetivo">Objetivo del día</h3>
+            <div class="experiencia__barras__container">
+                <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75"
+                    aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 50%"></div>
+                    <!--cambiar el widht-->
                 </div>
             </div>
+
         </div>
 
     </div>
