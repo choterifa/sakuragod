@@ -26,7 +26,7 @@ mysql = MySQL(app)
 @app.route("/")
 def index():
     if "email" in session:
-        # si se registro se envia a index
+        # si se registro se envia a index con una session creada
         return render_template("index.html", email=session["email"])
     else:
         return render_template("index.html")
@@ -39,7 +39,6 @@ def inventario():
     Productos = cur.fetchall()
     cur.close()
     return render_template('inventario.html', Productos=Productos)
-
 
 
 @app.route('/add_task', methods=['POST'])  # insertar datos
@@ -55,6 +54,23 @@ def add_task():
         fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         cur.execute("INSERT INTO Producto (Nombre, Precio_Venta,Precio_Compra,Existencias) VALUES (%s, %s, %s, %s)",
                     (nombre, precio_compra, precio_venta, existencias))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('inventario'))
+
+
+@app.route('/edit_task/<int:id>', methods=['POST'])
+def edit_task(id):
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        precio_compra = request.form['precio_compra']
+        precio_venta = request.form['precio_venta']
+        existencias = request.form['existencias']
+
+        cur.execute("UPDATE Producto SET Nombre = %s, Precio_Venta = %s, Precio_Compra = %s, Existencias = %s WHERE ID_Productos = %s",
+                    (nombre, precio_venta, precio_compra, existencias, id))
+
         mysql.connection.commit()
         cur.close()
         return redirect(url_for('inventario'))
@@ -92,7 +108,7 @@ def sign():
                 return redirect(url_for("successful_login", user=email, registration_login=True))
             else:
                 # Contraseña incorrecta
-                bad_password = True 
+                bad_password = True
                 return render_template(
                     "sign.html", bad_password=bad_password, email=email
                 )
@@ -159,7 +175,7 @@ def Signout():
 def successful_login():
     registration_login = request.args.get("registration_login")
     if registration_login == "True":
-     
+
         return render_template("successful_login.html")
     else:
         return index()
@@ -199,17 +215,17 @@ def successful_registration():
 #         return redirect(url_for('tasks'))
 
 
-@app.route('/edit_task/<int:id>', methods=['POST'])
-def edit_task(id):
-    cur = mysql.connection.cursor()
-    if request.method == 'POST':
-        nombre = request.form['nombre']
-        descripcion = request.form['descripcion']
-        cur.execute("UPDATE tasks SET nombre = %s, descripcion = %s WHERE id = %s",
-                    (nombre, descripcion, id))
-        mysql.connection.commit()
-        cur.close()
-        return redirect(url_for('tasks'))
+# @app.route('/edit_task/<int:id>', methods=['POST'])
+# def edit_task(id):
+#     cur = mysql.connection.cursor()
+#     if request.method == 'POST':
+#         nombre = request.form['nombre']
+#         descripcion = request.form['descripcion']
+#         cur.execute("UPDATE tasks SET nombre = %s, descripcion = %s WHERE id = %s",
+#                     (nombre, descripcion, id))
+#         mysql.connection.commit()
+#         cur.close()
+#         return redirect(url_for('tasks'))
 
 
 @app.route('/delete_task', methods=['POST'])
@@ -217,10 +233,11 @@ def delete_task():
     cur = mysql.connection.cursor()
     id = request.form['task_id']
     print("Valor de id:", id)
-    cur.execute("DELETE FROM tasks WHERE id = %s", (id,))
+    cur.execute("DELETE FROM Producto WHERE ID_Productos = %s",
+                (id,))  # ID_Productos cambia
     mysql.connection.commit()
     cur.close()
-    return redirect(url_for('tasks'))
+    return redirect(url_for('inventario'))
 
 
 if __name__ == '__main__':
