@@ -32,7 +32,34 @@ def index():
         return render_template("index.html")
 
 
-# la ruta igual al action del form
+@app.route("/inventario", methods=['GET'])
+def inventario():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM Producto")
+    Productos = cur.fetchall()
+    cur.close()
+    return render_template('inventario.html', Productos=Productos)
+
+
+
+@app.route('/add_task', methods=['POST'])  # insertar datos
+def add_task():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        precio_compra = request.form['precio_compra']
+        precio_venta = request.form['precio_venta']
+        existencias = request.form['existencias']
+
+        cur = mysql.connection.cursor()
+        # Obtener la fecha y hora actual
+        fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        cur.execute("INSERT INTO Producto (Nombre, Precio_Venta,Precio_Compra,Existencias) VALUES (%s, %s, %s, %s)",
+                    (nombre, precio_compra, precio_venta, existencias))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('inventario'))
+
+
 @app.route("/iniciar_sesion", methods=["GET", "POST"])
 def sign():
     # if "email" in session:
@@ -65,7 +92,7 @@ def sign():
                 return redirect(url_for("successful_login", user=email, registration_login=True))
             else:
                 # Contraseña incorrecta
-                bad_password = True
+                bad_password = True 
                 return render_template(
                     "sign.html", bad_password=bad_password, email=email
                 )
@@ -122,11 +149,7 @@ def signup():
 @app.route("/Signout")
 def Signout():
     if "email" in session:
-        # Obtener el valor de 'email' de la sesión
-        email = session.get("email")
-        session.pop(
-            "email", None
-        )  # Eliminar la clave 'email' de la sesión si está presente
+        session.pop("email")
         return render_template("sign.html")
     else:
         return redirect(url_for("sign"))
@@ -136,6 +159,7 @@ def Signout():
 def successful_login():
     registration_login = request.args.get("registration_login")
     if registration_login == "True":
+     
         return render_template("successful_login.html")
     else:
         return index()
@@ -150,28 +174,29 @@ def successful_registration():
         return index()
 
 
-@app.route("/tasks", methods=['GET'])
-def tasks():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM tasks")
-    tasks = cur.fetchall()
-    cur.close()
-    return render_template('tasks.html', tasks=tasks)
+# @app.route("/tasks", methods=['GET'])
+# def tasks():
+#     cur = mysql.connection.cursor()
+#     cur.execute("SELECT * FROM tasks")
+#     tasks = cur.fetchall()
+#     cur.close()
+#     return render_template('tasks.html', tasks=tasks)
 
 
-@app.route('/add_task', methods=['POST'])
-def add_task():
-    if request.method == 'POST':
-        nombre = request.form['nombre']
-        descripcion = request.form['descripcion']
-        cur = mysql.connection.cursor()
-        # Obtener la fecha y hora actual
-        fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        cur.execute("INSERT INTO tasks (nombre, descripcion,email,fecha) VALUES (%s, %s, %s, %s)",
-                    (nombre, descripcion, session['email'], fecha_actual))
-        mysql.connection.commit()
-        cur.close()
-        return redirect(url_for('tasks'))
+# @app.route('/add_task', methods=['POST'])
+# def add_task():
+#     if request.method == 'POST':
+#         nombre = request.form['nombre']
+#         descripcion = request.form['descripcion']
+
+#         cur = mysql.connection.cursor()
+#         # Obtener la fecha y hora actual
+#         fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+#         cur.execute("INSERT INTO tasks (nombre, descripcion,email,fecha) VALUES (%s, %s, %s, %s)",
+#                     (nombre, descripcion, session['email'], fecha_actual))
+#         mysql.connection.commit()
+#         cur.close()
+#         return redirect(url_for('tasks'))
 
 
 @app.route('/edit_task/<int:id>', methods=['POST'])
