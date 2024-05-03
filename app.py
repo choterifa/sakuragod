@@ -18,18 +18,33 @@ app = Flask(__name__)
 app.config["MYSQL_USER"] = config.MYSQL_USER
 app.config["MYSQL_DB"] = config.MYSQL_DB
 app.config["MYSQL_PASSWORD"] = config.MYSQL_PASSWORD
-# Configurar la clave secreta
 app.config["SECRET_KEY"] = config.HEX_SEC_KEY
 mysql = MySQL(app)
 
 
+# Seccion de inicio pagina web
 @app.route("/")
+def inicio():
+    return render_template("inicio/inicio.html")
+
+
+@app.route("/ubicacion")
+def ubicacion():
+    return render_template("inicio/ubicacion.html")
+
+
+@app.route("/contacto")
+def contacto():
+    return render_template("inicio/contacto.html")
+
+
+@app.route("/index")
 def index():
     if "email" in session:
         # si se registro se envia a index con una session creada
         return render_template("index.html", email=session["email"])
     else:
-        return render_template("index.html")
+        return render_template("iniciar_sesion.html")
 
 
 @app.route("/inventario", methods=['GET'])
@@ -96,7 +111,7 @@ def sign():
         if not existing_email:
             # El correo electrónico no está registrado
             email_not_found = True
-            return render_template("sign.html", email_not_found=email_not_found)
+            return render_template("iniciar_sesion.html", email_not_found=email_not_found)
         else:
             # El correo electrónico está registrado
             # en el cuarto campo de contraseña compara la contraseña del form
@@ -110,13 +125,13 @@ def sign():
                 # Contraseña incorrecta
                 bad_password = True
                 return render_template(
-                    "sign.html", bad_password=bad_password, email=email
+                    "iniciar_sesion.html", bad_password=bad_password, email=email
                 )
-    return render_template("sign.html")
+    return render_template("iniciar_sesion.html")
 
 
 @app.route("/registro", methods=["GET", "POST"])
-def signup():
+def registro():
     # if "email" in session:
     #     return render_template("index.html", email=session["email"])
     # else:
@@ -137,14 +152,14 @@ def signup():
             email_found = True
             error_message = "El correo electrónico ya está registrado."
             return render_template(
-                "signup.html", email_found=email_found, error_message=error_message
+                "registro.html", email_found=email_found, error_message=error_message
             )
 
         elif existing_user:  # ya existe usuario
             user_found = True
             error_message = "El usuario ya existe. Por favor, elija otro."
             return render_template(
-                "signup.html", user_found=user_found, error_message=error_message
+                "registro.html", user_found=user_found, error_message=error_message
             )
         else:
             # registrar en base de datos
@@ -159,16 +174,16 @@ def signup():
                 url_for("successful_registration",
                         registration_successful=True)
             )
-    return render_template("signup.html")
+    return render_template("registro.html")
 
 
 @app.route("/Signout")
 def Signout():
     if "email" in session:
         session.pop("email")
-        return render_template("sign.html")
+        return render_template("iniciar_sesion.html")
     else:
-        return redirect(url_for("sign"))
+        return redirect(url_for("iniciar_sesion"))
 
 
 @app.route("/successful_login")

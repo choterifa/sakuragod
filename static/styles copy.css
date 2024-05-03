@@ -18,15 +18,6 @@ body {
     color: #4B60EB;
 }
 
-/* vxcvxcvxcv */
-h1,
-h2,
-p {
-    font-family: 'Raleway', sans-serif;
-    color: #4B60EB;
-}
-
-
 /*seccion del login*/
 .container__signin {
     margin: 0 auto;
