@@ -38,15 +38,20 @@ def contacto():
     return render_template("inicio/contacto.html")
 
 
-@app.route("/index")
-def index():
+@app.route("/tablero")
+def tablero():
     if "email" in session:
-        # si se registro se envia a index con una session creada
-        return render_template("index.html", email=session["email"])
+        # si se registro se envia a tablero con una session creada
+        return render_template("tablero.html", email=session["email"])
     else:
         return render_template("iniciar_sesion.html")
 
 
+@app.route("/iniciar_sesion2")
+def iniciar_sesion2():
+    return render_template("iniciar_sesion2.html")
+    
+    
 @app.route("/inventario", methods=['GET'])
 def inventario():
     cur = mysql.connection.cursor()
@@ -92,35 +97,29 @@ def edit_task(id):
 
 
 @app.route("/iniciar_sesion", methods=["GET", "POST"])
-def sign():
-    # if "email" in session:
-    #     # si se registro se envia a index
-    #     return render_template("index.html", email=session["email"])
-    # else:
+def iniciar_sesion():
     if request.method == "POST":  # lo que recibo por post
-        email = request.form["email"]  # gaurda el name en variable
+        email = request.form["email"]
         password = request.form["password"]
 
-        cur = mysql.connection.cursor()  # guarda en la variable la conecion
-        cur.execute("SELECT * FROM users WHERE email = %s",
-                    (email,))  # se pasa la variable email
-        existing_email = cur.fetchone()  # si esta guarda la tupla o fila de los datos
+        cur = mysql.connection.cursor()  # Guardar conexion en variable
+        cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+        existing_email = cur.fetchone()  # Si existe, Guardar la tupla
         cur.close()
         print(existing_email)
 
         if not existing_email:
             # El correo electrónico no está registrado
-            email_not_found = True
-            return render_template("iniciar_sesion.html", email_not_found=email_not_found)
+            correo_no_encontrado = True
+            return render_template("iniciar_sesion.html", correo_no_encontrado=correo_no_encontrado)
         else:
             # El correo electrónico está registrado
-            # en el cuarto campo de contraseña compara la contraseña del form
+            # En el cuarto campo de la tupla (Contraseña) se compara con la contraseña del Form
             if existing_email[3] == password:
                 # Contraseña correcta
-                # crear session email con el email
+                # Crear session email con el email
                 session["email"] = email
-                # redireccionar
-                return redirect(url_for("successful_login", user=email, registration_login=True))
+                return redirect(url_for("inicio__exitoso", user=email, registration_login=True))
             else:
                 # Contraseña incorrecta
                 bad_password = True
@@ -133,7 +132,7 @@ def sign():
 @app.route("/registro", methods=["GET", "POST"])
 def registro():
     # if "email" in session:
-    #     return render_template("index.html", email=session["email"])
+    #     return render_template("tablero.html", email=session["email"])
     # else:
     if request.method == "POST":
         name = request.form.get("username")
@@ -171,10 +170,29 @@ def registro():
             session["email"] = email  # crear sesion del email
             return redirect(
                 # mensaje de registro
-                url_for("successful_registration",
+                url_for("registro_exitoso",
                         registration_successful=True)
             )
     return render_template("registro.html")
+
+
+@app.route("/inicio__exitoso")
+def inicio__exitoso():
+    registration_login = request.args.get("registration_login")
+    if registration_login == "True":
+
+        return render_template("inicio_exitoso.html")
+    else:
+        return tablero()
+
+
+@app.route("/registro_exitoso")
+def registro_exitoso():
+    registration_successful = request.args.get("registration_successful")
+    if registration_successful == "True":
+        return render_template("registro_exitoso.html")
+    else:
+        return tablero()
 
 
 @app.route("/Signout")
@@ -184,25 +202,6 @@ def Signout():
         return render_template("iniciar_sesion.html")
     else:
         return redirect(url_for("iniciar_sesion"))
-
-
-@app.route("/successful_login")
-def successful_login():
-    registration_login = request.args.get("registration_login")
-    if registration_login == "True":
-
-        return render_template("successful_login.html")
-    else:
-        return index()
-
-
-@app.route("/successful_registration")
-def successful_registration():
-    registration_successful = request.args.get("registration_successful")
-    if registration_successful == "True":
-        return render_template("successful_registration.html")
-    else:
-        return index()
 
 
 # @app.route("/tasks", methods=['GET'])

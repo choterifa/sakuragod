@@ -1,0 +1,48 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+</head>
+
+<body>
+    <section class="Inicio__Sesion">
+        <h1 class="Inicio__Sesion__Titulo">Inicia Sesion</h1>
+
+        <form method="post" action="{{ url_for('iniciar_sesion') }}"> <!--Se para la funcion-->
+            <!-- Email input -->
+            <div class="Inicio__Sesion__Email__Container">
+                <label for="email">Email address</label>
+                <input type="email" value="{{email}}" class="form-control {% if email_not_found %}is-invalid{% endif %}"
+                    id="email" name="email" required />
+                {% if email_not_found %}
+                <div class="invalid-feedback">Correo no encontrado.</div>
+                {% endif %}
+            </div>
+
+            <!-- Password input -->
+            <div class="">
+                <label for="password">Password</label>
+                <input type="password" class="{% if bad_password %}is-invalid{% endif %} " id="password" name="password"
+                    required />
+                {% if bad_password %}
+                <div class="invalid-feedback">Contraseña Invalida.</div>
+                {% endif %}
+            </div>
+
+            <!-- Checkbox -->
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
+                <label class="form-check-label" for="form1Example3"> Remember me</label>
+            </div>
+            <a href="#!" class="forget">Forgot password?</a>
+
+            <!-- Submit button -->
+            <button type="submit" class="Inicio__Sesion__Btn">Sign in</button>
+
+    </section>
+
+</body>
+
+</html>

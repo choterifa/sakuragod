@@ -1,0 +1,55 @@
+/*Nav Gestor*/
+
+
+.container__principal {
+    /*De todo el gestor*/
+    width: 100vw;
+    height: 100vh;
+    /* background-color: red; */
+}
+
+.flex__principal {
+    /* display: flex;
+    background-color: yellow;
+    width: 100vw;
+    height: 100vh;
+    justify-content: space-evenly; */
+    width: 100vw;
+    height: 100vh;
+}
+
+.hero__container {
+    display: flex;
+    /*arriba*/
+    height: 100%;
+    width: 100%;
+    /* background-color: yellow; */
+}
+
+.navbar__hero {
+    display: flex;
+    flex-direction: column;
+    background-color: #1d181c;
+    /* background-color: transparent; */
+    width: 15%;
+    height: 100%;
+}
+
+.navbar__hero ul {
+    list-style-type: none;
+}
+
+.navbar__hero ul li a {
+    text-decoration: none;
+    color: #fff;
+    padding: 15px 30px;
+}
+
+.navbar__lista {
+    display: flex;
+    gap: 40px;
+    flex-direction: column;
+    justify-content: center;
+    color: #ffff;
+    margin-top: 50px;
+}

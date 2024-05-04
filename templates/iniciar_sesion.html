@@ -1,92 +1,108 @@
-{%extends 'base.html'%}
+<html lang="en">
 
-{%block title%} Login{%endblock%}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="../static/logins.css">
+    <link rel="stylesheet" href="../static/inicio.css">
+    <!--Boostrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!--Iconos Boostrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
+
+<body>
+
+    <!-- 
+    <nav class="Inicio__Nav">
+        <div class="Inicio__Nav__Logo__Contenedor">
+            <img src="../static/imagenes/Logo/Icono.jpg" class="Inicio__Nav__Logo" alt="Logo">
+        </div>
+    </nav> -->
 
 
-{% block style%}
-<style>
-    .navbar {
-        background-image: linear-gradient(to right, #000000, #000000, #c7af9d);
-    }
-</style>
-{% endblock %}
+    <section class="Inicio__Sesion">
 
-{%block sign%}
-<section class="">
+        <div class=" container__signin">
 
-    <div class=" container__signin">
-
-        <div class="container__signin__flex ">
-
+            <div class="container__signin__flex ">
+                <!-- 
             <div class="col-md-8 col-lg-7 col-xl-6 container__imagen__signin">
                 <img src="../static/imagenes/Apple-like Aesthetics - 4.jpg" class="img-fluid imagen__signin"
                     alt="Phone image">
-            </div>
+            </div> -->
 
-            <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1 container__sigin__titulos">
-                <h1 class=" fw-bold mb-3 signin__titulo ">Inicia Sesion</h1>
+                <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1 container__sigin__titulos">
+                    <h1 class=" fw-bold mb-3 signin__titulo ">Inicia Sesion</h1>
 
-                <form method="post" action="{{ url_for('sign') }}">
-                    <!-- Email input -->
-                    <div class="form-outline mb-4">
-                        <label for="email">Email address</label>
-                        <input type="email" value="{{ email }}"
-                            class="form-control {% if email_not_found %}is-invalid{% endif %} " id="email" name="email"
-                            required />
-                        {% if email_not_found %}
-                        <div class="invalid-feedback">Correo no encontrado.</div>
-                        {% endif %}
-                    </div>
-                    <!-- Password input -->
-                    <div class="form-outline mb-4">
-                        <label for="password">Password</label>
-                        <input type="password" class=" form-control {% if bad_password %}is-invalid{% endif %} "
-                            id="password" name="password" required />
-                        {% if bad_password %}
-                        <div class="invalid-feedback">Contraseña Invalida.</div>
-                        {% endif %}
-                    </div>
-
-                    <div class="d-flex align-items-center mb-4 sigin__remember">
-                        <!-- Checkbox -->
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
-                            <label class="form-check-label" for="form1Example3"> Remember me </label>
+                    <form method="post" action="{{ url_for('iniciar_sesion') }}"> <!--Se para la funcion-->
+                        <!-- Email input -->
+                        <div class="form-outline mb-4">
+                            <label for="email">Email address</label>
+                            <input type="email" value="{{ email }}"
+                                class="form-control {% if email_not_found %}is-invalid{% endif %}" id="email"
+                                name="email" required />
+                            {% if email_not_found %}
+                            <div class="invalid-feedback">Correo no encontrado.</div>
+                            {% endif %}
                         </div>
-                        <a href="#!" class="forget">Forgot password?</a>
-                    </div>
+                        <!-- Password input -->
+                        <div class="form-outline mb-4">
+                            <label for="password">Password</label>
+                            <input type="password" class=" form-control {% if bad_password %}is-invalid{% endif %} "
+                                id="password" name="password" required />
+                            {% if bad_password %}
+                            <div class="invalid-feedback">Contraseña Invalida.</div>
+                            {% endif %}
+                        </div>
 
-                    <!-- Submit button -->
-                    <button type="submit" class="btn__form btn btn-primary btn-lg btn-block">Sign in</button>
+                        <div class="d-flex align-items-center mb-4 sigin__remember">
+                            <!-- Checkbox -->
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
+                                <label class="form-check-label" for="form1Example3"> Remember me </label>
+                            </div>
+                            <a href="#!" class="forget">Forgot password?</a>
+                        </div>
 
-                    <!-- divider -->
-                    <div class="divider d-flex align-items-center my-4">
-                        <p class="text-center fw-bold mx-3 mb-0 divisor">OR</p>
-                    </div>
+                        <!-- Submit button -->
+                        <button type="submit" class="btn__form btn btn-primary btn-lg btn-block">Sign in</button>
 
-                    <!-- other methods -->
-                    <div class="sigin__metodos">
-                        <a class="btn_facebook btn btn-primary btn-lg btn-block" style="background-color: #3b5998"
-                            href="#!" role="button">
-                            <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
-                        </a>
-                        <a class="btn_twitter btn btn-primary btn-lg btn-block" style="background-color: #55acee"
-                            href="#!" role="button">
-                            <i class="fab fa-twitter me-2"></i>Continue with Twitter</a>
-                    </div>
+                        <!-- divider -->
+                        <div class="divider d-flex align-items-center my-4">
+                            <p class="text-center fw-bold mx-3 mb-0 divisor">OR</p>
+                        </div>
 
-                </form>
+                        <!-- other methods -->
+                        <div class="sigin__metodos">
+                            <a class="btn_facebook btn btn-primary btn-lg btn-block" style="background-color: #3b5998"
+                                href="#!" role="button">
+                                <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
+                            </a>
+                            <a class="btn_twitter btn btn-primary btn-lg btn-block" style="background-color: #55acee"
+                                href="#!" role="button">
+                                <i class="fab fa-twitter me-2"></i>Continue with Twitter</a>
+                        </div>
+
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
 
-<div class="informacion">
-    <!-- <p class="informacion__mensaje">*Create your Specify account with your work email to sync 
+    <div class="informacion">
+        <!-- <p class="informacion__mensaje">*Create your Specify account with your work email to sync 
     all your design data across your design system</p>  -->
 
-    <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
-</div>
+        <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
+    </div>
 
-{%endblock%}
+
+</body>
+
+</html>

@@ -10,8 +10,6 @@
     /*outline: 1px solid red;*/
 }
 
-
-/* Aplicar la fuente Roboto al cuerpo del documento */
 body {
     scroll-behavior: smooth;
     font-family: 'Raleway', sans-serif;
@@ -29,7 +27,7 @@ body {
 
 .container__signin__flex {
     /*flex imagen y titulos*/
-    display: flex; 
+    display: flex;
     align-items: center;
     justify-content: center;
     /* margin-top: 10vh; */
@@ -38,11 +36,8 @@ body {
     /* gap: 15px; */
     /* color: black; */
     /* background-color: linear; */
-    width: 85vw;    
+    width: 85vw;
     /* background-color: red; */
-
-
-
 }
 
 .container__sigin__titulos {
@@ -142,9 +137,7 @@ label {
 
 
 /*informacion*/
-
 .informacion {
-
     width: 400px;
     height: 200px;
     background-image: linear-gradient(to right top, #00000060, #39032f79, #a38873df);
@@ -196,7 +189,6 @@ label {
 }
 
 /*seccion del registro*/
-
 .container__singup {
     margin: 0 auto;
     width: 100%;
@@ -239,7 +231,7 @@ label {
     height: 100%;
     border-radius: 25px 0 0 25px;
     display: block;
-    opacity: 0  ;
+    opacity: 0;
 }
 
 
