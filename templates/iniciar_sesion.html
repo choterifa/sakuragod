@@ -30,18 +30,14 @@
         <div class=" container__signin">
 
             <div class="container__signin__flex ">
-                <!-- 
-            <div class="col-md-8 col-lg-7 col-xl-6 container__imagen__signin">
-                <img src="../static/imagenes/Apple-like Aesthetics - 4.jpg" class="img-fluid imagen__signin"
-                    alt="Phone image">
-            </div> -->
 
-                <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1 container__sigin__titulos">
-                    <h1 class=" fw-bold mb-3 signin__titulo ">Inicia Sesion</h1>
+                <div class="container__sigin__titulos">
+
+                    <h1 class="fw-bold signin__titulo ">Inicia Sesion</h1>
 
                     <form method="post" action="{{ url_for('iniciar_sesion') }}"> <!--Se para la funcion-->
                         <!-- Email input -->
-                        <div class="form-outline mb-4">
+                        <div class="">
                             <label for="email">Email address</label>
                             <input type="email" value="{{ email }}"
                                 class="form-control {% if email_not_found %}is-invalid{% endif %}" id="email"
@@ -51,7 +47,7 @@
                             {% endif %}
                         </div>
                         <!-- Password input -->
-                        <div class="form-outline mb-4">
+                        <div class="">
                             <label for="password">Password</label>
                             <input type="password" class=" form-control {% if bad_password %}is-invalid{% endif %} "
                                 id="password" name="password" required />
@@ -72,35 +68,26 @@
                         <!-- Submit button -->
                         <button type="submit" class="btn__form btn btn-primary btn-lg btn-block">Sign in</button>
 
-                        <!-- divider -->
-                        <div class="divider d-flex align-items-center my-4">
-                            <p class="text-center fw-bold mx-3 mb-0 divisor">OR</p>
-                        </div>
 
                         <!-- other methods -->
                         <div class="sigin__metodos">
                             <a class="btn_facebook btn btn-primary btn-lg btn-block" style="background-color: #3b5998"
                                 href="#!" role="button">
-                                <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
+                                <i class="fab fa-facebook-f me-2"></i>Continue with Google
                             </a>
-                            <a class="btn_twitter btn btn-primary btn-lg btn-block" style="background-color: #55acee"
-                                href="#!" role="button">
-                                <i class="fab fa-twitter me-2"></i>Continue with Twitter</a>
                         </div>
 
                     </form>
                 </div>
+
             </div>
         </div>
     </section>
 
-
+    <!-- 
     <div class="informacion">
-        <!-- <p class="informacion__mensaje">*Create your Specify account with your work email to sync 
-    all your design data across your design system</p>  -->
-
         <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
-    </div>
+    </div> -->
 
 
 </body>

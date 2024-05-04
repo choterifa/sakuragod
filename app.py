@@ -119,7 +119,7 @@ def iniciar_sesion():
                 # Contraseña correcta
                 # Crear session email con el email
                 session["email"] = email
-                return redirect(url_for("inicio__exitoso", user=email, registration_login=True))
+                return redirect(url_for("inicio_exitoso", user=email, registration_login=True))
             else:
                 # Contraseña incorrecta
                 bad_password = True
@@ -176,8 +176,8 @@ def registro():
     return render_template("registro.html")
 
 
-@app.route("/inicio__exitoso")
-def inicio__exitoso():
+@app.route("/inicio_exitoso")
+def inicio_exitoso():
     registration_login = request.args.get("registration_login")
     if registration_login == "True":
 
