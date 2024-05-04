@@ -29,7 +29,7 @@
 .navbar__hero {
     display: flex;
     flex-direction: column;
-    background-color: #1d181c;
+    background-color: #eff2f9;
     /* background-color: transparent; */
     width: 15%;
     height: 100%;
@@ -41,7 +41,7 @@
 
 .navbar__hero ul li a {
     text-decoration: none;
-    color: #fff;
+    color: black;
     padding: 15px 30px;
 }
 

@@ -3,7 +3,7 @@
 :root {
     --color-gris: #515051;
     --color-verde: #66d5aadb;
-    --color-fondo: #dfdde3;
+    --color-fondo: #eff2f9;
     --color-azul: #5060e3;
     --color-rojo: #fe4059;
 }
@@ -12,7 +12,7 @@
     /*fondo de resumen*/
     width: 85%;
     height: 100vh;
-    /* background-color: var(--color-fondo); */
+    background-color: var(--color-fondo);
 }
 
 .resumen__titulo {
