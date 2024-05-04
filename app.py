@@ -47,11 +47,6 @@ def tablero():
         return render_template("iniciar_sesion.html")
 
 
-@app.route("/iniciar_sesion2")
-def iniciar_sesion2():
-    return render_template("iniciar_sesion2.html")
-    
-    
 @app.route("/inventario", methods=['GET'])
 def inventario():
     cur = mysql.connection.cursor()
