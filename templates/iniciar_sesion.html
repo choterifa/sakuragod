@@ -13,11 +13,14 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <!--Iconos Boostrap-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <!--Font awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 
 <body>
-
     <!-- 
+    
     <nav class="Inicio__Nav">
         <div class="Inicio__Nav__Logo__Contenedor">
             <img src="../static/imagenes/Logo/Icono.jpg" class="Inicio__Nav__Logo" alt="Logo">
@@ -27,67 +30,61 @@
 
     <section class="Inicio__Sesion">
 
-        <div class=" container__signin">
+        <div class="container__sigin__titulos">
 
-            <div class="container__signin__flex ">
+            <h1 class="signin__titulo">Inicia Sesion</h1>
 
-                <div class="container__sigin__titulos">
-
-                    <h1 class="fw-bold signin__titulo ">Inicia Sesion</h1>
-
-                    <form method="post" action="{{ url_for('iniciar_sesion') }}"> <!--Se para la funcion-->
-                        <!-- Email input -->
-                        <div class="">
-                            <label for="email">Email address</label>
-                            <input type="email" value="{{ email }}"
-                                class="form-control {% if email_not_found %}is-invalid{% endif %}" id="email"
-                                name="email" required />
-                            {% if email_not_found %}
-                            <div class="invalid-feedback">Correo no encontrado.</div>
-                            {% endif %}
-                        </div>
-                        <!-- Password input -->
-                        <div class="">
-                            <label for="password">Password</label>
-                            <input type="password" class=" form-control {% if bad_password %}is-invalid{% endif %} "
-                                id="password" name="password" required />
-                            {% if bad_password %}
-                            <div class="invalid-feedback">Contraseña Invalida.</div>
-                            {% endif %}
-                        </div>
-
-                        <div class="d-flex align-items-center mb-4 sigin__remember">
-                            <!-- Checkbox -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="form1Example3" checked />
-                                <label class="form-check-label" for="form1Example3"> Remember me </label>
-                            </div>
-                            <a href="#!" class="forget">Forgot password?</a>
-                        </div>
-
-                        <!-- Submit button -->
-                        <button type="submit" class="btn__form btn btn-primary btn-lg btn-block">Sign in</button>
-
-
-                        <!-- other methods -->
-                        <div class="sigin__metodos">
-                            <a class="btn_facebook btn btn-primary btn-lg btn-block" style="background-color: #3b5998"
-                                href="#!" role="button">
-                                <i class="fab fa-facebook-f me-2"></i>Continue with Google
-                            </a>
-                        </div>
-
-                    </form>
+            <form method="post" action="{{ url_for('iniciar_sesion') }}"> <!--Se pasa la funcion-->
+                <!-- Email input -->
+                <div class="">
+                    <label for="email">Email address</label>
+                    <input type="email" value="{{ email }}"
+                        class="form-control {% if correo_no_encontrado %}is-invalid{% endif %}" id="email" name="email"
+                        required />
+                    {% if correo_no_encontrado %}
+                    <div class="invalid-feedback">Correo no encontrado.</div>
+                    {% endif %}
+                </div>
+                <!-- Password input -->
+                <div class="">
+                    <label for="password">Password</label>
+                    <input type="password" class=" form-control {% if bad_password %}is-invalid{% endif %} "
+                        id="password" name="password" required />
+                    {% if bad_password %}
+                    <div class="invalid-feedback">Contraseña Invalida.</div>
+                    {% endif %}
                 </div>
 
-            </div>
-        </div>
-    </section>
+                <div class="sigin__remember">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="checkbox" /*checked*/ />
+                        <label class="form-check-label" for="checkbox">Remember me</label>
+                    </div>
+                    <a href="#" class="forget">Forgot password?</a>
+                </div>
 
-    <!-- 
+                <!-- Enviar button -->
+                <button type="submit" class="btn__form">Sign in</button>
+
+                <!-- Otros methods -->
+                <div class="sigin__metodos">
+                    <a class="btn__form btn_google" href="#">
+                        <i class="fab fa-google me-2"></i>Continue with Google
+                    </a>
+                </div>
+
+            </form>
+        </div>
+
+    </section>
+<!-- 
     <div class="informacion">
         <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
-    </div> -->
+    </div>  -->
+
+    <!-- <div class="fondo">
+        <img src="../static/imagenes/fondoArc.jpeg" alt="">
+    </div>  -->
 
 
 </body>
