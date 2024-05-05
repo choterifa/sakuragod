@@ -49,12 +49,10 @@
                 </div>
 
                 <!-- Button trigger modal -->
-                <button type="submit" class="btn__form" data-bs-toggle="modal" data-bs-target="#inicio_sesion">
-                    <!--Abrir modal (toogle) y cual (target)-->
+                <button type="submit" class="btn__form">
                     Sign In
                 </button>
             </form>
-
 
             <!--Boton google-->
             <a class="btn__form" href="#">
@@ -63,15 +61,21 @@
 
             <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
             <a class="btn__form btn__form--salir" href="/">Salir</a>
-
         </div>
     </section>
 
+    <!-- <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div> -->
+
+
+
+
+
+
     {% if registration_login %}
-    <button id="modal" type="submit" type="button" class="btn__form d-none" data-bs-toggle="modal"
-        data-bs-target="#inicio_sesion">
+    <button id="modal" type="button" class="btn__form d-none" data-bs-toggle="modal" data-bs-target="#inicio_sesion">
         <!--Abrir modal (toogle) y cual (target)-->
-        Sign In
     </button>
 
     <script>
@@ -87,25 +91,20 @@
         <script>
             setTimeout(function () {
                 window.location.href = "{{ url_for('tablero')}}";
-            }, 3000);
+            }, 6200);
         </script>
-        <div class="modal-dialog">
+
+        <div class="modal-dialog modal-dialog--modify">
             <div class="modal-content">
 
                 <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
-                    <button type="button"
-                        class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill"
-                        aria-label="Close" data-bs-dismiss="modal">
-                    </button>
                     <svg class="bi mt-5 mb-3" width="48" height="48">
                         <use xlink:href="#check2-circle"></use>
                     </svg>
                     <h1 class="text-body-emphasis">¡Inicio de sesión exitoso!</h1>
-                    <p class="col-lg-6 mx-auto mb-4">
+                    <p class="col-lg-9 mx-auto mb-4">
                         Ahora serás redirigido al tablero principal, donde podrás acceder a todas las funciones
-                        y
-                        características de nuestra
-                        plataforma. ¡Disfruta de tu experiencia!
+                        y características de nuestro gestor.
                     </p>
                     <a href="/tablero">
                         <button data-bs-dismiss="modal" class="btn btn-primary px-5 mb-5" type="button">
@@ -118,6 +117,8 @@
         </div>
     </div>
     {% endif %}
+
+
 
 </body>
 

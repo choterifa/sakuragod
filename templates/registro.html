@@ -29,9 +29,9 @@
             <form method="post" action="{{ url_for('registro') }}" autocomplete="off"> <!--Enviar a registro-->
                 <!-- Username input -->
                 <div class="">
-                    <label for="Username">Username</label>
+                    <label for="username">Username</label>
                     <input type="text" class="login__input {% if user_found %}is-invalid{% endif %} " id="username"
-                        name="username" required="" minlength="4" maxlength="10" pattern="[a-zA-Z]+" />
+                        name="username" required="" minlength="4" maxlength="15" pattern="[a-zA-Z]+" />
                     {% if user_found %}
                     <div class="invalid-feedback">{{ error_message }}</div>
                     {% endif %}
@@ -64,7 +64,7 @@
         </div>
     </section>
 
-    
+
 
 </body>
 

@@ -152,3 +152,7 @@ input:focus::placeholder {
     opacity: 0;
     /* Establece la opacidad del marcador de posición a 0 cuando el campo está enfocado */
 }
+
+.modal-dialog--modify{
+    margin-top: 90px !important;
+}

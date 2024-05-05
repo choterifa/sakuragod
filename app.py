@@ -158,9 +158,9 @@ def registro_exitoso():
 def Signout():
     if "email" in session:
         session.pop("email")
-        return render_template("inicio/inicio.html")
+        return render_template("iniciar_sesion.html")
     else:
-        return redirect(url_for("inicio"))
+        return redirect(url_for("iniciar_sesion"))
 
 
 @app.route('/add_task', methods=['POST'])  # insertar datos
