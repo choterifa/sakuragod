@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!--fFont awesome-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="../../static/Js/Audio.js"></script>
 
 </head>
 
@@ -68,8 +69,23 @@
             <figure class="Inicio__Imagen__Container">
                 <img src="../static/imagenes/Cover3.jpg" alt="Cover" class="Inicio__Imagen">
             </figure>
+
+            <video width="1080" height="720" loop preload="auto">
+                <source src="../../static/videos/Arc.mp4" type="video/mp4">
+            </video>
+
+
+            <audio id="audio-fondo" autoplay loop>
+                <source src="../../static/Audio/Audio.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+
         </div> <!--Fin Hero-->
+
         {%endblock%}
+
+
+
 
     </section>
 </body>
