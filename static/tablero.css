@@ -12,7 +12,7 @@
     /*fondo de resumen*/
     width: 85%;
     height: 100vh;
-    background-color: var(--color-fondo);
+    /* background-color: var(--color-fondo); */
 }
 
 .resumen__titulo {

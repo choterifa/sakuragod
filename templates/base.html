@@ -24,44 +24,39 @@
 
 <body>
 
-    <!--Barra de navegacion del gestor-->
     <div class="container__principal">
 
-        <div class="flex__principal">
+        <div class="container__nav__contenido"> <!--contenedor del nav + contenido-->
 
-            <div class="hero__container">
-
-                <nav class="navbar__hero">
+            <nav class="navbar__hero">
+                <ul class="navbar__lista">
                     {% if session['email'] %}
-                    <a class="Logo" href="/iniciar_sesion">Bienvenido {{session['email']}} </a>
+                    <li><a class="Logo" href="#">Bienvenido {{session['email']}} </a></li>
                     {% else %}
                     <a class="Logo" href="/iniciar_sesion">Iniciar Sesion</a>
                     {% endif %}
 
-                    <ul class="navbar__lista">
+                    <li><a href="/tablero">Tablero</a></li>
+                    <li><a href="/inventario">Inventario</a></li>
+                    <li><a href="#">Ventas</a></li>
+                    <li><a href="/Signout">Salir sesion</a></li>
+                    <li><a href="/">Inicio</a></li>
+                </ul>
+            </nav>
 
-                        <li><a href="/tablero">Tablero</a></li>
-                        <li><a href="/inventario">Inventario</a></li>
-                        <li><a href="#">Ventas</a></li>
-                        <li><a href="/Signout">Salir sesion</a></li>
-                        <li><a href="/">Inicio</a></li>
-                    </ul>
-                </nav>
+            {%block index%}
+            {%endblock%}
+            {%block inventario%}
+            {%endblock%}
+            {%block sign%}
+            {%endblock%}
+            {%block singup%}
+            {%endblock%}
+            {%block registro_exitoso%}
+            {%endblock%}
+            {%block task%}
+            {%endblock%}
 
-                {%block index%}
-                {%endblock%}
-                {%block inventario%}
-                {%endblock%}
-                {%block sign%}
-                {%endblock%}
-                {%block singup%}
-                {%endblock%}
-                {%block registro_exitoso%}
-                {%endblock%}
-                {%block task%}
-                {%endblock%}
-
-            </div>
         </div>
     </div>
 
