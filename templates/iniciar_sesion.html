@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-
     <link rel="stylesheet" href="../static/logins.css">
-    <link rel="stylesheet" href="../static/inicio.css">
     <!--Boostrap-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -15,18 +13,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!--Font awesome-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
 
 </head>
 
 <body>
-    <!-- 
-    
-    <nav class="Inicio__Nav">
-        <div class="Inicio__Nav__Logo__Contenedor">
-            <img src="../static/imagenes/Logo/Icono.jpg" class="Inicio__Nav__Logo" alt="Logo">
-        </div>
-    </nav> -->
-
 
     <section class="Inicio__Sesion">
 
@@ -38,54 +31,93 @@
                 <!-- Email input -->
                 <div class="">
                     <label for="email">Email address</label>
-                    <input type="email" value="{{ email }}"
-                        class="form-control {% if correo_no_encontrado %}is-invalid{% endif %}" id="email" name="email"
-                        required />
+                    <input type="email" class="login__input {% if correo_no_encontrado %}is-invalid{% endif %}"
+                        id="email" name="email" required="">
                     {% if correo_no_encontrado %}
                     <div class="invalid-feedback">Correo no encontrado.</div>
                     {% endif %}
                 </div>
+
                 <!-- Password input -->
                 <div class="">
                     <label for="password">Password</label>
-                    <input type="password" class=" form-control {% if bad_password %}is-invalid{% endif %} "
+                    <input type="password" class="login__input {% if bad_password %}is-invalid{% endif %} "
                         id="password" name="password" required />
                     {% if bad_password %}
                     <div class="invalid-feedback">Contraseña Invalida.</div>
                     {% endif %}
                 </div>
 
-                <div class="sigin__remember">
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="checkbox" /*checked*/ />
-                        <label class="form-check-label" for="checkbox">Remember me</label>
-                    </div>
-                    <a href="#" class="forget">Forgot password?</a>
-                </div>
+                <!-- Button trigger modal -->
+                <button type="submit" class="btn__form" data-bs-toggle="modal" data-bs-target="#inicio_sesion">
+                    <!--Abrir modal (toogle) y cual (target)-->
+                    Sign In
+                </button>
+            </form>
 
-                <!-- Enviar button -->
-                <button type="submit" class="btn__form">Sign in</button>
 
-                <!-- Otros methods -->
-                <div class="sigin__metodos">
-                    <a class="btn__form btn_google" href="#">
-                        <i class="fab fa-google me-2"></i>Continue with Google
+            <!--Boton google-->
+            <a class="btn__form" href="#">
+                <i class="fab fa-google me-2"></i>Continue with Google
+            </a>
+
+            <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
+            <a class="btn__form btn__form--salir" href="/">Salir</a>
+
+        </div>
+    </section>
+
+    {% if registration_login %}
+    <button id="modal" type="submit" type="button" class="btn__form d-none" data-bs-toggle="modal"
+        data-bs-target="#inicio_sesion">
+        <!--Abrir modal (toogle) y cual (target)-->
+        Sign In
+    </button>
+
+    <script>
+        // Simular clic en el botón automáticamente cuando la página se cargue
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('modal').click();
+        });
+    </script>
+
+    <!-- Modal -->
+    <div class="modal fade" id="inicio_sesion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+        <!--Evitar que se ciiere con esq y click y no enfocable-->
+        <script>
+            setTimeout(function () {
+                window.location.href = "{{ url_for('tablero')}}";
+            }, 3000);
+        </script>
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
+                    <button type="button"
+                        class="position-absolute top-0 end-0 p-3 m-3 btn-close bg-secondary bg-opacity-10 rounded-pill"
+                        aria-label="Close" data-bs-dismiss="modal">
+                    </button>
+                    <svg class="bi mt-5 mb-3" width="48" height="48">
+                        <use xlink:href="#check2-circle"></use>
+                    </svg>
+                    <h1 class="text-body-emphasis">¡Inicio de sesión exitoso!</h1>
+                    <p class="col-lg-6 mx-auto mb-4">
+                        Ahora serás redirigido al tablero principal, donde podrás acceder a todas las funciones
+                        y
+                        características de nuestra
+                        plataforma. ¡Disfruta de tu experiencia!
+                    </p>
+                    <a href="/tablero">
+                        <button data-bs-dismiss="modal" class="btn btn-primary px-5 mb-5" type="button">
+                            Entrar
+                        </button>
                     </a>
                 </div>
 
-            </form>
+            </div>
         </div>
-
-    </section>
-<!-- 
-    <div class="informacion">
-        <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
-    </div>  -->
-
-    <!-- <div class="fondo">
-        <img src="../static/imagenes/fondoArc.jpeg" alt="">
-    </div>  -->
-
+    </div>
+    {% endif %}
 
 </body>
 

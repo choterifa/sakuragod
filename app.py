@@ -56,41 +56,6 @@ def inventario():
     return render_template('inventario.html', Productos=Productos)
 
 
-@app.route('/add_task', methods=['POST'])  # insertar datos
-def add_task():
-    if request.method == 'POST':
-        nombre = request.form['nombre']
-        precio_compra = request.form['precio_compra']
-        precio_venta = request.form['precio_venta']
-        existencias = request.form['existencias']
-
-        cur = mysql.connection.cursor()
-        # Obtener la fecha y hora actual
-        fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        cur.execute("INSERT INTO Producto (Nombre, Precio_Venta,Precio_Compra,Existencias) VALUES (%s, %s, %s, %s)",
-                    (nombre, precio_compra, precio_venta, existencias))
-        mysql.connection.commit()
-        cur.close()
-        return redirect(url_for('inventario'))
-
-
-@app.route('/edit_task/<int:id>', methods=['POST'])
-def edit_task(id):
-    cur = mysql.connection.cursor()
-    if request.method == 'POST':
-        nombre = request.form['nombre']
-        precio_compra = request.form['precio_compra']
-        precio_venta = request.form['precio_venta']
-        existencias = request.form['existencias']
-
-        cur.execute("UPDATE Producto SET Nombre = %s, Precio_Venta = %s, Precio_Compra = %s, Existencias = %s WHERE ID_Productos = %s",
-                    (nombre, precio_venta, precio_compra, existencias, id))
-
-        mysql.connection.commit()
-        cur.close()
-        return redirect(url_for('inventario'))
-
-
 @app.route("/iniciar_sesion", methods=["GET", "POST"])
 def iniciar_sesion():
     if request.method == "POST":  # lo que recibo por post
@@ -114,7 +79,7 @@ def iniciar_sesion():
                 # Contraseña correcta
                 # Crear session email con el email
                 session["email"] = email
-                return redirect(url_for("inicio_exitoso", user=email, registration_login=True))
+                return render_template("iniciar_sesion.html", user=email, registration_login=True)
             else:
                 # Contraseña incorrecta
                 bad_password = True
@@ -175,7 +140,6 @@ def registro():
 def inicio_exitoso():
     registration_login = request.args.get("registration_login")
     if registration_login == "True":
-
         return render_template("inicio_exitoso.html")
     else:
         return tablero()
@@ -194,47 +158,44 @@ def registro_exitoso():
 def Signout():
     if "email" in session:
         session.pop("email")
-        return render_template("iniciar_sesion.html")
+        return render_template("inicio/inicio.html")
     else:
-        return redirect(url_for("iniciar_sesion"))
+        return redirect(url_for("inicio"))
 
 
-# @app.route("/tasks", methods=['GET'])
-# def tasks():
-#     cur = mysql.connection.cursor()
-#     cur.execute("SELECT * FROM tasks")
-#     tasks = cur.fetchall()
-#     cur.close()
-#     return render_template('tasks.html', tasks=tasks)
+@app.route('/add_task', methods=['POST'])  # insertar datos
+def add_task():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        precio_compra = request.form['precio_compra']
+        precio_venta = request.form['precio_venta']
+        existencias = request.form['existencias']
+
+        cur = mysql.connection.cursor()
+        # Obtener la fecha y hora actual
+        fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        cur.execute("INSERT INTO Producto (Nombre, Precio_Venta,Precio_Compra,Existencias) VALUES (%s, %s, %s, %s)",
+                    (nombre, precio_compra, precio_venta, existencias))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('inventario'))
 
 
-# @app.route('/add_task', methods=['POST'])
-# def add_task():
-#     if request.method == 'POST':
-#         nombre = request.form['nombre']
-#         descripcion = request.form['descripcion']
+@app.route('/edit_task/<int:id>', methods=['POST'])
+def edit_task(id):
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        precio_compra = request.form['precio_compra']
+        precio_venta = request.form['precio_venta']
+        existencias = request.form['existencias']
 
-#         cur = mysql.connection.cursor()
-#         # Obtener la fecha y hora actual
-#         fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-#         cur.execute("INSERT INTO tasks (nombre, descripcion,email,fecha) VALUES (%s, %s, %s, %s)",
-#                     (nombre, descripcion, session['email'], fecha_actual))
-#         mysql.connection.commit()
-#         cur.close()
-#         return redirect(url_for('tasks'))
+        cur.execute("UPDATE Producto SET Nombre = %s, Precio_Venta = %s, Precio_Compra = %s, Existencias = %s WHERE ID_Productos = %s",
+                    (nombre, precio_venta, precio_compra, existencias, id))
 
-
-# @app.route('/edit_task/<int:id>', methods=['POST'])
-# def edit_task(id):
-#     cur = mysql.connection.cursor()
-#     if request.method == 'POST':
-#         nombre = request.form['nombre']
-#         descripcion = request.form['descripcion']
-#         cur.execute("UPDATE tasks SET nombre = %s, descripcion = %s WHERE id = %s",
-#                     (nombre, descripcion, id))
-#         mysql.connection.commit()
-#         cur.close()
-#         return redirect(url_for('tasks'))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('inventario'))
 
 
 @app.route('/delete_task', methods=['POST'])

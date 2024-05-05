@@ -22,47 +22,37 @@ body {
     align-items: center;
     justify-content: center;
     height: 100%;
-    background-color: rgb(149, 128, 128);
     background-image: url(../static/imagenes/fondoArc.jpeg);
-    /* background-image: linear-gradient(to right, #000000, #000000, #c7af9d); */
-    /* background-image: linear-gradient(to right, #bb7972, #a78597, #848ac0, #7388ca); */
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .container__sigin__titulos {
-    margin: 0 auto;
-    padding: 20px 40px;
+    /*El card*/
+    width: 31%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 30px;
     border-radius: 12px;
     /* background-color: #28033142; */
 }
 
-.container__imagen__signin {
-    height: 100%;
-    width: 50%;
-}
-
-.imagen__signin {
-    width: 100%;
-    height: 100%;
-    border-radius: 25px 0 0 25px;
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
 .signin__titulo {
-    font-size: 60px;
-    color: black;
-    /* color: white; */
-    margin: 5px 0px;
-    padding: 10px 0px;
+    font-size: 50px;
     font-weight: bold;
+    margin: 10px 0px;
+    color: rgba(0, 0, 0, 0.775);
 }
 
-.form-control {
-    /*los formularios*/
-    padding: 12.5px;
-    margin-top: 11px;
+.login__input {
+    /*los formualrios*/
+    display: block;
+    width: 100%;
+    padding: 19px;
+    border-radius: 15px;
+    border: 1.8px solid #75757527;
+    margin: 10px 0;
 }
 
 .forget {
@@ -70,22 +60,33 @@ body {
     text-decoration: none;
 }
 
-/* 
-.divisor {
-    color: white;
-} */
-
 .btn__form {
     width: 100%;
+    margin-top: 12px;
     font-size: 1rem;
-    padding: 11.5px;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background-color: #3038f0;
+    color: white;
+    text-decoration: none;
+    text-align: center;
 }
 
-.btn_google {
-    width: 100%;
-    padding: 11.5px;
-    font-size: 4rem;
-    border: none;
+.btn__form:hover {
+    background-image: linear-gradient(to right, #b18ae7, #aa8cf6, #fdfeffe0);
+    background-size: 200% 200%;
+    animation: moverGradiente 5s infinite;
+}
+
+@keyframes moverGradiente {
+    0% {
+        background-position: 0% 0%;
+    }
+
+    100% {
+        background-position: -200% 0%;
+    }
 }
 
 .sigin__remember {
@@ -95,150 +96,59 @@ body {
     justify-content: space-around;
 }
 
-
 /*informacion*/
-.informacion {
-    width: 400px;
-    height: 200px;
-    background-image: linear-gradient(to right top, #00000060, #39032f79, #a38873df);
-    border-radius: 15px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.informacion:hover {
-    background-image: linear-gradient(to right top, #00000069, #50084287, #ad9482df);
-    background-size: 150% 150%;
-    /* Tamaño del gradiente */
-    animation: moverGradiente 5s infinite;
-}
-
-@keyframes moverGradiente {
-    0% {
-        background-position: 0% 0%;
-    }
-
-    50% {
-        background-position: 100% 0%;
-    }
-
-    100% {
-        background-position: 0% 0%;
-    }
-}
-
 .informacion__mensaje {
-    font-size: 20px;
+    font-size: 1rem;
     text-decoration: none;
     text-align: center;
-    display: block;
-    width: 100%;
-    height: 100%;
-    line-height: 200px;
-    color: rgba(255, 255, 255, 0.846);
-
+    color: #3038f0;
 }
 
 /*seccion del registro*/
-.container__singup {
-    margin: 0 auto;
-    width: 100%;
-    height: 90vh;
-    background-color: red;
-}
-
-.container__singup__flex {
-    /*flex imagen y titulos*/
+.Registro {
     display: flex;
     align-items: center;
-    /* margin-top: 10vh; */
+    justify-content: center;
     height: 100%;
-    /* border-radius: 25px; */
-    gap: 15px;
-    color: black;
-    /* background-color: yellow; */
-    /* background-image: linear-gradient(to right, #000000, #000000, #c7af9d); */
-    /* background-color: linear; */
-
+    background-image: url(../static/imagenes/fondoArc.jpeg);
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .container__singup__titulos {
-    margin: 0 auto;
-    padding: 20px 40px;
-    border-radius: 12px;
-    background-color: #28033142;
-    /* background-color: white; */
-}
-
-.container__imagen__singup {
-    height: 100%;
-    width: 50%;
-    /* background-color: yellow; */
-
-}
-
-.imagen__signup {
-    width: 100%;
-    height: 100%;
-    border-radius: 25px 0 0 25px;
-    display: block;
-    opacity: 0;
-}
-
-
-.singup__titulo {
-    font-size: 50px;
-    color: whitesmoke;
-    margin: 5px 0px;
-    padding: 10px 0px;
-}
-
-.form-control {
-    /*los formualrios*/
-    margin: 10px 0;
-    padding: 11px;
-}
-
-.singup__password {}
-
-label {
-    color: white;
-}
-
-.divisor {
-    color: white;
-}
-
-.btn__form {
-    width: 100%;
-    font-size: 1rem;
-    padding: 11.5px;
-    margin: 0;
-}
-
-.btn_facebook {
-    width: 100%;
-    padding: 11.5px;
-    font-size: 1rem;
-    border: none;
-    margin: 0;
-}
-
-.btn_twitter {
-    width: 100%;
-    padding: 11.5px;
-    font-size: 1rem;
-    margin-bottom: 15px;
-    border: none;
-    margin: 0;
-}
-
-.singup__metodos {
+    width: 31%;
     display: flex;
     flex-direction: column;
     gap: 15px;
+    padding: 30px;
+    border-radius: 12px;
+    /* background-color: #28033142; */
+}
+
+.singup__titulo {
+    font-size: 50px;
+    font-weight: bold;
+    margin: 10px 0px;
+    color: rgba(0, 0, 0, 0.775);
+}
+
+label {
+    /*Sus etiquetas*/
+    color: #757575;
+}
+
+/*Salirse alv*/
+.btn__form--salir {
+    width: 80px;
+    padding: 7px 10px;
+    position: relative;
+    left: 720;
+    bottom: 630;
+}
+
+
+/* Estilo para ocultar el marcador de posición cuando el campo de entrada recibe el foco */
+input:focus::placeholder {
+    opacity: 0;
+    /* Establece la opacidad del marcador de posición a 0 cuando el campo está enfocado */
 }
