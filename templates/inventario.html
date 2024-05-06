@@ -23,7 +23,7 @@
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            {% for indice in Productos %} <!--es un nombre cualquiera mas el que recibe de la variable-->
+            {% for indice in Productos %} <!--Nombre cualquiera + el que recibe de la variable-->
             <tr>
                 <td>{{ indice[1] }}</td>
                 <td>{{ indice[2] }}</td>
@@ -34,10 +34,10 @@
                     <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                         data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
                         data-bs-venta="{{indice[2]}}" data-bs-compra="{{indice[3]}}"
-                        data-bs-existencias="{{indice[5]}}">Editar<i class="fas fa-edit"></i>
+                        data-bs-existencias="{{indice[5]}}">Editar <i class="fas fa-edit"></i>
                     </button>
                     <form action="/delete_task" method="post">
-                        <input type="hidden" name="indice_id" value="{{indice[0]}}"><!--Form oculto para obtener id-->
+                        <input type="hidden" name="indice_id" value="{{indice[0]}}"><!--Form oculto para el id  -->
                         <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
                                 class="fas fa-trash-alt"></i>
                         </button>
@@ -90,6 +90,7 @@
     </div>
 </div>
 
+<script src="../static/Js/ModalEditar.js"></script>
 
 
 {%endblock%}

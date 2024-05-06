@@ -38,6 +38,11 @@ def contacto():
     return render_template("inicio/contacto.html")
 
 
+@app.route("/problematica")
+def problematica():
+    return render_template("inicio/problematica.html")
+
+
 @app.route("/tablero")
 def tablero():
     if "email" in session:
@@ -112,14 +117,14 @@ def registro():
 
         if existing_email:  # ya existe en bd
             email_found = True
-            error_message = "El correo electrónico ya está registrado."
+            error_message = "El correo electrónico ya está registrado"
             return render_template(
                 "registro.html", email_found=email_found, error_message=error_message
             )
 
         elif existing_user:  # ya exis  te usuario
             user_found = True
-            error_message = "El usuario ya existe. Por favor, elija otro."
+            error_message = "El usuario ya existe. Por favor, elija otro"
             return render_template(
                 "registro.html", user_found=user_found, error_message=error_message
             )
@@ -135,22 +140,22 @@ def registro():
     return render_template("registro.html")
 
 
-@app.route("/inicio_exitoso")
-def inicio_exitoso():
-    registration_login = request.args.get("registration_login")
-    if registration_login == "True":
-        return render_template("inicio_exitoso.html")
-    else:
-        return tablero()
+# @app.route("/inicio_exitoso")
+# def inicio_exitoso():
+#     registration_login = request.args.get("registration_login")
+#     if registration_login == "True":
+#         return render_template("inicio_exitoso.html")
+#     else:
+#         return tablero()
 
 
-@app.route("/registro_exitoso")
-def registro_exitoso():
-    registration_successful = request.args.get("registration_successful")
-    if registration_successful == "True":
-        return render_template("registro_exitoso.html")
-    else:
-        return tablero()
+# @app.route("/registro_exitoso")
+# def registro_exitoso():
+#     registration_successful = request.args.get("registration_successful")
+#     if registration_successful == "True":
+#         return render_template("registro_exitoso.html")
+#     else:
+#         return tablero()
 
 
 @app.route("/Signout")
