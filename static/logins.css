@@ -74,7 +74,7 @@ body {
 }
 
 .btn__form:hover {
-    background-image: linear-gradient(to right, #b18ae7, #aa8cf6, #fdfeffe0);
+    background-image: linear-gradient(to right, #b18ae7, #aa8cf6, #b6cef4ad);
     background-size: 200% 200%;
     animation: moverGradiente 5s infinite;
 }
@@ -142,17 +142,22 @@ label {
     width: 80px;
     padding: 7px 10px;
     position: relative;
-    left: 720;
-    bottom: 630;
+    left: 710;
+    bottom: 620;
+    font-size: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #3038f0;
+    color: white;
+    text-decoration: none;
+    text-align: center;
 }
 
-
-/* Estilo para ocultar el marcador de posición cuando el campo de entrada recibe el foco */
-input:focus::placeholder {
-    opacity: 0;
-    /* Establece la opacidad del marcador de posición a 0 cuando el campo está enfocado */
+.btn__form--salir:hover {
+    background-color: #4B60EB;
 }
 
-.modal-dialog--modify{
+/*Margen al modal de login*/
+.modal-dialog--modify {
     margin-top: 90px !important;
 }

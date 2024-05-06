@@ -4,188 +4,92 @@
 
 {%block inventario%}
 
-<div class="container2">
-    <div class="row">
-        <div class="col-12 text-center">
-            <h1 class="mt-4 titulo2">Inventario de productos</h1>
-            <h3 class="titulo3">Aumenta tu eficiencia y mantenla con facilidad: Optimiza tu gestión de inventario con
-                nuestra app
-            </h3>
-            <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal"
-                data-bs-target="#taskModal" data-taskid="0">Agregar una Producto
-            </button>
+<section class="inventario">
+    <h1 class="inventario__titulo text-center">Inventario de productos</h1>
 
-            <table class="table table-bordered table-hover tablita">
-                <thead>
-                    <tr>
-                        <th scope="col">Nombre</th>
-                        <th scope="col">Precio Venta</th>
-                        <th scope="col">Precio Compra</th>
-                        <th scope="col">Existencias</th>
-                        <th scope="col">Editar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for task in Productos %} <!--es un nombre cualquiera mas el que recibe de la variable-->
-                    <!-- <td> -->
-                    <!-- <th scope="row">{{ task[0] }}</th> id -->
-                    <td class="">
-                        <div class="flex__descripcion1">
-                            <p class="task1">{{ task[1] }}</p>
-                            <img src="../static/imagenes/img2.jpeg" class="imagen" alt="">
+    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
+        data-taskid="0">Agregar una Producto
+    </button>
 
-                        </div>
-                    </td> <!--nombre -->
-
-                    <td>
-                        <!--precio venta-->
-                        <div class="flex__descripcion">
-                            <p class="texto__enlace" href="{{ task[2] }}">{{ task[2] }}</p>
-                        </div>
-                    </td>
-
-                    <td>
-                        <!--precio compra-->
-                        <div class="flex__descripcion">
-                            <p class="texto__enlace" href="{{ task[3] }}">{{ task[3] }}</p>
-                            <!-- <img class="imagen" src="../static/imagenes/img1.png" alt="" </td> desc -->
-                        </div>
-                    </td>
-                    <td>
-                        <!--exisrencias-->
-                        <div class="flex__descripcion">
-                            <p class="texto__enlace" href="{{ task[3] }}">{{ task[5] }}</p>
-                        </div>
-                    </td>
-
-                    <td>
-                        <div class="flex__btns">
-                            <button type="button" class="btn__editar btn btn-primary btn-sm" data-bs-toggle="modal"
-                                data-bs-target="#taskModal" data-bs-id="{{task[0]}}" data-bs-nombre="{{task[1]}}"
-                                data-bs-venta="{{task[2]}}" data-bs-compra="{{task[3]}}"
-                                data-bs-existencias="{{task[5]}}">Editar <i class="fas fa-edit"></i>
-                            </button>
-
-                            <form action="/delete_task" method="post" id="deleteTaskForm">
-                                <input type="hidden" name="task_id" id="deleteTaskId" value="{{task[0]}}">
-                                <!--el valor?-->
-                                <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
-                                        class="fas fa-trash-alt"></i>
-                                </button>
-                            </form>
-                        </div>
-                    </td>
-
-
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
+    <!--NUeva tabla-->
+    <table class="table  table-hover table-striped align-middle">
+        <thead>
+            <tr>
+                <th scope="col ">Nombre</th> <!--Columna Encabezados-->
+                <th scope="col">Precio Venta</th>
+                <th scope="col">Precio Compra</th>
+                <th scope="col">Existencias</th>
+                <th scope="col">Editar</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for indice in Productos %} <!--es un nombre cualquiera mas el que recibe de la variable-->
+            <tr>
+                <td>{{ indice[1] }}</td>
+                <td>{{ indice[2] }}</td>
+                <td>{{ indice[3] }}</td>
+                <td>{{ indice[4] }}</td>
+                <!--Seccion de edicion (Editar/Eliminar)-->
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
+                        data-bs-venta="{{indice[2]}}" data-bs-compra="{{indice[3]}}"
+                        data-bs-existencias="{{indice[5]}}">Editar<i class="fas fa-edit"></i>
+                    </button>
+                    <form action="/delete_task" method="post">
+                        <input type="hidden" name="indice_id" value="{{indice[0]}}"><!--Form oculto para obtener id-->
+                        <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
+                                class="fas fa-trash-alt"></i>
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
 
 
 <!-- Modal para crear/editar tarea -->
-<div class="modal fade" id="taskModal" tabindex="-1" role="dialog" aria-labelledby="taskModalLabel" aria-hidden="true">
+<div class="modal fade" id="abrirModal" tabindex="-1">
 
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="taskModalLabel">Agregar Pagina</h5> <!--id-->
+
+            <div class="modal-header"><!--Header-->
+                <h5 class="modal-title">Agregar Producto</h5> <!--id-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
 
-            <div class="modal-body">
-                <!--fomulario-->
-                <form id="taskForm" method="POST" action="{{ url_for('add_task') }}"> <!--enviar a app.py-->
-                    <input type="hidden" id="taskId" name="taskId">
-                    <div class="form-group">
-                        <label for="nombre">Nombre:</label> <!--no aparecen-->
-                        <h6>NOmbre</h6>
-                        <input type="text" class="form-control" id="nombre" name="nombre" required> <!--sirve el nam-->
+            <div class="modal-body"> <!--Formulario-->
+                <form id="taskForm" method="post" action="{{ url_for('add_task')}}"> <!--Añadir producto-->
+                    <div class="">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
                     </div>
-                    <div class="form-group">
-                        <label for="descripcion">Precio Compra:</label>
-                        <h6>Precio Compra</h6>
+                    <div class="">
+                        <label for="compra">Precio Compra:</label>
                         <input type="text" class="form-control" id="precio_compra" name="precio_compra" required>
                     </div>
-                    <div class="form-group">
-                        <label for="descripcion">Precio Venta:</label>
-                        <h6>Precio Venta</h6>
+                    <div class="">
+                        <label for="venta">Precio Venta:</label>
                         <input type="text" class="form-control" id="precio_venta" name="precio_venta" required>
                     </div>
-                    <div class="form-group">
-                        <label for="descripcion">Existencias:</label>
-                        <h6>Existencias</h6>
+                    <div class="">
+                        <label for="existencias">Existencias:</label>
                         <input type="text" class="form-control" id="existencias" name="existencias" required>
                     </div>
-                    <div class="form-group text-center mt-2">
+                    <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
                 </form>
-
             </div>
 
         </div>
     </div>
 </div>
-</body>
 
 
-
-<script>
-
-    const nombreModal = document.getElementById('taskModal')
-    if (nombreModal) {
-        nombreModal.addEventListener('show.bs.modal', event => {
-            // Button that triggered the modal
-            const button = event.relatedTarget
-            // Extract info from data-bs-* attributes
-            const id = button.getAttribute('data-bs-id')
-            const name = button.getAttribute('data-bs-nombre')
-            const compra = button.getAttribute('data-bs-compra')
-            const venta = button.getAttribute('data-bs-venta')
-            const existencias = button.getAttribute('data-bs-existencias')
-            const desc = button.getAttribute('data-bs-descripcion')
-            // If necessary, you could initiate an Ajax request here
-            // and then do the updating in a callback.
-
-            // Update the modal's content.
-            const modalNombre = nombreModal.querySelector('#nombre')
-            const modalCompra = nombreModal.querySelector('#precio_compra')
-            const modalVenta = nombreModal.querySelector('#precio_venta')
-            const modalExistencias = nombreModal.querySelector('#existencias')
-            const modalDesc = nombreModal.querySelector('#descripcion')
-            //  const modalBodyInput = exampleModal.querySelector('.modal-body input')
-
-            //modal.textContent = `New message to ${recipient}`
-            modalNombre.value = name
-            modalCompra.value = compra
-            modalVenta.value = venta
-            modalExistencias.value = existencias
-
-            if (id) {
-                nombreModal.querySelector('.modal-title').textContent = 'Editar tarea';
-                nombreModal.querySelector('#taskForm').setAttribute('action', '{{ url_for("edit_task", id=0) }}'.replace('0', id));
-            } else {
-                nombreModal.querySelector('.modal-title').textContent = 'Agregar tarea';
-            }
-        })
-    }
-
-    document.getElementById("delete__btn").addEventListener("click", function () {
-        if (confirm("¿Estás seguro de que deseas Eliminar?")) {
-            // Si el usuario confirma, realizar alguna acción, por ejemplo, redireccionar a otra página
-            window.location.href = "";
-        } else {
-            // Si el usuario cancela, no hacer nada
-        }
-    });
-
-
-
-</script>
 
 {%endblock%}

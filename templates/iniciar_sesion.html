@@ -29,10 +29,10 @@
 
             <form method="post" action="{{ url_for('iniciar_sesion') }}"> <!--Se pasa la funcion-->
                 <!-- Email input -->
-                <div class="">
+                <div class=" ">
                     <label for="email">Email address</label>
                     <input type="email" class="login__input {% if correo_no_encontrado %}is-invalid{% endif %}"
-                        id="email" name="email" required="">
+                        id="email" name="email" required="" >
                     {% if correo_no_encontrado %}
                     <div class="invalid-feedback">Correo no encontrado.</div>
                     {% endif %}
@@ -60,18 +60,13 @@
             </a>
 
             <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
-            <a class="btn__form btn__form--salir" href="/">Salir</a>
+            <a class="btn__form--salir" href="/">Salir</a>
         </div>
     </section>
 
     <!-- <div class="spinner-border" role="status">
         <span class="visually-hidden">Loading...</span>
     </div> -->
-
-
-
-
-
 
     {% if registration_login %}
     <button id="modal" type="button" class="btn__form d-none" data-bs-toggle="modal" data-bs-target="#inicio_sesion">

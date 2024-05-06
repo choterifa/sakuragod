@@ -49,11 +49,14 @@ def tablero():
 
 @app.route("/inventario", methods=['GET'])
 def inventario():
-    cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM Producto")
-    Productos = cur.fetchall()
-    cur.close()
-    return render_template('inventario.html', Productos=Productos)
+    if "email" in session:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM Producto")
+        Productos = cur.fetchall()
+        cur.close()
+        return render_template('inventario.html', Productos=Productos)
+    else:
+        return render_template("iniciar_sesion.html")
 
 
 @app.route("/iniciar_sesion", methods=["GET", "POST"])
@@ -114,7 +117,7 @@ def registro():
                 "registro.html", email_found=email_found, error_message=error_message
             )
 
-        elif existing_user:  # ya existe usuario
+        elif existing_user:  # ya exis  te usuario
             user_found = True
             error_message = "El usuario ya existe. Por favor, elija otro."
             return render_template(
@@ -128,11 +131,7 @@ def registro():
             )
             mysql.connection.commit()
             session["email"] = email  # crear sesion del email
-            return redirect(
-                # mensaje de registro
-                url_for("registro_exitoso",
-                        registration_successful=True)
-            )
+            return render_template("registro.html", registration_successful=True)
     return render_template("registro.html")
 
 
@@ -201,8 +200,7 @@ def edit_task(id):
 @app.route('/delete_task', methods=['POST'])
 def delete_task():
     cur = mysql.connection.cursor()
-    id = request.form['task_id']
-    print("Valor de id:", id)
+    id = request.form['indice_id']
     cur.execute("DELETE FROM Producto WHERE ID_Productos = %s",
                 (id,))  # ID_Productos cambia
     mysql.connection.commit()

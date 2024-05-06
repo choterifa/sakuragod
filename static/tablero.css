@@ -4,7 +4,6 @@
     --color-gris: #515051;
     --color-verde: #66d5aadb;
     --color-fondo: #eff2f9;
-    --color-azul: #5060e3;
     --color-rojo: #fe4059;
 }
 
@@ -21,32 +20,34 @@
 
 .resumen__enlaces {
     text-decoration: none;
+    color: #80f0ba;
 }
 
 .resumen__cards {
-    /*contenedor de las tarjetas*/
+    /*Contenedor de las tarjetas*/
     display: flex;
     width: 100%;
     justify-content: space-around;
     padding: 18px;
     margin: 10px 0 20px 0px;
+    /* background-color: red; */
 }
 
 .resumen__card__item {
     /*tarjetas*/
     width: 17%;
     height: 120px;
-    background-color: #f3f3f3;
+    background-color: #f3f3f3c6;
     border-radius: 10px;
     box-shadow: 0px 0px 5px 0px rgba(73, 71, 71, 0.194);
 }
 
-.resumen__card__item:hover {
+.resumen__card__item:hover, .resumen__card__item:hover > .resumen__enlaces {
     /*tarjetas*/
-    transform: scale(1.05);
+    transform: scale(1.04);
     cursor: pointer;
-    background-color: #76eeb4;
-    color: #1c8d56;
+    color: #187347;
+    background-color: #80f0ba;
 }
 
 .resumen__card__textos {
@@ -59,10 +60,11 @@
 
 .resumen__card__titulo {
     font-size: 36px;
-    color: #66d5aadb;
 }
 
+
 .resumen__card__paragraph {
+    /*Icono + parrafo*/
     display: flex;
     gap: 10px;
     justify-content: center;
@@ -114,15 +116,15 @@
     font-size: 20px;
 }
 
-/*parte 2*/
+/*Seccion vendidos +  deudores + final*/
 .resumen__card__item2 {
     /*tarjetas*/
     width: 47%;
     min-height: 240px;
     padding: 10px;
-    background-color: #f3f3f3;
+    background-color: #f3f3f3a4;
     border-radius: 10px;
-    box-shadow: 0px 0px 5px 0px rgba(73, 71, 71, 0.194);
+    box-shadow: 0px 0px 5px 0px rgba(73, 71, 71, 0.401);
 }
 
 .resumen__card__titulo2 {
@@ -141,6 +143,8 @@
     height: 120px;
     display: block;
     object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0px 0px 5px 0px rgba(73, 71, 71, 0.194);
 }
 
 .resumen__card__items {
@@ -156,26 +160,29 @@
 }
 
 .resumen__paragraph2 {
-    /*todos los p 2*/
-    color: var(--color-gris);
+    /*titulos de mas vendidos*/
     margin: 0;
+    color: var(--color-gris);
 }
 
 /*reembolso (parte ultima)*/
 .resumen__cards--modify {
-    justify-content: space-between;
-    width: 95%;
-    margin-left: 17px;
+    justify-content: space-around;
     /* background-color: yellow; */
-
 }
 
 .resumen__card__item2--reebolso {
     /*los 2 de abajo*/
     width: 21%;
-    height: 160px;
+    height: 140px;
     min-height: 10px;
 }
+
+.resumen__card__item2--reebolso:hover{
+    transform: scale(1.04);
+    background-color: rgba(251, 58, 58, 0.649);
+}
+
 
 .resumen__card__reembolso__flex {
     display: flex;

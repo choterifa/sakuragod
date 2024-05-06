@@ -12,7 +12,7 @@
     <div class="resumen__cards">
 
         <div class="resumen__card__item">
-            <a href="/iniciar_sesion" class="resumen__enlaces">
+            <a href="#" class="resumen__enlaces">
 
                 <div class="resumen__card__textos">
                     <h3 class="resumen__card__titulo">800</h3>
@@ -26,7 +26,7 @@
         </div>
 
         <div class="resumen__card__item">
-            <a href="/iniciar_sesion" class="resumen__enlaces">
+            <a href="#" class="resumen__enlaces">
                 <div class="resumen__card__textos">
                     <h3 class="resumen__card__titulo">200</h3>
                     <div class="resumen__card__paragraph">
@@ -40,7 +40,7 @@
         </div>
 
         <div class="resumen__card__item">
-            <a href="/iniciar_sesion" class="resumen__enlaces">
+            <a href="#" class="resumen__enlaces">
                 <div class="resumen__card__textos">
                     <h3 class="resumen__card__titulo">4</h3>
                     <div class="resumen__card__paragraph">
@@ -52,7 +52,7 @@
         </div>
 
         <div class="resumen__card__item">
-            <a href="/iniciar_sesion" class="resumen__enlaces">
+            <a href="#" class="resumen__enlaces">
                 <div class="resumen__card__textos">
                     <h3 class="resumen__card__titulo">2</h3>
                     <div class="resumen__card__paragraph">
@@ -75,8 +75,8 @@
 
             <div class="resumen__card__item  resumen__card__item--bandera">
                 <div class="resumen__card__textos resumen__card__textos--modify">
-                    <p class="resumen__paragraph__bandera">Total de items</p>
-                    <h3 class="resumen__card__titulo__bandera">200</h3>
+                    <p class="resumen__paragraph__bandera">Clientes</p>
+                    <h3 class="resumen__card__titulo__bandera">20</h3>
                 </div>
             </div>
 
@@ -86,7 +86,7 @@
     <div class="resumen__cards">
 
         <div class="resumen__card__item2 ">
-            <h3 class="resumen__card__titulo2">3 Más vendidos</h3>
+            <h3 class="resumen__card__titulo2">Más vendidos</h3>
             <div class="resumen__card__items__vendidos">
 
                 <div class="resumen__card__items">
@@ -94,7 +94,7 @@
                         <img src="https://images.unsplash.com/photo-1569411032431-07598b0012c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTMyNTI5MzZ8&ixlib=rb-4.0.3&q=80&w=1080"
                             alt="" class="imagen">
                     </figure>
-                    <p class="resumen__paragraph2">Sabana </p>
+                    <p class="resumen__paragraph2">Sabana</p>
                     <h3 class="resumen__card__pzas">60 pzas</h3>
                 </div>
 
@@ -120,9 +120,9 @@
         </div>
 
 
-        <!-- Apartados  2-->
+        <!-- Clientes que deben-->
         <div class="resumen__card__item2">
-            <h3 class="resumen__card__titulo2">Vencen Pronto</h3>
+            <h3 class="resumen__card__titulo2">Deudores</h3>
 
 
             <table class="table table-bordered table-hover tablita">
@@ -134,30 +134,29 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for task in tasks %}
+                    {% for deudor in task %}
                     <tr>
-                        <th scope="row">{{ task[0] }}</th> id
+                        <th scope="row">{{ deudor[0] }}</th> 
                         <td class="">
                             <div class="flex__descripcion1">
-                                <p class="task1">{{ task[1] }}</p>
+                                <p class="deudor1">{{ deudor[1] }}</p>
                             </div>
                         </td>
                         <!--nombre -->
-
                         <td>
                             <div class="flex__descripcion">
-                                <a class="texto__enlace" href="{{ task[2] }}">{{ task[2] }}</a>
+                                <a class="texto__enlace" href="{{ deudor[2] }}">{{ deudor[2] }}</a>
                                 <img class="imagen" src="../static/imagenes/img1.png" alt="" </td> <!--desc-->
                                 </>
                         <td>
                             <div class="flex__btns">
                                 <button type="button" class="btn__editar btn btn-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#taskModal" data-bs-id="{{task[0]}}" data-bs-nombre="{{task[1]}}"
-                                    data-bs-descripcion="{{task[2]}}">Editar <i class="fas fa-edit"></i>
+                                    data-bs-target="#deudorModal" data-bs-id="{{deudor[0]}}" data-bs-nombre="{{deudor[1]}}"
+                                    data-bs-descripcion="{{deudor[2]}}">Editar <i class="fas fa-edit"></i>
                                 </button>
 
-                                <form action="/delete_task" method="post" id="deleteTaskForm">
-                                    <input type="hidden" name="task_id" id="deleteTaskId" value="{{task[0]}}">
+                                <form action="/delete_deudor" method="post" id="deletedeudorForm">
+                                    <input type="hidden" name="deudor_id" id="deletedeudorId" value="{{deudor[0]}}">
                                     <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
                                             class="fas fa-trash-alt"></i>
                                     </button>
@@ -189,8 +188,8 @@
 
         <div class="resumen__card__item2 resumen__card__item2--reebolso">
             <div class="resumen__card__reembolso__flex">
-                <p class="resumen__paragraph__invertir">Dinero a invertir</p>
-                <h3 class="resumen__card__invertir">5000</h3>
+                <p class="resumen__paragraph__invertir">Total de productos</p>
+                <h3 class="resumen__card__invertir">100</h3>
             </div>
         </div>
         <!--ultimo-->
