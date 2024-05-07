@@ -84,23 +84,23 @@
         <script>
             setTimeout(function () {
                 window.location.href = "{{ url_for('tablero')}}";
-            }, 6200);
+            }, 10000);
         </script>
 
         <div class="modal-dialog modal-dialog--modify">
             <div class="modal-content">
 
                 <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
-                    <svg class="bi mt-5 mb-3" width="48" height="48">
-                        <use xlink:href="#check2-circle"></use>
-                    </svg>
+                    <i class="bi bi-check2-circle"></i> <!--Icono-->
                     <h1 class="text-body-emphasis">¡Registro existoso!</h1>
+                    <h1 class="text-body-emphasis contador" id="contador">5</h1> <!--Contador-->
+                    <script src="../static/Js/inciar_sesion.js"></script>
                     <p class="col-lg-9 mx-auto mb-4">
                         Ahora serás redirigido al tablero principal, donde podrás acceder a todas las funciones
                         y características de nuestro gestor.
                     </p>
                     <a href="/tablero">
-                        <button data-bs-dismiss="modal" class="btn btn-primary px-5 mb-5" type="button">
+                        <button data-bs-dismiss="modal" class="btn btn-primary px-5 mb-4" type="button">
                             Entrar
                         </button>
                     </a>
@@ -110,10 +110,6 @@
         </div>
     </div>
     {% endif %}
-
-
-
-
 
 </body>
 

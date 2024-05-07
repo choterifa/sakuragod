@@ -1,6 +1,11 @@
-
-.inventario{
+.inventario {
     width: 85%;
     padding: 25px;
+    /* background-color: red; */
+}
+
+.editar__botones {
+    display: flex;
+    justify-content: space-around;
     /* background-color: red; */
 }

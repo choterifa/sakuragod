@@ -262,8 +262,26 @@
     border-radius: 50%;
     background-color: rgb(27, 27, 28);
     color: white;
-    font-size: 28px;
+    font-size: 24px;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.modo__Oscuro {
+    position: absolute;
+    top: 45%;
+    right: 0px;
+    text-decoration: none;
+    width: 60px;
+    height: 47px;
+    border-radius: 20px 0 0 20px;
+    text-align: center;
+    background-color: rgb(27, 27, 28);
+    color: white;
+    font-size: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }

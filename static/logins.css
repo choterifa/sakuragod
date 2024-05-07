@@ -39,10 +39,10 @@ body {
 }
 
 .signin__titulo {
-    font-size: 50px;
+    font-size: 56px;
     font-weight: bold;
     margin: 10px 0px;
-    color: rgba(0, 0, 0, 0.775);
+    color: rgba(0, 0, 0, 0.742);
 }
 
 .login__input {
@@ -51,7 +51,7 @@ body {
     width: 100%;
     padding: 19px;
     border-radius: 15px;
-    border: 1.8px solid #75757527;
+    border: 1.85px solid #75757527;
     margin: 10px 0;
 }
 
@@ -76,7 +76,7 @@ body {
 .btn__form:hover {
     background-image: linear-gradient(to right, #b18ae7, #aa8cf6, #b6cef4ad);
     background-size: 200% 200%;
-    animation: moverGradiente 5s infinite;
+    animation: moverGradiente 4s infinite;
 }
 
 @keyframes moverGradiente {
@@ -158,6 +158,25 @@ label {
 }
 
 /*Margen al modal de login*/
+
 .modal-dialog--modify {
-    margin-top: 90px !important;
+
+    margin-top: calc(50vh - 270px) !important;
+    /* background-color: red; */
+}
+
+.modal-content {
+    border-radius: 100px !important;
+}
+
+.contador {
+    font-size: 24px;
+    transition: all 1s ease;
+    /* Animación suave */
+}
+
+.modal-content i {
+    padding: 10px;
+    margin-top: 10px;
+    font-size: 60px;
 }

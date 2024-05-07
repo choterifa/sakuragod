@@ -5,8 +5,10 @@
 
 {%block index%}
 <section class="resumen">
+     
 
     <h1 class="resumen__titulo">Movimientos</h1>
+
 
 
     <div class="resumen__cards">
@@ -136,7 +138,7 @@
                 <tbody>
                     {% for deudor in task %}
                     <tr>
-                        <th scope="row">{{ deudor[0] }}</th> 
+                        <th scope="row">{{ deudor[0] }}</th>
                         <td class="">
                             <div class="flex__descripcion1">
                                 <p class="deudor1">{{ deudor[1] }}</p>
@@ -151,8 +153,9 @@
                         <td>
                             <div class="flex__btns">
                                 <button type="button" class="btn__editar btn btn-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#deudorModal" data-bs-id="{{deudor[0]}}" data-bs-nombre="{{deudor[1]}}"
-                                    data-bs-descripcion="{{deudor[2]}}">Editar <i class="fas fa-edit"></i>
+                                    data-bs-target="#deudorModal" data-bs-id="{{deudor[0]}}"
+                                    data-bs-nombre="{{deudor[1]}}" data-bs-descripcion="{{deudor[2]}}">Editar <i
+                                        class="fas fa-edit"></i>
                                 </button>
 
                                 <form action="/delete_deudor" method="post" id="deletedeudorForm">

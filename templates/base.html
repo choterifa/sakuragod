@@ -24,6 +24,7 @@
 </head>
 
 <body>
+    <!-- data-bs-theme="dark" -->
 
     <div class="container__principal">
 
@@ -48,7 +49,11 @@
                                 <ul class="dropdown-menu ">
                                     <li><a class="dropdown-item" href="/">Ir a inicio</a></li>
                                     <li><a class="dropdown-item" href="/">Editar Perfil</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
                                     <li><a class="dropdown-item" href="/Signout">Cerrar Sesion</a></li>
+
                                 </ul>
                             </div>
                         </li>
@@ -59,19 +64,30 @@
 
                     </div>
 
-                    <li><a href="/tablero">Tablero</a></li>
-                    <li><a href="/inventario">Caja</a></li>
-                    <li><a href="/inventario">Inventario</a></li>
-                    <li><a href="/inventario">Categorias</a></li>
-                    <li><a href="/inventario">Productos</a></li>
-                    <li><a href="#">Ventas</a></li>
+                    <div class="nav__icon__flex">
+                        <li><i class="bi bi-house-fill"></i><a href="/tablero" class="item__nav">Tablero</a></li>
+                        <li><i class="bi bi-cart"></i><a href="/inventario" class="item__nav">Productos</a></li>
+                        <li><i class="bi bi-file-earmark"></i><a href="#" class="item__nav">Ventas</a></li>
+                        <li><i class="bi bi-people"></i><a href="/inventario" class="item__nav">Clientes</a></li>
+                        <li><i class="bi bi-shop"></i><a href="/inventario" class="item__nav">Inventario</a></li>
+                        <li><i class="bi bi-tags"></i><a href="/inventario" class="item__nav">Categorias</a></li>
+                        <li><i class="bi bi-graph-up"></i><a href="/inventario" class="item__nav">Reportes</a></li>
+                        <li>
+                            <i class="bi bi-door-closed"></i>
+                            <a class="item__nav" href="/Signout">Cerrar Sesion</a>
+                        </li>
+
+
+                    </div>
+
                 </ul>
             </nav>
+
+
 
             {%block index%}
             {%endblock%}
             {%block inventario%}
-
             {%endblock%}
             {%block sign%}
             {%endblock%}

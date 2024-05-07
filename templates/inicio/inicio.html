@@ -13,6 +13,9 @@
     <!--fFont awesome-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+    <link rel="icon" href="../../static/imagenes/Logo/Almohada.jpg" type="image/x-icon">
+
+
 
 </head>
 
@@ -22,7 +25,9 @@
         <!--Inicio nav-->
         <nav class="Inicio__Nav">
             <div class="Inicio__Nav__Logo__Contenedor">
-                <img src="../static/imagenes/Logo/Icono.jpg" class="Inicio__Nav__Logo" alt="Logo">
+                <a href="/">
+                    <img src="../static/imagenes/Logo/Icono.jpg" class="Inicio__Nav__Logo" alt="Logo">
+                </a>
             </div>
 
             <div class="Inicio__Enlaces__Contenedor">
@@ -34,7 +39,7 @@
                 </a>
                 <a href="/problematica" class="Inicio__Enlace">Problematica
                 </a>
-               
+
             </div>
 
             <a href="/tablero">
@@ -45,8 +50,11 @@
         <!--Audio Btn-->
         <a href="#" id="audio" class="Audio__Btn "><i class="bi bi-music-note-beamed"></i>
         </a>
-        {%block contenido%}
+        <!--ModoNocturno-->
+        <a href="#" id="cambiarTema" class="modo__Oscuro "><i class="bi bi-moon-fill"></i></i></i>
+        </a>
 
+        {%block contenido%}
         <!--Hero del inicio-->
         <div class="Inicio__Hero">
             <div class="Inicio__Contenedor__Parrafos">
@@ -76,19 +84,32 @@
                 <img src="../static/imagenes/Cover3.jpg" alt="Cover" class="Inicio__Imagen">
             </figure>
 
-           
-
+            <!--Musica-->
             <audio id="audio-fondo" autoplay loop>
                 <source src="../../static/Audio/Audio.mp3" type="audio/mpeg">
                 Tu navegador no soporta el elemento de audio
             </audio>
-
             <script src="../../static/Js/Audio.js"></script>
+
+
 
         </div> <!--Fin Hero-->
 
         {%endblock%}
 
+
+        <script src="../../static/Js/modoOscuro.js"></script>
+
+        <!--Footer-->
+        <footer class="py-3 my-4 w-75">
+            <ul class="nav justify-content-center border-bottom pb-3 mb-3">
+                <li><a href="#" class="nav-link px-2 text-body-secondary">Inicio</a></li>
+                <li><a href="#" class="nav-link px-2 text-body-secondary">Ubicacion</a></li>
+                <li><a href="#" class="nav-link px-2 text-body-secondary">Contacto</a></li>
+                <li><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+            </ul>
+            <p class="text-center text-body-secondary">© 2024 Company, Inc</p>
+        </footer>
 
 
 

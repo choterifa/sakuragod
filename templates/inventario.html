@@ -5,6 +5,27 @@
 {%block inventario%}
 
 <section class="inventario">
+    <!--Breadcrumb-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
+            <li class="breadcrumb-item">
+                <a class="link-body-emphasis" href="#">
+                    <svg class="bi" width="16" height="16">
+                        <use xlink:href="#house-door-fill"></use>
+                    </svg>
+                    <span class="visually-hidden">Home</span>
+                </a>
+            </li>
+            <li class="breadcrumb-item">
+                <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Library</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                Data
+            </li>
+        </ol>
+    </nav>
+
+
     <h1 class="inventario__titulo text-center">Inventario de productos</h1>
 
     <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
@@ -15,7 +36,7 @@
     <table class="table  table-hover table-striped align-middle">
         <thead>
             <tr>
-                <th scope="col ">Nombre</th> <!--Columna Encabezados-->
+                <th scope="col">Nombre</th> <!--Columna Encabezados-->
                 <th scope="col">Precio Venta</th>
                 <th scope="col">Precio Compra</th>
                 <th scope="col">Existencias</th>
@@ -26,22 +47,25 @@
             {% for indice in Productos %} <!--Nombre cualquiera + el que recibe de la variable-->
             <tr>
                 <td>{{ indice[1] }}</td>
-                <td>{{ indice[2] }}</td>
-                <td>{{ indice[3] }}</td>
+                <td>${{ indice[2] }}</td>
+                <td>${{ indice[3] }}</td>
                 <td>{{ indice[4] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
-                    <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal"
-                        data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
-                        data-bs-venta="{{indice[2]}}" data-bs-compra="{{indice[3]}}"
-                        data-bs-existencias="{{indice[5]}}">Editar <i class="fas fa-edit"></i>
-                    </button>
-                    <form action="/delete_task" method="post">
-                        <input type="hidden" name="indice_id" value="{{indice[0]}}"><!--Form oculto para el id  -->
-                        <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
-                                class="fas fa-trash-alt"></i>
+                    <div class="editar__botones">
+                        <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
+                            data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
+                            data-bs-venta="{{indice[2]}}" data-bs-compra="{{indice[3]}}"
+                            data-bs-existencias="{{indice[5]}}">Editar <i class="fas fa-edit "></i>
                         </button>
-                    </form>
+                        <form action="/delete_task" method="post" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[0]}}"><!--Form oculto para el id  -->
+                            <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
+                                    class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </div>
+
                 </td>
             </tr>
             {% endfor %}
@@ -49,6 +73,38 @@
     </table>
 </section>
 
+<!--Modal eliminar-->
+
+<div class="modal fade" id="Modal_eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+    <!--Evitar que se ciiere con esq y click y no enfocable-->
+    <!-- <script>
+        setTimeout(function () {
+            window.location.href = "{{ url_for('tablero')}}";
+        }, 8000);
+    </script> -->
+
+    <div class="modal-dialog modal-dialog--modify">
+        <div class="modal-content">
+
+            <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
+                <svg class="bi mt-5 mb-3" width="48" height="48">
+                    <use xlink:href="#check2-circle"></use>
+                </svg>
+                <h1 class="text-body-emphasis">¡Inicio de sesión exitoso!</h1>
+                <p class="col-lg-9 mx-auto mb-4">
+                    Ahora serás redirigido al tablero principal, donde podrás acceder a todas las funciones
+                    y características del gestor.
+                </p>
+                <a href="/tablero">
+                    <button data-bs-dismiss="modal" id="confirmar" class="btn btn-primary px-5 mb-5" type="button">
+                        Confirmar
+                    </button>
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
 
 <!-- Modal para crear/editar tarea -->
 <div class="modal fade" id="abrirModal" tabindex="-1">
