@@ -32,7 +32,7 @@
         data-taskid="0">Agregar una Producto
     </button>
 
-    <!--NUeva tabla-->
+    <!--Nueva tabla-->
     <table class="table  table-hover table-striped align-middle">
         <thead>
             <tr>
@@ -75,15 +75,7 @@
 </section>
 
 <!--Modal eliminar-->
-
 <div class="modal fade" id="Modal_eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <!--Evitar que se ciiere con esq y click y no enfocable-->
-    <!-- <script>
-        setTimeout(function () {
-            window.location.href = "{{ url_for('tablero')}}";
-        }, 8000);
-    </script> -->
-
     <div class="modal-dialog modal-dialog--modify">
         <div class="modal-content">
 
@@ -120,22 +112,38 @@
             </div>
 
             <div class="modal-body"> <!--Formulario-->
-                <form id="taskForm" method="post" action="{{ url_for('add_task')}}"> <!--Añadir producto-->
+                <form id="taskForm" method="post" action="{{ url_for('agregar_producto')}}"> <!--Añadir producto-->
                     <div class="">
                         <label for="nombre">Nombre:</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" required>
                     </div>
                     <div class="">
-                        <label for="compra">Precio Compra:</label>
+                        <label for="precio_compra">Precio Compra:</label>
                         <input type="text" class="form-control" id="precio_compra" name="precio_compra" required>
                     </div>
                     <div class="">
-                        <label for="venta">Precio Venta:</label>
+                        <label for="precio_venta">Precio Venta:</label>
                         <input type="text" class="form-control" id="precio_venta" name="precio_venta" required>
+                    </div>
+                    <div class="">
+                        <label for="ganancia">Ganancia:</label>
+                        <input type="text" class="form-control" id="ganancia" name="ganancia" required>
                     </div>
                     <div class="">
                         <label for="existencias">Existencias:</label>
                         <input type="text" class="form-control" id="existencias" name="existencias" required>
+                    </div>
+                    <div class="">
+                        <label for="existencias_deseadas">Existencias deseadas:</label>
+                        <input type="text" class="form-control" id="existencias_deseadas" name="existencias_deseadas" >
+                    </div>
+                    <div class="">
+                        <label for="proovedor">Proveedor:</label>
+                        <input type="text" class="form-control" id="proveedor" name="proveedor" required>
+                    </div>
+                    <div class="">
+                        <label for="categoria">Categoria:</label>
+                        <input type="text" class="form-control" id="categoria" name="categoria" required>
                     </div>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary">Guardar</button>

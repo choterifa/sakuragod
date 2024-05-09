@@ -68,11 +68,11 @@ def mostrarInventario():
 @app.route("/iniciar_sesion", methods=["GET", "POST"])
 def iniciar_sesion():
     if request.method == "POST":  # lo que recibo por post
-        email = request.form["email"]
-        password = request.form["password"]
+        correo = request.form["correo"]
+        contraseña = request.form["contraseña"]
 
         cur = mysql.connection.cursor()  # Guardar conexion en variable
-        cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+        cur.execute("SELECT * FROM login WHERE Correo = %s", (correo,))
         existing_email = cur.fetchone()  # Si existe, Guardar la tupla
         cur.close()
         print(existing_email)
@@ -84,16 +84,16 @@ def iniciar_sesion():
         else:
             # El correo electrónico está registrado
             # En el cuarto campo de la tupla (Contraseña) se compara con la contraseña del Form
-            if existing_email[3] == password:
+            if existing_email[3] == contraseña:
                 # Contraseña correcta
                 # Crear session email con el email
-                session["email"] = email
-                return render_template("iniciar_sesion.html", user=email, registration_login=True)
+                session["email"] = correo
+                return render_template("iniciar_sesion.html", user=correo, registration_login=True)
             else:
                 # Contraseña incorrecta
                 bad_password = True
                 return render_template(
-                    "iniciar_sesion.html", bad_password=bad_password, email=email
+                    "iniciar_sesion.html", bad_password=bad_password, email=correo
                 )
     return render_template("iniciar_sesion.html")
 
@@ -104,16 +104,16 @@ def registro():
     #     return render_template("tablero.html", email=session["email"])
     # else:
     if request.method == "POST":
-        name = request.form.get("username")
-        email = request.form.get("email")
-        password = request.form.get("password")
+        nombre = request.form.get("nombre")
+        correo = request.form.get("correo")
+        contraseña = request.form.get("contraseña")
 
         # comprobar antes si estan en la bd para no registralos
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM users WHERE email = %s", (email,))
+        cur.execute("SELECT * FROM login WHERE Correo = %s", (correo,))
         existing_email = cur.fetchone()
 
-        cur.execute("SELECT * FROM users WHERE name = %s", (name,))
+        cur.execute("SELECT * FROM login WHERE Nombre = %s", (nombre,))
         existing_user = cur.fetchone()
 
         if existing_email:  # ya existe en bd
@@ -132,31 +132,13 @@ def registro():
         else:
             # registrar en base de datos
             cur.execute(
-                "INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
-                (name, email, password),
+                "INSERT INTO login (Nombre, Correo, Contraseña) VALUES (%s, %s, %s)",
+                (nombre, correo, contraseña),
             )
             mysql.connection.commit()
-            session["email"] = email  # crear sesion del email
+            session["email"] = correo  # crear sesion del email
             return render_template("registro.html", registration_successful=True)
     return render_template("registro.html")
-
-
-# @app.route("/inicio_exitoso")
-# def inicio_exitoso():
-#     registration_login = request.args.get("registration_login")
-#     if registration_login == "True":
-#         return render_template("inicio_exitoso.html")
-#     else:
-#         return tablero()
-
-
-# @app.route("/registro_exitoso")
-# def registro_exitoso():
-#     registration_successful = request.args.get("registration_successful")
-#     if registration_successful == "True":
-#         return render_template("registro_exitoso.html")
-#     else:
-#         return tablero()
 
 
 @app.route("/Signout")
@@ -168,22 +150,28 @@ def Signout():
         return redirect(url_for("iniciar_sesion"))
 
 
-@app.route('/add_task', methods=['POST'])  # insertar datos
-def add_task():
+@app.route('/agregar_producto', methods=['POST'])  # insertar datos
+def agregar_producto():
     if request.method == 'POST':
         nombre = request.form['nombre']
         precio_compra = request.form['precio_compra']
         precio_venta = request.form['precio_venta']
+        ganancia = request.form['ganancia']
         existencias = request.form['existencias']
+        existencias_deseadas = request.form['existencias_deseadas']
+        proveedor = request.form['proveedor']
+        categoria = request.form['categoria']
+
+        print(existencias_deseadas)
 
         cur = mysql.connection.cursor()
         # Obtener la fecha y hora actual
-        fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        cur.execute("INSERT INTO Producto (Nombre, Precio_Venta,Precio_Compra,Existencias) VALUES (%s, %s, %s, %s)",
-                    (nombre, precio_compra, precio_venta, existencias))
+        # fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        cur.execute("INSERT INTO Producto (Nombre, Precio_Compra, Precio_Venta, Ganancia_Producto, Existencias, Existencias_Deseadas, ID_Provedor, ID_C) VALUES (%s, %s, %s, %s,%s,%s,%s,%s)",
+                    (nombre, precio_compra, precio_venta, ganancia, existencias, existencias_deseadas, proveedor, categoria))
         mysql.connection.commit()
         cur.close()
-        return redirect(url_for('inventario'))
+        return redirect(url_for('mostrarInventario'))
 
 
 @app.route('/edit_task/<int:id>', methods=['POST'])
