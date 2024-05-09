@@ -15,8 +15,9 @@ from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 
+# Configuración para la primera base de datos
 app.config["MYSQL_USER"] = config.MYSQL_USER
-app.config["MYSQL_DB"] = config.MYSQL_DB
+app.config["MYSQL_DB"] = config.MYSQL_DB2  # cambio de BD
 app.config["MYSQL_PASSWORD"] = config.MYSQL_PASSWORD
 app.config["SECRET_KEY"] = config.HEX_SEC_KEY
 mysql = MySQL(app)
@@ -53,7 +54,7 @@ def tablero():
 
 
 @app.route("/inventario", methods=['GET'])
-def inventario():
+def mostrarInventario():
     if "email" in session:
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM Producto")

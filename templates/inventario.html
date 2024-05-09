@@ -37,8 +37,8 @@
         <thead>
             <tr>
                 <th scope="col">Nombre</th> <!--Columna Encabezados-->
-                <th scope="col">Precio Venta</th>
                 <th scope="col">Precio Compra</th>
+                <th scope="col">Precio Venta</th>
                 <th scope="col">Existencias</th>
                 <th scope="col">Editar</th>
             </tr>
@@ -49,14 +49,15 @@
                 <td>{{ indice[1] }}</td>
                 <td>${{ indice[2] }}</td>
                 <td>${{ indice[3] }}</td>
-                <td>{{ indice[4] }}</td>
+                <td>{{ indice[5] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
                         <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
                             data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
-                            data-bs-venta="{{indice[2]}}" data-bs-compra="{{indice[3]}}"
+                            data-bs-venta="{{indice[3]}}" data-bs-compra="{{indice[2]}}"
                             data-bs-existencias="{{indice[5]}}">Editar <i class="fas fa-edit "></i>
+                            <!--Cambia el orden del modal js-->
                         </button>
                         <form action="/delete_task" method="post" id="eliminarp">
                             <input type="hidden" name="indice_id" value="{{indice[0]}}"><!--Form oculto para el id  -->
