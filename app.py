@@ -54,7 +54,7 @@ def tablero():
 
 
 @app.route("/inventario", methods=['GET'])
-def mostrarInventario():
+def inventario():
     if "email" in session:
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM Producto")
@@ -141,8 +141,8 @@ def registro():
     return render_template("registro.html")
 
 
-@app.route("/Signout")
-def Signout():
+@app.route("/cerrar_sesion")
+def cerrar_sesion():
     if "email" in session:
         session.pop("email")
         return render_template("iniciar_sesion.html")
@@ -174,17 +174,21 @@ def agregar_producto():
         return redirect(url_for('mostrarInventario'))
 
 
-@app.route('/edit_task/<int:id>', methods=['POST'])
-def edit_task(id):
+@app.route('/editar_producto/<int:id>', methods=['POST'])
+def editar_producto(id):
     cur = mysql.connection.cursor()
     if request.method == 'POST':
         nombre = request.form['nombre']
         precio_compra = request.form['precio_compra']
         precio_venta = request.form['precio_venta']
+        ganancia = request.form['ganancia']
         existencias = request.form['existencias']
+        existencias_deseadas = request.form['existencias_deseadas']
+        proveedor = request.form['proveedor']
+        categoria = request.form['categoria']
 
-        cur.execute("UPDATE Producto SET Nombre = %s, Precio_Venta = %s, Precio_Compra = %s, Existencias = %s WHERE ID_Productos = %s",
-                    (nombre, precio_venta, precio_compra, existencias, id))
+        cur.execute("UPDATE producto SET Nombre = %s, Precio_Compra = %s, Precio_Venta = %s, Ganancia_Producto = %s, Existencias = %s, Existencias_Deseadas = %s, ID_Provedor = %s, ID_C= %s  WHERE ID_Producto = %s",
+                    (nombre, precio_compra, precio_venta, ganancia, existencias, existencias_deseadas, proveedor, categoria, id))
 
         mysql.connection.commit()
         cur.close()
