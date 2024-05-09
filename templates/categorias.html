@@ -1,6 +1,6 @@
 {%extends 'base.html'%}
 
-{%block title%} Inventario{%endblock%}
+{%block title%} Clientes{%endblock%}
 
 {%block inventario%}
 
@@ -24,9 +24,11 @@
             </li>
         </ol>
     </nav>
+    <!--FIn Breadcrumb-->
 
 
-    <h1 class="inventario__titulo text-center">Inventario de productos</h1>
+
+    <h1 class="inventario__titulo text-center">Categorias</h1>
 
     <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
         data-taskid="0">Agregar una Producto
@@ -36,20 +38,19 @@
     <table class="table  table-hover table-striped align-middle">
         <thead>
             <tr>
-                <th scope="col">Nombre</th> <!--Columna Encabezados-->
-                <th scope="col">Precio Compra</th>
-                <th scope="col">Precio Venta</th>
-                <th scope="col">Existencias</th>
+                <th scope="col">Id</th> <!--Columna Encabezados-->
+                <th scope="col">Categorias</th>
+                <th scope="col">Productos</th>
                 <th scope="col">Editar</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            {% for indice in Productos %} <!--Nombre cualquiera + el que recibe de la variable-->
+            {% for indice in categorias %} <!--Nombre cualquiera + el que recibe de la variable-->
             <tr>
+                <td>{{ indice[0] }}</td>
                 <td>{{ indice[1] }}</td>
-                <td>${{ indice[2] }}</td>
-                <td>${{ indice[3] }}</td>
-                <td>{{ indice[5] }}</td>
+                <td>{{ indice[1] }}</td>
+                <td>{{ indice[4] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">

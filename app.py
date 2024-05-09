@@ -44,6 +44,7 @@ def problematica():
     return render_template("inicio/problematica.html")
 
 
+# Seccion del gestor
 @app.route("/tablero")
 def tablero():
     if "email" in session:
@@ -65,6 +66,44 @@ def inventario():
         return render_template("iniciar_sesion.html")
 
 
+@app.route('/clientes', methods=['GET'])
+def clientes():
+    if "email" in session:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM clientes")
+        clientes = cur.fetchall()
+        cur.close()
+        return render_template('clientes.html', clientes=clientes)
+    else:
+        return render_template("iniciar_sesion.html")
+    
+    
+@app.route('/ventas', methods=['GET'])
+def ventas():
+    if "email" in session:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM ventas")
+        ventas = cur.fetchall()
+        cur.close()
+        return render_template('ventas.html', ventas=ventas)
+    else:
+        return render_template("iniciar_sesion.html")
+
+
+@app.route('/categorias', methods=['GET'])
+def categorias():
+    if "email" in session:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM categorias")
+        categorias = cur.fetchall()
+        cur.close()
+        return render_template('categorias.html', categorias=categorias)
+    else:
+        return render_template("iniciar_sesion.html")
+
+
+
+# Registro y login
 @app.route("/iniciar_sesion", methods=["GET", "POST"])
 def iniciar_sesion():
     if request.method == "POST":  # lo que recibo por post
@@ -141,15 +180,6 @@ def registro():
     return render_template("registro.html")
 
 
-@app.route("/cerrar_sesion")
-def cerrar_sesion():
-    if "email" in session:
-        session.pop("email")
-        return render_template("iniciar_sesion.html")
-    else:
-        return redirect(url_for("iniciar_sesion"))
-
-
 @app.route('/agregar_producto', methods=['POST'])  # insertar datos
 def agregar_producto():
     if request.method == 'POST':
@@ -163,6 +193,8 @@ def agregar_producto():
         categoria = request.form['categoria']
 
         print(existencias_deseadas)
+        if existencias_deseadas == '':
+            existencias_deseadas = None
 
         cur = mysql.connection.cursor()
         # Obtener la fecha y hora actual
@@ -171,7 +203,7 @@ def agregar_producto():
                     (nombre, precio_compra, precio_venta, ganancia, existencias, existencias_deseadas, proveedor, categoria))
         mysql.connection.commit()
         cur.close()
-        return redirect(url_for('mostrarInventario'))
+        return redirect(url_for('inventario'))
 
 
 @app.route('/editar_producto/<int:id>', methods=['POST'])
@@ -184,6 +216,7 @@ def editar_producto(id):
         ganancia = request.form['ganancia']
         existencias = request.form['existencias']
         existencias_deseadas = request.form['existencias_deseadas']
+
         proveedor = request.form['proveedor']
         categoria = request.form['categoria']
 
@@ -195,15 +228,24 @@ def editar_producto(id):
         return redirect(url_for('inventario'))
 
 
-@app.route('/delete_task', methods=['POST'])
-def delete_task():
+@app.route('/eliminar_producto', methods=['POST'])
+def eliminar_producto():
     cur = mysql.connection.cursor()
     id = request.form['indice_id']
-    cur.execute("DELETE FROM Producto WHERE ID_Productos = %s",
+    cur.execute("DELETE FROM producto WHERE ID_Producto = %s",
                 (id,))  # ID_Productos cambia
     mysql.connection.commit()
     cur.close()
     return redirect(url_for('inventario'))
+
+
+@app.route("/cerrar_sesion")
+def cerrar_sesion():
+    if "email" in session:
+        session.pop("email")
+        return render_template("iniciar_sesion.html")
+    else:
+        return redirect(url_for("iniciar_sesion"))
 
 
 if __name__ == '__main__':

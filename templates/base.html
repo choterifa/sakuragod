@@ -42,7 +42,7 @@
 
                         {% if session['email'] %}
                         <li>
-                            <div class="dropdown dropdown-center">
+                            <div class="dropdown dropdown-center "data-bs-theme="dark" >
                                 <button class="btn btn-secondary dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     {{session['email']}}
@@ -67,16 +67,16 @@
 
                     <div class="nav__icon__flex">
                         <li><i class="bi bi-house-fill"></i><a href="/tablero" class="item__nav">Tablero</a></li>
-                        <li><i class="bi bi-cart"></i><a href="/inventario" class="item__nav">Productos</a></li>
-                        <li><i class="bi bi-file-earmark"></i><a href="#" class="item__nav">Ventas</a></li>
-                        <li><i class="bi bi-people"></i><a href="/inventario" class="item__nav">Clientes</a></li>
-                        <li><i class="bi bi-shop"></i><a href="/inventario" class="item__nav">Inventario</a></li>
-                        <li><i class="bi bi-tags"></i><a href="/inventario" class="item__nav">Categorias</a></li>
-                        <li><i class="bi bi-graph-up"></i><a href="/inventario" class="item__nav">Reportes</a></li>
+                        <li><i class="bi bi-shop"></i><a href="/inventario" class="item__nav">Productos</a></li>
+                        <li><i class="bi bi-file-earmark"></i><a href="/ventas" class="item__nav">Ventas</a></li>
+                        <li><i class="bi bi-people"></i><a href="/clientes" class="item__nav">Clientes</a></li>
+                        <li><i class="bi bi-tags"></i><a href="/categorias" class="item__nav">Categorias</a></li>
+                        <li><i class="bi bi-graph-up"></i><a href="/reortes" class="item__nav">Reportes</a></li>
                         <li>
                             <i class="bi bi-door-closed"></i>
-                            <a class="item__nav" href="/Signout">Cerrar Sesion</a>
+                            <a class="item__nav" href="/cerrar_sesion">Cerrar Sesion</a>
                         </li>
+
 
 
                     </div>
@@ -84,6 +84,12 @@
                 </ul>
             </nav>
 
+            <!--Musica-->
+            <audio id="audio-fondo" autoplay loop>
+                <source src="../../static/Audio/Audio.mp3" type="audio/mpeg">
+                Tu navegador no soporta el elemento de audio
+            </audio>
+            <script src="../../static/Js/Audio.js"></script>
 
 
             {%block index%}

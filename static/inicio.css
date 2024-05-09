@@ -283,5 +283,31 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    display: none;
+
+}
+.contacto__container__flex{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* background-color: yellow; */
+}
+
+.contacto__container__textos{
+    display: flex;
+    flex-direction: column  ;
+    /* background-color: red; */
+}
+
+.imagen__contacto__container {
+    width: 600px;
+    height: 90%;
+}
+
+.imagen__contacto {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
 
 }
