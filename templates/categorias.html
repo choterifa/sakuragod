@@ -9,67 +9,57 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
             <li class="breadcrumb-item">
-                <a class="link-body-emphasis" href="#">
-                    <svg class="bi" width="16" height="16">
-                        <use xlink:href="#house-door-fill"></use>
-                    </svg>
-                    <span class="visually-hidden">Home</span>
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Library</a>
+                <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Tablero</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-                Data
+                Categorias
             </li>
         </ol>
     </nav>
-    <!--FIn Breadcrumb-->
+
 
 
 
     <h1 class="inventario__titulo text-center">Categorias</h1>
 
-    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
-        data-taskid="0">Agregar una Producto
+    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal"
+        data-bs-target="#abrirModalCategoria" data-taskid="0">Agregar Categoria
     </button>
 
     <!--Nueva tabla-->
     <table class="table  table-hover table-striped align-middle">
         <thead>
             <tr>
-                <th scope="col">Id</th> <!--Columna Encabezados-->
                 <th scope="col">Categorias</th>
-                <th scope="col">Productos</th>
-                <th scope="col">Editar</th>
+                <th scope="col">Edición</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
             {% for indice in categorias %} <!--Nombre cualquiera + el que recibe de la variable-->
             <tr>
-                <td>{{ indice[0] }}</td>
-                <td>{{ indice[1] }}</td>
                 <td>{{ indice[1] }}</td>
                 <td>{{ indice[4] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
                         <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
-                            data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
-                            data-bs-compra="{{indice[2]}}" data-bs-venta="{{indice[3]}}"
-                            data-bs-ganancia="{{indice[4]}}" data-bs-existencias="{{indice[5]}}"
-                            data-bs-existencias-deseadas="{{indice[6]}}" data-bs-proveedor="{{indice[7]}}"
-                            data-bs-categoria="{{indice[8]}}">Editar <i class="fas fa-edit "></i>
+                            data-bs-target="#abrirModalCategoria" data-bs-id="{{indice[0]}}"
+                            data-bs-nombre="{{indice[1]}}">Editar <i class="fas fa-edit "></i>
                             <!--Cambia el orden del modal js-->
                         </button>
-                        <form action="/eliminar_producto" method="POST" id="eliminarp">
-                            <input type="hidden" name="indice_id" value="{{indice[0]}}"><!--Form oculto para el id  -->
-                            <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
-                                    class="fas fa-trash-alt"></i>
-                            </button>
-                        </form>
-                    </div>
+                        <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
+                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar<i
+                                class="fas fa-trash-alt"></i>
+                        </button>
 
+
+                        <!-- <form action="/ver_productos_categoria" method="POST" id="miFormulario">
+                            <input type="hidden" name="indice_id" value="{{indice[0]}}">
+                            <button type="submit" id="btnEnviar" class="btn btn-primary">Ver productos<i
+                                    class="bi bi-eye"></i>
+                            </button>
+                        </form> -->
+                    </div>
                 </td>
             </tr>
             {% endfor %}
@@ -77,92 +67,67 @@
     </table>
 </section>
 
-<!--Modal eliminar-->
-<div class="modal fade" id="Modal_eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog modal-dialog--modify">
-        <div class="modal-content">
 
-            <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
-                <svg class="bi mt-5 mb-3" width="48" height="48">
-                    <use xlink:href="#check2-circle"></use>
-                </svg>
-                <h1 class="text-body-emphasis">¡Inicio de sesión exitoso!</h1>
-                <p class="col-lg-9 mx-auto mb-4">
-                    Ahora serás redirigido al tablero principal, donde podrás acceder a todas las funciones
-                    y características del gestor.
-                </p>
-                <a href="/tablero">
-                    <button data-bs-dismiss="modal" id="confirmar" class="btn btn-primary px-5 mb-5" type="button">
-                        Confirmar
-                    </button>
-                </a>
-            </div>
+<!-- Modal para crear/editar categoria -->
+<div class="modal fade" id="abrirModalCategoria" tabindex="-1">
 
-        </div>
-    </div>
-</div>
-
-<!-- Modal para crear/editar tarea -->
-<div class="modal fade" id="abrirModal" tabindex="-1">
-
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
 
             <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Agregar Producto</h5> <!--id-->
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title">Agregar Categoria</h5> <!--id-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
 
             <div class="modal-body"> <!--Formulario-->
-                <form id="taskForm" method="POST" action="{{ url_for('agregar_producto')}}"> <!--Añadir producto o-->
+                <form id="enviarCategoria" method="POST" action="{{ url_for('agregar_categoria')}}">
                     <div class="">
                         <label for="nombre">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        <input type="text" class="form-control" id="nombre" name="nombre" pattern="^[A-Za-z\s]+$" required>
                     </div>
-                    <div class="">
-                        <label for="precio_compra">Precio Compra:</label>
-                        <input type="text" class="form-control" id="precio_compra" name="precio_compra" required>
-                    </div>
-                    <div class="">
-                        <label for="precio_venta">Precio Venta:</label>
-                        <input type="text" class="form-control" id="precio_venta" name="precio_venta" required>
-                    </div>
-                    <div class="">
-                        <label for="ganancia">Ganancia:</label>
-                        <input type="text" class="form-control" id="ganancia" name="ganancia" required>
-                    </div>
-                    <div class="">
-                        <label for="existencias">Existencias:</label>
-                        <input type="text" class="form-control" id="existencias" name="existencias" required>
-                    </div>
-                    <div class="">
-                        <label for="existencias_deseadas">Existencias deseadas:</label>
-                        <input type="text" class="form-control" id="existencias_deseadas" name="existencias_deseadas"
-                            placeholder="Opcional" >
-                    </div>
-                    <div class="">
-                        <label for="proovedor">Proveedor:</label>
-                        <input type="" class="form-control" id="proveedor" name="proveedor" required>
-                    </div>
-                    <div class="">
-                        <label for="categoria">Categoria:</label>
-                        <input type="" class="form-control" id="categoria" name="categoria" required>
-                    </div>
-
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
                 </form>
             </div>
-
         </div>
     </div>
 </div>
-<!-- <script src="../static/Js/ModalEditar.js"></script> -->
+
+<!-- Modal para eliminar -->
+<div class="modal fade" id="Eliminar" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header"><!--Header-->
+                <h5 class="modal-title">Eliminar Producto</h5> <!--id-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body"> <!--Formulario-->
+                <h3>¿Deseas eliminarlo?</h3>
+
+            </div>
+            <div class="modal-footer">
+                <form action="/eliminar_producto" method="POST" id="eliminarp">
+                    <input type="hidden" name="indice_id" id="indice_id" value="">
+                    <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
+                    </button>
+                </form>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Actualizar modal-->
 <script>
     //< !--Codigo para obtner los datos del fomr segun si id(Editar)-- >
-    const abrirModal = document.getElementById('abrirModal')
+    const abrirModal = document.getElementById('abrirModalCategoria')
     if (abrirModal) {
         abrirModal.addEventListener('show.bs.modal', event => {
             // Button that triggered the modal
@@ -170,47 +135,30 @@
             //Obtneer los datos del boton con los id
             const id = button.getAttribute('data-bs-id')
             const name = button.getAttribute('data-bs-nombre')
-            const compra = button.getAttribute('data-bs-compra')
-            const venta = button.getAttribute('data-bs-venta')
-            const ganancia = button.getAttribute('data-bs-ganancia')
-            const existencias = button.getAttribute('data-bs-existencias')
-            const existencias_deseadas = button.getAttribute('data-bs-existencias-deseadas')
-            const proveedor = button.getAttribute('data-bs-proveedor')
-            const categoria = button.getAttribute('data-bs-categoria')
 
             // Seleccionar los id para actulizarlos en el modal
             const modalNombre = abrirModal.querySelector('#nombre')
-            const modalCompra = abrirModal.querySelector('#precio_compra')
-            const modalVenta = abrirModal.querySelector('#precio_venta')
-            const modalGanancia = abrirModal.querySelector('#ganancia')
-            const modalExistencias = abrirModal.querySelector('#existencias')
-            const modalExistencias_deseadas = abrirModal.querySelector('#existencias_deseadas')
-            const modalProveedor = abrirModal.querySelector('#proveedor')
-            const modalCategoria = abrirModal.querySelector('#categoria')
 
             // Acutualizar el modal con los datos de los atributos.
             modalNombre.value = name
-            modalCompra.value = compra
-            modalVenta.value = venta
-            modalGanancia.value = ganancia
-            modalExistencias.value = existencias
-            modalExistencias_deseadas.value = existencias_deseadas
-            modalProveedor.value = proveedor
-            modalCategoria.value = categoria
 
             //Titulo segun la funcion
             if (id) {
-                abrirModal.querySelector('.modal-title').textContent = 'Editar Producto';
+                abrirModal.querySelector('.modal-title').textContent = 'Editar Categoria';
                 console.log(id)
-                abrirModal.querySelector('#taskForm').setAttribute('action', '{{ url_for("editar_producto", id=0) }}'.replace('0', id));
+                abrirModal.querySelector('#enviarCategoria').setAttribute('action', '{{ url_for("editar_categoria", id=0) }}'.replace('0', id));
                 //Enviar a editar
-            } else {
-                abrirModal.querySelector('.modal-title').textContent = 'Agregar Producto';
             }
         })
     }
 </script>
 
+<!--Para obtener el id y mandarlo al modal-->
+<script>
+    function setProductId(productId) {
+        document.getElementById('indice_id').value = productId;
+    }
+</script>
 
 
 

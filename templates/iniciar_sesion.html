@@ -27,7 +27,7 @@
 
             <h1 class="signin__titulo">Inicia Sesion</h1>
 
-            <form method="post" action="{{ url_for('iniciar_sesion') }}"> <!--Se pasa la funcion-->
+            <form method="post" action="{{ url_for('iniciar_sesion') }}" "> <!--Se pasa la funcion-->
                 <!-- Email input -->
                 <div class=" ">
                     <label for="email">Correo Electrónico</label>
@@ -42,7 +42,7 @@
                 <div class="">
                     <label for="password">Contraseña</label>
                     <input type="password" class="login__input {% if bad_password %}is-invalid{% endif %} "
-                        id="password" name="contraseña" required />
+                        id="password" name="contraseña" required=""  autocomplete="on"/>
                     {% if bad_password %}
                     <div class="invalid-feedback">Contraseña no encontrada</div>
                     {% endif %}
@@ -62,9 +62,12 @@
             <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
             <a class=" btn__form--salir" href="/">Salir</a>
         </div>
+
+      
     </section>
 
 
+    
 
     {% if registration_login %}
     <button id="modal" type="button" class="btn__form d-none" data-bs-toggle="modal" data-bs-target="#inicio_sesion">
@@ -74,14 +77,14 @@
     <!-- Modal -->
     <div class="modal fade" id="inicio_sesion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
         <!--Evitar que se ciiere con esq y click y no enfocable-->
-        <script>
+        <!-- <script>
             setTimeout(function () {
                 window.location.href = "{{ url_for('tablero')}}";
             }, 10000);
-        </script>
+        </script> -->
 
-        <div class="modal-dialog modal-dialog--modify">
-            <div class="modal-content">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content modal-content--logins">
 
                 <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
                     <i class="bi bi-check2-circle icono__modal"></i> <!--Icono-->

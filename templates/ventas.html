@@ -9,29 +9,20 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
             <li class="breadcrumb-item">
-                <a class="link-body-emphasis" href="#">
-                    <svg class="bi" width="16" height="16">
-                        <use xlink:href="#house-door-fill"></use>
-                    </svg>
-                    <span class="visually-hidden">Home</span>
-                </a>
-            </li>
-            <li class="breadcrumb-item">
-                <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Library</a>
+                <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Tablero</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-                Data
+                Ventas
             </li>
         </ol>
     </nav>
-    <!--FIn Breadcrumb-->
 
 
 
     <h1 class="inventario__titulo text-center">Ventas</h1>
 
-    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
-        data-taskid="0">Agregar una venta
+    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal"
+        data-bs-target="#abrirModalVenta" data-taskid="0">Agregar una venta
     </button>
 
     <!--Nueva tabla-->
@@ -69,12 +60,18 @@
                             data-bs-categoria="{{indice[8]}}">Editar <i class="fas fa-edit "></i>
                             <!--Cambia el orden del modal js-->
                         </button>
-                        <form action="/eliminar_producto" method="POST" id="eliminarp">
-                            <input type="hidden" name="indice_id" value="{{indice[0]}}"><!--Form oculto para el id  -->
+
+                        <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
+                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar<i
+                                class="fas fa-trash-alt"></i>
+                        </button>
+                        
+                        <!-- <form action="/eliminar_producto" method="POST" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[0]}}">
                             <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
                                     class="fas fa-trash-alt"></i>
                             </button>
-                        </form>
+                        </form> -->
                     </div>
 
                 </td>
@@ -84,39 +81,15 @@
     </table>
 </section>
 
-<!--Modal eliminar-->
-<div class="modal fade" id="Modal_eliminar" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-    <div class="modal-dialog modal-dialog--modify">
-        <div class="modal-content">
 
-            <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
-                <svg class="bi mt-5 mb-3" width="48" height="48">
-                    <use xlink:href="#check2-circle"></use>
-                </svg>
-                <h1 class="text-body-emphasis">¡Inicio de sesión exitoso!</h1>
-                <p class="col-lg-9 mx-auto mb-4">
-                    Ahora serás redirigido al tablero principal, donde podrás acceder a todas las funciones
-                    y características del gestor.
-                </p>
-                <a href="/tablero">
-                    <button data-bs-dismiss="modal" id="confirmar" class="btn btn-primary px-5 mb-5" type="button">
-                        Confirmar
-                    </button>
-                </a>
-            </div>
-
-        </div>
-    </div>
-</div>
-
-<!-- Modal para crear/editar tarea -->
-<div class="modal fade" id="abrirModal" tabindex="-1">
+<!-- Modal para crear/editar venta -->
+<div class="modal fade" id="abrirModalVenta" tabindex="-1">
 
     <div class="modal-dialog">
         <div class="modal-content">
 
             <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Agregar Producto</h5> <!--id-->
+                <h5 class="modal-title">Agregar Una venta</h5> <!--id-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -146,7 +119,7 @@
                     <div class="">
                         <label for="existencias_deseadas">Existencias deseadas:</label>
                         <input type="text" class="form-control" id="existencias_deseadas" name="existencias_deseadas"
-                            placeholder="Opcional" >
+                            placeholder="Opcional">
                     </div>
                     <div class="">
                         <label for="proovedor">Proveedor:</label>
@@ -166,6 +139,36 @@
         </div>
     </div>
 </div>
+
+<!-- Modal para eliminar -->
+<div class="modal fade" id="Eliminar" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header"><!--Header-->
+                <h5 class="modal-title">Eliminar Producto</h5> <!--id-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body"> <!--Formulario-->
+                <h3>¿Deseas eliminarlo?</h3>
+
+            </div>
+            <div class="modal-footer">
+                <form action="/eliminar_producto" method="POST" id="eliminarp">
+                    <input type="hidden" name="indice_id" id="indice_id" value="">
+                    <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
+                    </button>
+                </form>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- <script src="../static/Js/ModalEditar.js"></script> -->
 <script>
     //< !--Codigo para obtner los datos del fomr segun si id(Editar)-- >
@@ -218,9 +221,12 @@
     }
 </script>
 
-
-
-
+<!--Para obtener el id y mandarlo al modal-->
+<script>
+    function setProductId(productId) {
+        document.getElementById('indice_id').value = productId;
+    }
+</script>
 
 
 {%endblock%}

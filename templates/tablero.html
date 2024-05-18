@@ -5,19 +5,15 @@
 
 {%block index%}
 <section class="resumen">
-     
 
     <h1 class="resumen__titulo">Movimientos</h1>
-
-
-
     <div class="resumen__cards">
 
         <div class="resumen__card__item">
             <a href="#" class="resumen__enlaces">
 
                 <div class="resumen__card__textos">
-                    <h3 class="resumen__card__titulo">800</h3>
+                    <h3 class="resumen__card__titulo">1800</h3>
                     <div class="resumen__card__paragraph">
                         <i class="bi bi-receipt resumen__card__icon"></i>
                         <p class="resumen__paragraph">Vendido</p>
@@ -44,7 +40,7 @@
         <div class="resumen__card__item">
             <a href="#" class="resumen__enlaces">
                 <div class="resumen__card__textos">
-                    <h3 class="resumen__card__titulo">4</h3>
+                    <h3 class="resumen__card__titulo">8</h3>
                     <div class="resumen__card__paragraph">
                         <i class="bi bi-truck resumen__card__icon"></i>
                         <p class="resumen__paragraph">Enviar</p>
@@ -56,7 +52,7 @@
         <div class="resumen__card__item">
             <a href="#" class="resumen__enlaces">
                 <div class="resumen__card__textos">
-                    <h3 class="resumen__card__titulo">2</h3>
+                    <h3 class="resumen__card__titulo">7</h3>
                     <div class="resumen__card__paragraph">
                         <i class="bi bi-calendar resumen__card__icon resumen__card__icon--modify"></i>
                         <p class="resumen__paragraph">Apartados</p>
@@ -78,7 +74,7 @@
             <div class="resumen__card__item  resumen__card__item--bandera">
                 <div class="resumen__card__textos resumen__card__textos--modify">
                     <p class="resumen__paragraph__bandera">Clientes</p>
-                    <h3 class="resumen__card__titulo__bandera">20</h3>
+                    <h3 class="resumen__card__titulo__bandera">40</h3>
                 </div>
             </div>
 
@@ -102,19 +98,19 @@
 
                 <div class="resumen__card__items">
                     <figure>
-                        <img src="https://images.unsplash.com/photo-1569411032431-07598b0012c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTMyNTI5MzZ8&ixlib=rb-4.0.3&q=80&w=1080"
+                        <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTU2OTgzODF8&ixlib=rb-4.0.3&q=80&w=1080"
                             alt="" class="imagen">
                     </figure>
-                    <p class="resumen__paragraph2">Sabana</p>
+                    <p class="resumen__paragraph2">Bolsa</p>
                     <h3 class="resumen__card__pzas">40 pzas</h3>
                 </div>
 
                 <div class="resumen__card__items">
                     <figure>
-                        <img src="https://images.unsplash.com/photo-1569411032431-07598b0012c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTMyNTI5MzZ8&ixlib=rb-4.0.3&q=80&w=1080"
+                        <img src="https://images.unsplash.com/photo-1620987278429-ab178d6eb547?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTU2OTgzMDV8&ixlib=rb-4.0.3&q=80&w=1080"
                             alt="" class="imagen">
                     </figure>
-                    <p class="resumen__paragraph2">Sabana</p>
+                    <p class="resumen__paragraph2">Toallas</p>
                     <h3 class="resumen__card__pzas">30 pzas</h3>
                 </div>
 
@@ -126,51 +122,28 @@
         <div class="resumen__card__item2">
             <h3 class="resumen__card__titulo2">Deudores</h3>
 
-
-            <table class="table table-bordered table-hover tablita">
-                <thead> <!--titulos-->
-                    <tr> <!--fila-->
-                        <th scope="col" class="tablita__nombre">Nombre</th> <!--encabezado-->
-                        <th scope="col" class="tablita__nombre">Deuda</th>
-                        <th scope="col" class="tablita__nombre">Dias restantes</th>
+            <!--Nueva tabla-->
+            <table class="table  table-hover table-striped align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th> <!--Columna Encabezados-->
+                        <th scope="col">Apellido P</th>
+                        <th scope="col">Total adeudo</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for deudor in task %}
+                <tbody class="table-group-divider">
+                    {% for indice in clientes %} <!--Nombre cualquiera + el que recibe de la variable-->
                     <tr>
-                        <th scope="row">{{ deudor[0] }}</th>
-                        <td class="">
-                            <div class="flex__descripcion1">
-                                <p class="deudor1">{{ deudor[1] }}</p>
-                            </div>
-                        </td>
-                        <!--nombre -->
-                        <td>
-                            <div class="flex__descripcion">
-                                <a class="texto__enlace" href="{{ deudor[2] }}">{{ deudor[2] }}</a>
-                                <img class="imagen" src="../static/imagenes/img1.png" alt="" </td> <!--desc-->
-                                </>
-                        <td>
-                            <div class="flex__btns">
-                                <button type="button" class="btn__editar btn btn-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#deudorModal" data-bs-id="{{deudor[0]}}"
-                                    data-bs-nombre="{{deudor[1]}}" data-bs-descripcion="{{deudor[2]}}">Editar <i
-                                        class="fas fa-edit"></i>
-                                </button>
-
-                                <form action="/delete_deudor" method="post" id="deletedeudorForm">
-                                    <input type="hidden" name="deudor_id" id="deletedeudorId" value="{{deudor[0]}}">
-                                    <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
-                                            class="fas fa-trash-alt"></i>
-                                    </button>
-                                </form>
-                            </div>
-
-                        </td>
+                        <td>{{ indice[1] }}</td>
+                        <td>{{ indice[2] }}</td>
+                        <td>{{ indice[3] }}</td>
+                        <!--Seccion de edicion (Editar/Eliminar)-->
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+
+
             <!-- <div class="resumen__card__paragraph">
                     <i class="bi bi-receipt resumen__card__icon"></i>
                     <p class="resumen__paragraph">proxomios a vencer su pago</p>
@@ -211,7 +184,12 @@
 
     </div>
 
-
+    <!--Musica-->
+    <!-- <audio id="audio-fondo" autoplay loop>
+        <source src="../../static/Audio/Audio.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio
+    </audio>
+    <script src="../../static/Js/Audio.js"></script> -->
 
 </section>
 

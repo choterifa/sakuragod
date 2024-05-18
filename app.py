@@ -39,9 +39,9 @@ def contacto():
     return render_template("inicio/contacto.html")
 
 
-@app.route("/problematica")
-def problematica():
-    return render_template("inicio/problematica.html")
+@app.route("/promocional")
+def promocional():
+    return render_template("inicio/promocional.html")
 
 
 # Seccion del gestor
@@ -49,7 +49,11 @@ def problematica():
 def tablero():
     if "email" in session:
         # si se registro se envia a tablero con una session creada
-        return render_template("tablero.html", email=session["email"])
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT * FROM clientes")
+        clientes = cur.fetchall()
+        return render_template("tablero.html", email=session["email"], clientes=clientes)
+
     else:
         return render_template("iniciar_sesion.html")
 
@@ -60,8 +64,12 @@ def inventario():
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM Producto")
         Productos = cur.fetchall()
+        cur.execute("SELECT ID_Proveedor, Empresa  FROM proveedor")
+        Proveedor = cur.fetchall()
+        cur.execute("SELECT * FROM categorias")
+        Categorias = cur.fetchall()
         cur.close()
-        return render_template('inventario.html', Productos=Productos)
+        return render_template('inventario.html', Productos=Productos, Proveedor=Proveedor, Categorias=Categorias)
     else:
         return render_template("iniciar_sesion.html")
 
@@ -72,12 +80,14 @@ def clientes():
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM clientes")
         clientes = cur.fetchall()
+        cur.execute("SELECT ID_CEL,Celular FROM celulares")
+        Telefono = cur.fetchall()
         cur.close()
-        return render_template('clientes.html', clientes=clientes)
+        return render_template('clientes.html', clientes=clientes, Telefono=Telefono)
     else:
         return render_template("iniciar_sesion.html")
-    
-    
+
+
 @app.route('/ventas', methods=['GET'])
 def ventas():
     if "email" in session:
@@ -96,14 +106,32 @@ def categorias():
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM categorias")
         categorias = cur.fetchall()
+        print(categorias)
         cur.close()
         return render_template('categorias.html', categorias=categorias)
     else:
         return render_template("iniciar_sesion.html")
 
 
+@app.route('/proveedor', methods=['GET'])
+def proveedor():
+    if "email" in session:
+        cur = mysql.connection.cursor()
+        cur.execute("SELECT Empresa FROM proveedor")
+        proveedor = cur.fetchall()
+        cur.close()
+        return render_template('proveedor.html', proveedor=proveedor)
+    else:
+        return render_template("inventario.html")
+
+
+@app.route('/resultado')
+def resultado():
+    return render_template("resultado.html")
 
 # Registro y login
+
+
 @app.route("/iniciar_sesion", methods=["GET", "POST"])
 def iniciar_sesion():
     if request.method == "POST":  # lo que recibo por post
@@ -180,6 +208,7 @@ def registro():
     return render_template("registro.html")
 
 
+# Agregar productos
 @app.route('/agregar_producto', methods=['POST'])  # insertar datos
 def agregar_producto():
     if request.method == 'POST':
@@ -216,7 +245,6 @@ def editar_producto(id):
         ganancia = request.form['ganancia']
         existencias = request.form['existencias']
         existencias_deseadas = request.form['existencias_deseadas']
-
         proveedor = request.form['proveedor']
         categoria = request.form['categoria']
 
@@ -237,6 +265,120 @@ def eliminar_producto():
     mysql.connection.commit()
     cur.close()
     return redirect(url_for('inventario'))
+
+
+# Agregar Categoria
+@app.route('/agregar_categoria', methods=['POST'])  # insertar datos
+def agregar_categoria():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO categorias (Categoria) VALUES (%s)", (nombre,))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('categorias'))
+
+
+@app.route('/editar_categoria/<int:id>', methods=['POST'])  # Enviar
+def editar_categoria(id):
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+    cur.execute(
+        "UPDATE categorias SET Categoria = %s WHERE ID_C = %s", (nombre, id))
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('categorias'))
+
+
+@app.route('/eliminar_categoria', methods=['POST'])
+def eliminar_categoria():
+    cur = mysql.connection.cursor()
+    id = request.form['indice_id']
+    cur.execute("DELETE FROM categorias WHERE ID_C = %s",
+                (id,))  # ID_Productos cambia
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('categorias'))
+
+# Agregar Categoria
+
+
+@app.route('/agregar_cliente', methods=['POST'])  # insertar datos
+def agregar_cliente():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        apellido_p = request.form['apellido_p']
+        apellido_m = request.form['apellido_m']
+        telefono = request.form['telefono']
+        cur = mysql.connection.cursor()
+        cur.execute(
+            "INSERT INTO clientes (Nombres, Apellido_P, Apellido_M, ID_CEL) VALUES (%s,%s,%s,%s)", (nombre, apellido_p, apellido_m, telefono))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('clientes'))
+
+
+@app.route('/agregar_telefono_cliente', methods=['POST'])  # insertar datos
+def agregar_telefono_cliente():
+    if request.method == 'POST':
+        telefono = request.form['telefono']
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO celulares (Celular) VALUES (%s)", (telefono,))
+
+        mysql.connection.commit()
+        print(cur.fetchone())
+        cur.close()
+        return redirect(url_for('clientes'))
+
+
+@app.route('/editar_cliente/<int:id>', methods=['POST'])  # Enviar
+def editar_cliente(id):
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        apellido_p = request.form['apellido_p']
+        apellido_m = request.form['apellido_m']
+        telefono = request.form['telefono']
+        cur = mysql.connection.cursor()
+        cur.execute(
+            "UPDATE clientes SET Nombre = %s, Apellido_P = %s, Apellido_M = %s, ID_CEL = %s WHERE ID_Cliente = %s", (nombre, apellido_p, apellido_m, telefono, id))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('clientes'))
+
+
+@app.route('/eliminar_cliente', methods=['POST'])
+def eliminar_cliente():
+    cur = mysql.connection.cursor()
+    id = request.form['indice_id']
+    cur.execute("DELETE FROM clientes WHERE ID_Cliente = %s",
+                (id,))  # ID_Productos cambia
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('clientes'))
+
+
+@app.route('/ver_productos_categoria', methods=['POST'])
+def ver_productos_categoria():
+    cur = mysql.connection.cursor()
+    id = request.form['indice_id']
+    print("El valor de 'id' es:", id)
+    cur.execute("""
+    SELECT
+        Producto.Nombre,
+        categorias.Categoria
+    FROM
+        Producto,
+        categorias 
+    WHERE
+        producto.ID_C = categorias.ID_C
+        AND categorias.ID_C  = %s;
+""", (id,))
+    mysql.connection.commit()
+    resultados = cur.fetchone()
+    print(resultados)
+    return redirect(url_for("resultado", resultados=resultados))
 
 
 @app.route("/cerrar_sesion")

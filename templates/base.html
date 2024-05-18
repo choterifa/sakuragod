@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor</title>
@@ -19,8 +17,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <!--Font awesome-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-
 
 </head>
 
@@ -42,14 +38,14 @@
 
                         {% if session['email'] %}
                         <li>
-                            <div class="dropdown dropdown-center "data-bs-theme="dark" >
+                            <div class="dropdown dropdown-center " data-bs-theme="dark">
                                 <button class="btn btn-secondary dropdown-toggle" href="#" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     {{session['email']}}
                                 </button>
                                 <ul class="dropdown-menu ">
                                     <li><a class="dropdown-item" href="/">Ir a inicio</a></li>
-                                    <li><a class="dropdown-item" href="/">Editar Perfil</a></li>
+                                    <!-- <li><a class="dropdown-item" href="/">Editar Perfil</a></li> -->
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
@@ -68,28 +64,20 @@
                     <div class="nav__icon__flex">
                         <li><i class="bi bi-house-fill"></i><a href="/tablero" class="item__nav">Tablero</a></li>
                         <li><i class="bi bi-shop"></i><a href="/inventario" class="item__nav">Productos</a></li>
-                        <li><i class="bi bi-file-earmark"></i><a href="/ventas" class="item__nav">Ventas</a></li>
+                        <!-- <li><i class="bi bi-file-earmark"></i><a href="/ventas" class="item__nav">Ventas</a></li> -->
                         <li><i class="bi bi-people"></i><a href="/clientes" class="item__nav">Clientes</a></li>
                         <li><i class="bi bi-tags"></i><a href="/categorias" class="item__nav">Categorias</a></li>
-                        <li><i class="bi bi-graph-up"></i><a href="/reortes" class="item__nav">Reportes</a></li>
+                        <!-- <li><i class="bi bi-graph-up"></i><a href="/reortes" class="item__nav">Reportes</a></li> -->
                         <li>
                             <i class="bi bi-door-closed"></i>
                             <a class="item__nav" href="/cerrar_sesion">Cerrar Sesion</a>
                         </li>
-
-
-
                     </div>
 
                 </ul>
             </nav>
 
-            <!--Musica-->
-            <audio id="audio-fondo" autoplay loop>
-                <source src="../../static/Audio/Audio.mp3" type="audio/mpeg">
-                Tu navegador no soporta el elemento de audio
-            </audio>
-            <script src="../../static/Js/Audio.js"></script>
+
 
 
             {%block index%}
@@ -108,6 +96,7 @@
 
         </div>
     </div>
+
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

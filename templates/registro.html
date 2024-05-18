@@ -80,15 +80,15 @@
 
     <!-- Modal -->
     <div class="modal fade" id="inicio_sesion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-        <!--Evitar que se ciiere con esq y click y no enfocable-->
+        <!-- Evitar que se ciiere con esq y click y no enfocable-->
         <script>
             setTimeout(function () {
                 window.location.href = "{{ url_for('tablero')}}";
             }, 10000);
         </script>
 
-        <div class="modal-dialog modal-dialog--modify">
-            <div class="modal-content">
+        <div class="modal-dialog">
+            <div class="modal-content modal-content--logins">
 
                 <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
                     <i class="bi bi-check2-circle"></i> <!--Icono-->

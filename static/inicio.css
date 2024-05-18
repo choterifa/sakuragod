@@ -7,8 +7,6 @@
     /* outline: 1px solid red; */
 }
 
-
-
 /*Incio Pagina Cover*/
 .Inicio {
     display: flex;
@@ -44,12 +42,11 @@
     margin-left: 100px;
     justify-content: center;
     align-items: center;
-    gap: 50px;
+    gap: 75px;
     /* background-color: #1c8d56; */
 }
 
 .Inicio__Enlace {
-    padding: 12px 15px;
     text-align: center;
     text-decoration: none;
     color: #181818;
@@ -58,6 +55,7 @@
 
 .Inicio__Enlace:hover {
     color: #1c1e8d;
+    border-bottom: 2px solid rgba(0, 0, 139, 0.61);
 }
 
 /*Pagina de Presentacion*/
@@ -119,13 +117,17 @@
 .Inicio__Btn {
     width: 145px;
     border: none;
-    padding: 11.3px 20px;
+    padding: 11.3px 10px;
     border-radius: 7px;
     cursor: pointer;
     align-items: center;
     background-color: #181818;
     color: #f3f3f3;
     letter-spacing: 0.5px;
+}
+
+.Inicio__Btn--logo {
+    width: 120px;
 }
 
 .Inicio__Btn--Blanco {
@@ -162,38 +164,25 @@
     background-color: #5060e3;
 }
 
-.Inicio__Imagen:hover {
-    animation-name: Inicio__Imagen;
-    animation-duration: .8s;
-    animation-delay: 120ms;
-    /* animation-timing-function: ease; */
-    animation-iteration-count: 1;
-    animation-direction: normal;
-    animation-fill-mode: forwards;
-    animation-play-state: running;
+.Inicio__Imagen {
+    transition: transform 0.6s ease;
+    /* Transición suave para la escala */
 }
 
-@keyframes Inicio__Imagen {
-    0% {
-        transform: scale(1);
-    }
-
-    100% {
-        transform: scale(1.02);
-    }
-
+.Inicio__Imagen:hover {
+    transform: scale(1.02);
+    /* Escala a 1.02 al hacer hover */
 }
 
 /*Ubicacion del Inicio*/
 .Ubicacion__Imagen__Contenedor {
-    margin-top: 4vh;
-    width: 270px;
+    margin-top: 2vh;
+    width: 240px;
 }
 
 .Ubicacion__Imagen {
     width: 100%;
     height: 100%;
-    object-fit: cover;
 }
 
 .Ubicacion__Titulo {
@@ -201,55 +190,100 @@
     margin-bottom: 20px;
 }
 
+/*Galeria*/
 .Ubicacion__Galeria {
     margin-top: 80px;
     width: 90%;
     display: flex;
     flex-wrap: wrap;
-    padding: 10px;
-    justify-content: space-evenly;
-    /* background-color: #1c1e8d15; */
+    gap: 30px;
+    justify-content: center;
+    overflow: hidden;
+    /* background-color: red; */
 }
 
 .Ubicacion__Galeria__Imagen {
-    width: 32%;
+    width: 30%;
     height: 400px;
     object-fit: cover;
-    margin: 10px 0px;
-    transition: all .7s;
+    transition: transform .45s;
 }
 
 .Ubicacion__Galeria__Imagen:hover {
-    transform: scale(1.03);
+    transform: scale(1.035);
+}
+
+#carrusel {
+    width: 70vw;
+    height: 600px;
+    background-color: red;
+    margin-top: 90px;
+}
+
+.carrusel_img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 /*Contacto*/
-.display-4-modify {
-    margin-top: 10vh;
-}
-
 .contacto__container {
-    height: 90vh;
     background-color: rgba(237, 241, 244, 0.675);
-    line-height: 1.65;
-
-
+    height: 100vh;
 }
 
-.contacto__redes {
+.contacto__container__flex {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    width: 10%;
-    gap: 20px;
-    height: 30px;
-    margin-top: 20px;
+    padding: 30px 40px;
+    /* background-color: yellow; */
 }
 
-.contacto__icon {
-    color: rgb(69, 62, 62);
-    font-size: 22px;
+.contacto__container__textos {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    line-height: 1.85;
+    width: 52%;
+    /* background-color: red; */
 }
+
+.contacto__parrafo {
+    font-size: 21.5px;
+}
+
+span {
+    font-weight: 500;
+}
+
+.btn__contactar {
+    display: inline-block;
+    padding: 10px;
+    width: 32%;
+    border: none;
+    background-color: black;
+    border-radius: 10px;
+    color: white;
+}
+
+.btn__contactar:hover {
+    background-color: #1c1e8d;
+}
+
+.imagen__contacto__container {
+    width: 31%;
+    height: 520px;
+}
+
+.imagen__contacto {
+    width: 120%;
+    height: 120%;
+    object-fit: cover;
+}
+
+
+/*Otros*/
 
 .Audio__Btn {
     position: fixed;
@@ -286,28 +320,13 @@
     display: none;
 
 }
-.contacto__container__flex{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* background-color: yellow; */
+
+.video__container {
+    width: 1150px;
 }
 
-.contacto__container__textos{
-    display: flex;
-    flex-direction: column  ;
-    /* background-color: red; */
-}
 
-.imagen__contacto__container {
-    width: 600px;
-    height: 90%;
-}
-
-.imagen__contacto {
+.video{
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    display: block;
-
 }

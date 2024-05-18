@@ -159,15 +159,6 @@ label {
 
 /*Margen al modal de login*/
 
-.modal-dialog--modify {
-
-    margin-top: calc(50vh - 270px) !important;
-    /* background-color: red; */
-}
-
-.modal-content {
-    border-radius: 100px !important;
-}
 
 .contador {
     font-size: 24px;
@@ -182,3 +173,6 @@ label {
     color: rgba(35, 187, 35, 0.676);
 }
 
+.modal-content--logins {
+    border-radius: 120px !important;
+}
