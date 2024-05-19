@@ -22,7 +22,7 @@
     <h1 class="inventario__titulo text-center">Clientes</h1>
 
     <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
-        data-taskid="0">Agregar una clientes
+        data-taskid="0">Agregar un cliente
     </button>
     <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal"
         data-bs-target="#agregarTelefono" data-taskid="0">Agregar telefono
@@ -37,21 +37,21 @@
                 <th scope="col">Apellido M</th>
                 <th scope="col">Total adeudo</th>
                 <th scope="col">Celular</th>
-                <th scope="col">Debe</th>
+                <th scope="col">Apartados</th>
                 <th scope="col">Editar</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
             {% for indice in clientes %} <!--Nombre cualquiera + el que recibe de la variable-->
-            <tr>
+            <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
                 <td>{{ indice[2] }}</td>
                 <td>{{ indice[3] }}</td>
                 <td>{{ indice[4] }}</td>
-                <td>{{ indice[5] }}</td>
                 <td>{{ indice[6] }}</td>
+                <td>{{ indice[7] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
-                <td>
+                <td >
                     <div class="editar__botones">
                         <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
                             data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
@@ -95,7 +95,7 @@
 
             <div class="modal-body"> <!--Formulario-->
                 <form id="agregar_cliente" method="POST" action="{{ url_for('agregar_cliente')}}">
-                    <!--Añadir producto o-->
+                    <!--Añadir producto-->
                     <div class="">
                         <label for="nombre">Nombre:</label>
                         <input type="text" class="form-control" id="nombre" name="nombre"  pattern="^[A-Za-z\s]+$" required>
@@ -176,11 +176,10 @@
 
             <div class="modal-body"> <!--Formulario-->
                 <h3>¿Deseas eliminarlo?</h3>
-
             </div>
             <div class="modal-footer">
-                <form action="/eliminar_producto" method="POST" id="eliminarp">
-                    <input type="hidden" name="indice_id" id="indice_id" value="">
+                <form action="/eliminar_cliente" method="POST" id="eliminarp">
+                    <input type="" name="indice_id" id="indice_id" value="">
                     <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
                     </button>
                 </form>

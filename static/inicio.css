@@ -7,6 +7,10 @@
     /* outline: 1px solid red; */
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 /*Incio Pagina Cover*/
 .Inicio {
     display: flex;
@@ -185,14 +189,18 @@
     height: 100%;
 }
 
+iframe {
+    width: 100vw;
+    height: 610px;
+}
+
 .Ubicacion__Titulo {
     font-size: 30px;
-    margin-bottom: 20px;
+    margin: 40px;
 }
 
 /*Galeria*/
 .Ubicacion__Galeria {
-    margin-top: 80px;
     width: 90%;
     display: flex;
     flex-wrap: wrap;
@@ -326,7 +334,7 @@ span {
 }
 
 
-.video{
+.video {
     width: 100%;
     height: 100%;
 }

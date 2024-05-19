@@ -1,10 +1,9 @@
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-
     <link rel="stylesheet" href="../static/logins.css">
     <!--Boostrap-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -17,90 +16,87 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+
 </head>
 
 <body>
 
-    <section class="Registro">
+    <section class="Inicio__Sesion">
 
-        <div class="container__singup__titulos">
+        <div class="container__sigin__titulos">
 
-            <h1 class="singup__titulo">Registrate</h1>
-            <form method="post" action="{{ url_for('registro') }}"> <!--Enviar a registro-->
-                <!-- Username input -->
-                <div class="">
-                    <label for="username">Nombre</label>
-                    <input type="text" class="login__input {% if user_found %}is-invalid{% endif %} " id="username"
-                        name="nombre" required="" minlength="4" maxlength="15" pattern="[a-zA-Z]+" />
-                    {% if user_found %}
-                    <div class="invalid-feedback">{{ error_message }}</div>
-                    {% endif %}
-                </div>
+            <h1 class="signin__titulo">Inicia Sesion</h1>
 
+            <form method="post" action="{{ url_for('iniciar_sesion') }}" "> <!--Se pasa la funcion-->
                 <!-- Email input -->
-                <div class="">
+                <div class=" ">
                     <label for="email">Correo Electrónico</label>
-                    <input type="email" class="login__input {% if email_found %}is-invalid{% endif %} " id="email"
-                        name="correo" required="" />
-                    {% if email_found %}
-                    <div class="invalid-feedback">{{ error_message }}</div>
+                    <input type="email" class="login__input {% if correo_no_encontrado %}is-invalid{% endif %}"
+                        id="email" name="correo" required="">
+                    {% if correo_no_encontrado %}
+                    <div class="invalid-feedback">Correo no encontrado</div>
                     {% endif %}
                 </div>
+
                 <!-- Password input -->
                 <div class="">
                     <label for="password">Contraseña</label>
-                    <input type="password" class="singup__password login__input" id="password" name="contraseña"
-                        required />
+                    <input type="password" class="login__input {% if bad_password %}is-invalid{% endif %} "
+                        id="password" name="contraseña" pattern="[a-zA-Z1-9]+" required=""/>
+                    {% if bad_password %}
+                    <div class="invalid-feedback">Contraseña incorrecta</div>
+                    {% endif %}
                 </div>
 
-                <!-- Submit button -->
-                <button type="submit" id="enviar-registro" class="btn__form">Registrate</button>
-
+                <!-- Button trigger modal -->
+                <button type="submit" class="btn__form">
+                    Iniciar Sesion
+                </button>
             </form>
-            <a class="informacion__mensaje" href="/iniciar_sesion">¿Ya tienes una cuenta?</a>
 
-            <a class="btn__form--salir" href="/">Salir</a>
+            <!--Boton google-->
+            <a class="btn__form" href="#">
+                <i class="fab fa-google me-2"></i>Continua con Google
+            </a>
 
+            <!--Extras-->
+            <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
+            <a class=" btn__form--salir" href="/">Salir</a>
         </div>
+
+      
     </section>
 
-
-
-    {% if registration_successful %}
+    
+    {% if registration_login %}
     <button id="modal" type="button" class="btn__form d-none" data-bs-toggle="modal" data-bs-target="#inicio_sesion">
         <!--Abrir modal (toogle) y cual (target)-->
     </button>
 
-    <script>
-        // Simular clic en el botón automáticamente cuando la página se cargue
-        document.addEventListener('DOMContentLoaded', function () {
-            document.getElementById('modal').click();
-        });
-    </script>
-
-    <!-- Modal -->
+    <!-- Modal Inicio de sesion -->
     <div class="modal fade" id="inicio_sesion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
-        <!-- Evitar que se ciiere con esq y click y no enfocable-->
+        <!--Evitar que se cierre con esq, mouse y click no enfocable-->
         <script>
             setTimeout(function () {
-                window.location.href = "{{ url_for('tablero')}}";
+                window.location.href = "{{ url_for('spinner')}}";
             }, 10000);
         </script>
 
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered ">
             <div class="modal-content modal-content--logins">
-
                 <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
-                    <i class="bi bi-check2-circle"></i> <!--Icono-->
-                    <h1 class="text-body-emphasis">¡Registro existoso!</h1>
+                    <i class="bi bi-check2-circle icono__modal"></i> <!--Icono-->
+                    <h1 class="text-body-emphasis">¡Inicio de sesión exitoso!</h1>
                     <h1 class="text-body-emphasis contador" id="contador">5</h1> <!--Contador-->
                     <script src="../static/Js/inciar_sesion.js"></script>
+
                     <p class="col-lg-9 mx-auto mb-4">
                         Ahora serás redirigido al tablero principal, donde podrás acceder a todas las funciones
                         y características de nuestro gestor.
                     </p>
-                    <a href="/tablero">
-                        <button data-bs-dismiss="modal" class="btn btn-primary px-5 mb-4" type="button">
+                  
+                    <a href="/spinner">
+                        <button data-bs-dismiss="modal" class="btn btn-primary px-5 mb-3" type="button">
                             Entrar
                         </button>
                     </a>

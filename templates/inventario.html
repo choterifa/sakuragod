@@ -21,7 +21,7 @@
     <h1 class="inventario__titulo text-center">Inventario de productos</h1>
 
     <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
-        data-taskid="0">Agregar una Producto
+        data-taskid="0">Agregar Producto
     </button>
 
     <!--Nueva tabla-->
@@ -39,45 +39,73 @@
         </thead>
         <tbody class="table-group-divider">
             {% for indice in Productos %} <!--Nombre cualquiera + el que recibe de la variable-->
-            <tr>
+            <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
                 <td>${{ indice[2] }}</td>
                 <td>${{ indice[3] }}</td>
                 <td>{{ indice[5] }}</td>
-                <td>{{ indice[7] }}</td>
                 <td>{{ indice[8] }}</td>
+                <td>{{ indice[10] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
-                        <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
-                            data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
-                            data-bs-compra="{{indice[2]}}" data-bs-venta="{{indice[3]}}"
+                        <button type="button" id="editar_btn" class="btn btn-primary btn-sm btn__editar"
+                            data-bs-toggle="modal" data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}"
+                            data-bs-nombre="{{indice[1]}}" data-bs-compra="{{indice[2]}}" data-bs-venta="{{indice[3]}}"
                             data-bs-ganancia="{{indice[4]}}" data-bs-existencias="{{indice[5]}}"
-                            data-bs-existencias-deseadas="{{indice[6]}}" data-bs-proveedor="{{indice[0]}}"
-                            data-bs-categoria="{{indice[8]}}">Editar <i class="fas fa-edit "></i>
+                            data-bs-existencias-deseadas="{{indice[6]}}" data-bs-proveedor="{{indice[7]}}"
+                            data-bs-categoria="{{indice[9]}}">Editar <i class="fas fa-edit "></i>
                             <!--Cambia el orden del modal js-->
                         </button>
 
                         <!-- <form action="/eliminar_producto" method="POST" id="eliminarp">
                             <input type="hidden" name="indice_id" value="{{indice[0]}}">Form oculto para el id  -->
+                        <!-- </form> -->
 
                         <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
                             data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar<i
                                 class="fas fa-trash-alt"></i>
                         </button>
-
-                        <!-- </form> -->
                     </div>
                 </td>
             </tr>
+
             {% endfor %}
+
         </tbody>
     </table>
 </section>
 
+<!--Banner de alerta producto bajo-->
+{% if producto_escaso %}
+<div class="toast-container position-fixed bottom-0 end-0 p-4">
+    {% for producto in producto_escaso %}
+    <div class="toast text-bg-warning">
+        <div class="toast-header">
+            <strong class="me-auto">Alerta</strong>
+            <small class="text-body-secondary">just now</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            El producto ({{ producto[0] }}) tiene pocas existencias
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl);
+        });
+        toastList.forEach(toast => toast.show());
+    });
+</script>
+{% endif %}
 
 <!-- Modal para crear/editar tarea -->
-<div class="modal fade" id="abrirModal" tabindex="-1">
+<div class="modal fade " data-bs-backdrop="static" id="abrirModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered ">
         <div class="modal-content">
 
@@ -88,7 +116,7 @@
             </div>
 
             <div class="modal-body"> <!--Formulario-->
-                <form id="taskForm" method="POST" action="{{ url_for('agregar_producto')}}"> <!--Añadir producto o-->
+                <form id="taskForm" method="POST" action="{{ url_for('agregar_producto')}}"> <!--Añadir producto-->
                     <div class="">
                         <label for="nombre">Nombre:</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" pattern="^[A-Za-z\s]+$"
@@ -96,17 +124,18 @@
                     </div>
                     <div class="">
                         <label for="precio_compra">Precio Compra:</label>
-                        <input type="number" class="form-control" id="precio_compra" name="precio_compra" min="0"
-                            required>
+                        <input type="number" class="form-control" id="precio_compra" step="0.1" name="precio_compra"
+                            min="0" required>
                     </div>
                     <div class="">
                         <label for="precio_venta">Precio Venta:</label>
-                        <input type="number" class="form-control" id="precio_venta" name="precio_venta" min="0"
-                            required>
+                        <input type="number" class="form-control" id="precio_venta" step="0.1" name="precio_venta"
+                            min="0" required>
                     </div>
                     <div class="">
                         <label for="ganancia">Ganancia:</label>
-                        <input type="number" class="form-control" id="ganancia" name="ganancia" min="0" required>
+                        <input type="number" class="form-control" id="ganancia" step="0.1" name="ganancia" min="0"
+                            required>
                     </div>
                     <div class="">
                         <label for="existencias">Existencias:</label>
@@ -223,12 +252,6 @@
                 console.log(id)
                 abrirModal.querySelector('#taskForm').setAttribute('action', '{{ url_for("editar_producto", id=0) }}'.replace('0', id));
                 //Enviar a editar
-                // Obtener el elemento que deseas eliminar
-                var elementoEliminar = document.getElementById("btn_reset");
-                // Eliminar el elemento
-                elementoEliminar.parentNode.removeChild(elementoEliminar);
-
-
             } else {
                 abrirModal.querySelector('.modal-title').textContent = 'Agregar Producto';
             }
@@ -242,6 +265,7 @@
         document.getElementById('indice_id').value = productId;
     }
 </script>
+
 
 
 

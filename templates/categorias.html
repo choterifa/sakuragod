@@ -36,7 +36,7 @@
         </thead>
         <tbody class="table-group-divider">
             {% for indice in categorias %} <!--Nombre cualquiera + el que recibe de la variable-->
-            <tr>
+            <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
                 <td>{{ indice[4] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
@@ -112,7 +112,7 @@
 
             </div>
             <div class="modal-footer">
-                <form action="/eliminar_producto" method="POST" id="eliminarp">
+                <form action="/eliminar_categoria" method="POST" id="eliminarp">
                     <input type="hidden" name="indice_id" id="indice_id" value="">
                     <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
                     </button>

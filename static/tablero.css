@@ -7,6 +7,20 @@
     --color-rojo: #fe4059;
 }
 
+.loader--modify {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 85%;
+    height: 100vh;
+    /* background-color: red; */
+}
+
+.spinner__tamaño{
+    width: 4.5rem !important;
+    height: 4.5rem !important;
+}
+
 .resumen {
     /*fondo de resumen*/
     width: 85%;
@@ -42,7 +56,8 @@
     box-shadow: 0px 0px 5px 0px rgba(73, 71, 71, 0.194);
 }
 
-.resumen__card__item:hover, .resumen__card__item:hover > .resumen__enlaces {
+.resumen__card__item:hover,
+.resumen__card__item:hover>.resumen__enlaces {
     /*tarjetas*/
     transform: scale(1.04);
     cursor: pointer;
@@ -178,7 +193,7 @@
     min-height: 10px;
 }
 
-.resumen__card__item2--reebolso:hover{
+.resumen__card__item2--reebolso:hover {
     transform: scale(1.04);
     background-color: rgba(251, 58, 58, 0.649);
 }
@@ -223,4 +238,9 @@
 
 .tablita__nombre {
     padding: 1px;
+}
+
+.resumen__card__enlace{
+    text-decoration: none;
+    color: black;
 }

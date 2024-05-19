@@ -10,10 +10,10 @@
     <div class="resumen__cards">
 
         <div class="resumen__card__item">
-            <a href="#" class="resumen__enlaces">
+            <a href="/ventas" class="resumen__enlaces">
 
                 <div class="resumen__card__textos">
-                    <h3 class="resumen__card__titulo">1800</h3>
+                    <h3 class="resumen__card__titulo">{{ingresos_del_corte}}</h3>
                     <div class="resumen__card__paragraph">
                         <i class="bi bi-receipt resumen__card__icon"></i>
                         <p class="resumen__paragraph">Vendido</p>
@@ -24,9 +24,9 @@
         </div>
 
         <div class="resumen__card__item">
-            <a href="#" class="resumen__enlaces">
+            <a href="/caja" class="resumen__enlaces">
                 <div class="resumen__card__textos">
-                    <h3 class="resumen__card__titulo">200</h3>
+                    <h3 class="resumen__card__titulo">{{ganancias}}</h3>
                     <div class="resumen__card__paragraph">
                         <!-- <i class="bi bi-receipt "></i> -->
                         <i class="bi bi-cash-stack resumen__card__icon"></i>
@@ -38,9 +38,9 @@
         </div>
 
         <div class="resumen__card__item">
-            <a href="#" class="resumen__enlaces">
+            <a href="/envios" class="resumen__enlaces">
                 <div class="resumen__card__textos">
-                    <h3 class="resumen__card__titulo">8</h3>
+                    <h3 class="resumen__card__titulo">{{envios}}</h3>
                     <div class="resumen__card__paragraph">
                         <i class="bi bi-truck resumen__card__icon"></i>
                         <p class="resumen__paragraph">Enviar</p>
@@ -50,9 +50,9 @@
         </div>
 
         <div class="resumen__card__item">
-            <a href="#" class="resumen__enlaces">
+            <a href="/apartados" class="resumen__enlaces">
                 <div class="resumen__card__textos">
-                    <h3 class="resumen__card__titulo">7</h3>
+                    <h3 class="resumen__card__titulo">{{apartados}}</h3>
                     <div class="resumen__card__paragraph">
                         <i class="bi bi-calendar resumen__card__icon resumen__card__icon--modify"></i>
                         <p class="resumen__paragraph">Apartados</p>
@@ -65,17 +65,22 @@
         <!--banderas-->
         <div class="container__banderas">
             <div class="resumen__card__item  resumen__card__item--bandera">
-                <div class="resumen__card__textos resumen__card__textos--modify">
-                    <p class="resumen__paragraph__bandera">Ventas del dia</p>
-                    <h3 class="resumen__card__titulo__bandera">20</h3>
-                </div>
+                <a href="/ventas" class="resumen__card__enlace">
+                    <div class="resumen__card__textos resumen__card__textos--modify">
+                        <p class="resumen__paragraph__bandera">Ventas del dia</p>
+                        <h3 class="resumen__card__titulo__bandera">20</h3>
+                    </div>
+                </a>
             </div>
 
             <div class="resumen__card__item  resumen__card__item--bandera">
-                <div class="resumen__card__textos resumen__card__textos--modify">
-                    <p class="resumen__paragraph__bandera">Clientes</p>
-                    <h3 class="resumen__card__titulo__bandera">40</h3>
-                </div>
+                <a href="/clientes" class="resumen__card__enlace">
+                    <div class="resumen__card__textos resumen__card__textos--modify">
+                        <p class="resumen__paragraph__bandera">Clientes</p>
+                        <h3 class="resumen__card__titulo__bandera">40</h3>
+                    </div>
+                </a>
+
             </div>
 
         </div>
@@ -157,7 +162,7 @@
 
         <div class="resumen__card__item2 resumen__card__item2--reebolso">
             <div class="resumen__card__reembolso__flex">
-                <p class="resumen__paragraph__invertir">Dinero a invertir</p>
+                <p class="resumen__paragraph__invertir">Dinero a Reinvertir</p>
                 <h3 class="resumen__card__invertir">5000</h3>
             </div>
         </div>
@@ -173,15 +178,12 @@
 
             <h3 class="resumen__card__objetivo">Objetivo del día</h3>
             <div class="experiencia__barras__container">
-                <div class="progress" role="progressbar" aria-label="Animated striped example" aria-valuenow="75"
-                    aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 50%"></div>
-                    <!--cambiar el widht-->
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 20%">
+                        25%</div>
                 </div>
             </div>
-
         </div>
-
     </div>
 
     <!--Musica-->

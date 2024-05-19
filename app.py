@@ -44,48 +44,134 @@ def promocional():
     return render_template("inicio/promocional.html")
 
 
+@app.route("/spinner")
+def spinner():
+    return render_template("loader.html")
+
 # Seccion del gestor
+
+
 @app.route("/tablero")
 def tablero():
     if "email" in session:
-        # si se registro se envia a tablero con una session creada
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM clientes")
         clientes = cur.fetchall()
-        return render_template("tablero.html", email=session["email"], clientes=clientes)
+        query = """
+        SELECT
+            (SELECT caja.Ingresos_Del_Corte
+            FROM caja
+            ORDER BY ID_Caja DESC
+            LIMIT 1) AS Ingresos_Del_Corte,
 
+            (SELECT caja.Ganancias
+            FROM caja
+            ORDER BY ID_Caja DESC
+            LIMIT 1) AS Ganancias,
+
+            (SELECT COUNT(*)
+            FROM envios
+            WHERE envios.ID_StatusE = 3) AS envios,
+
+            (SELECT COUNT(*)
+            FROM apartados
+            WHERE apartados.ID_Status = 1) AS apartados;
+        """
+        cur.execute(query)
+
+        data = cur.fetchone()
+        # Acceder a los elementos de la tupla correctamente
+        if data:
+            ingresos_del_corte = data[0]
+            ganancias = data[1]
+            envios = data[2]
+            apartados = data[3]
+        else:
+            ingresos_del_corte = None
+            ganancias = None
+            envios = None
+            apartados = None
+
+        return render_template("tablero.html", email=session["email"], clientes=clientes, ingresos_del_corte=ingresos_del_corte, ganancias=ganancias, envios=envios, apartados=apartados,
+                               )
     else:
-        return render_template("iniciar_sesion.html")
+        return render_template("inicio/iniciar_sesion.html")
 
 
 @app.route("/inventario", methods=['GET'])
 def inventario():
     if "email" in session:
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM Producto")
+        cur.execute("""
+        SELECT
+            producto.ID_Producto,
+            producto.Nombre,
+            producto.Precio_Compra,
+            producto.Precio_Venta,
+            producto.Ganancia_Producto,
+            producto.Existencias,
+            producto.Existencias_Deseadas,
+            proveedor.ID_Proveedor,
+            proveedor.Empresa,
+            categorias.ID_C,
+            categorias.Categoria
+        FROM
+            producto,
+            proveedor,
+            categorias
+        WHERE
+            producto.ID_Provedor  = proveedor.ID_Proveedor
+            AND producto.ID_C = categorias.ID_C;
+        """)
         Productos = cur.fetchall()
+        cur.execute("""
+        SELECT
+            producto.Nombre
+            FROM
+            producto
+            WHERE producto.Existencias <=5;
+        """)
+        producto_escaso = cur.fetchall()
+        print(producto_escaso)
         cur.execute("SELECT ID_Proveedor, Empresa  FROM proveedor")
         Proveedor = cur.fetchall()
         cur.execute("SELECT * FROM categorias")
         Categorias = cur.fetchall()
         cur.close()
-        return render_template('inventario.html', Productos=Productos, Proveedor=Proveedor, Categorias=Categorias)
+        return render_template('inventario.html', Productos=Productos, Proveedor=Proveedor, Categorias=Categorias, producto_escaso=producto_escaso)
     else:
-        return render_template("iniciar_sesion.html")
+        return render_template("inicio/iniciar_sesion.html")
 
 
 @app.route('/clientes', methods=['GET'])
 def clientes():
     if "email" in session:
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM clientes")
+        cur.execute("""
+        SELECT
+            clientes.ID_Cliente,
+            clientes.Nombres,
+            clientes.Apellido_P,
+            clientes.Apellido_M,
+            clientes.Total_Adeudo,
+            celulares.ID_CEL,
+            celulares.Celular,
+            t_apartado.Tiene_Apartados
+        FROM
+            clientes,
+            celulares,
+            t_apartado
+        WHERE
+            clientes.ID_CEL  = celulares.ID_CEL
+            AND clientes.ID_AP = t_apartado.ID_AP;
+        """)
         clientes = cur.fetchall()
         cur.execute("SELECT ID_CEL,Celular FROM celulares")
         Telefono = cur.fetchall()
         cur.close()
         return render_template('clientes.html', clientes=clientes, Telefono=Telefono)
     else:
-        return render_template("iniciar_sesion.html")
+        return render_template("inicio/iniciar_sesion.html")
 
 
 @app.route('/ventas', methods=['GET'])
@@ -97,7 +183,151 @@ def ventas():
         cur.close()
         return render_template('ventas.html', ventas=ventas)
     else:
-        return render_template("iniciar_sesion.html")
+        return render_template("inicio/iniciar_sesion.html")
+
+
+@app.route('/envios', methods=['GET'])
+def envios():
+    if "email" in session:
+        cur = mysql.connection.cursor()
+        cur.execute("""
+        SELECT 
+            clientes.ID_Cliente,
+            clientes.Nombres,    
+            clientes.Apellido_P,
+            envios.*,
+            destino.Destino,
+            producto.ID_Producto,
+            producto.Nombre,
+            STR_TO_DATE(CONCAT(
+                anio_envio.Anio_Envio, '-', 
+                CASE 
+                    WHEN mes_envio.Mes_Envio = 'Enero' THEN '01'
+                    WHEN mes_envio.Mes_Envio = 'Febrero' THEN '02'
+                    WHEN mes_envio.Mes_Envio = 'Marzo' THEN '03'
+                    WHEN mes_envio.Mes_Envio = 'Abril' THEN '04'
+                    WHEN mes_envio.Mes_Envio = 'Mayo' THEN '05'
+                    WHEN mes_envio.Mes_Envio = 'Junio' THEN '06'
+                    WHEN mes_envio.Mes_Envio = 'Julio' THEN '07'
+                    WHEN mes_envio.Mes_Envio = 'Agosto' THEN '08'
+                    WHEN mes_envio.Mes_Envio = 'Septiembre' THEN '09'
+                    WHEN mes_envio.Mes_Envio = 'Octubre' THEN '10'
+                    WHEN mes_envio.Mes_Envio = 'Noviembre' THEN '11'
+                    WHEN mes_envio.Mes_Envio = 'Diciembre' THEN '12'
+                END, '-', dia_envio.Dia_Envio), '%Y-%m-%d') AS Fecha_Envio
+        FROM 
+            clientes
+            INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
+            INNER JOIN envios ON relacion_c_p_a_e.ID_Envio = envios.ID_Envios
+            INNER JOIN destino ON envios.ID_Destino = destino.ID_Destino
+            INNER JOIN status_envio ON envios.ID_StatusE = status_envio.ID_StatusE
+            INNER JOIN producto ON relacion_c_p_a_e.ID_Producto = producto.ID_Producto
+            INNER JOIN dia_envio ON envios.ID_DE = dia_envio.ID_DE
+            INNER JOIN mes_envio ON envios.ID_ME = mes_envio.ID_ME
+            INNER JOIN anio_envio ON envios.ID_AE = anio_envio.ID_AE
+        WHERE 
+            envios.ID_StatusE = 3
+        ORDER BY 
+            envios.ID_Envios ASC;
+            """)
+        envios = cur.fetchall()
+        cur.execute("""
+        SELECT
+            clientes.ID_Cliente,
+            clientes.Nombres,
+            clientes.Apellido_P
+        FROM
+            clientes;
+            """)
+        clientes = cur.fetchall()
+        cur.execute("""
+        SELECT
+            destino.ID_Destino,
+            destino.Destino
+        FROM
+            destino;
+            """)
+        destino = cur.fetchall()
+        cur.execute("""
+        SELECT
+            status_envio.ID_StatusE,
+            status_envio.Status_Envio
+        FROM
+            status_envio;
+            """)
+        status = cur.fetchall()
+        cur.execute("""
+        SELECT
+                colonia.ID_C ,
+                colonia.Colonia
+            FROM
+                colonia;
+            """)
+        colonia = cur.fetchall()
+        cur.execute("""
+        SELECT
+            producto.ID_Producto,
+            producto.Nombre
+        FROM
+            producto;
+            """)
+        productos = cur.fetchall()
+        cur.execute("""
+        UPDATE envios, dia_envio, mes_envio, anio_envio SET envios.Dias_Para_El_Envio = DATEDIFF(STR_TO_DATE(CONCAT(anio_envio.Anio_Envio, '-', 
+            CASE mes_envio.Mes_Envio
+                WHEN 'Enero' THEN '01'
+                WHEN 'Febrero' THEN '02'
+                WHEN 'Marzo' THEN '03'
+                WHEN 'Abril' THEN '04'
+                WHEN 'Mayo' THEN '05'
+                WHEN 'Junio' THEN '06'
+                WHEN 'Julio' THEN '07'
+                WHEN 'Agosto' THEN '08'
+                WHEN 'Septiembre' THEN '09'
+                WHEN 'Octubre' THEN '10'
+                WHEN 'Noviembre' THEN '11'
+                WHEN 'Diciembre' THEN '12'
+            END, '-', dia_envio.Dia_Envio), '%Y-%m-%D'), CURDATE())
+        WHERE 
+            envios.ID_DE = dia_envio.ID_DE
+            AND envios.ID_ME = mes_envio.ID_ME
+            AND envios.ID_AE = anio_envio.ID_AE;
+        """)
+        mysql.connection.commit()
+        cur.close()
+        return render_template("envios.html", envios=envios, productos=productos, clientes=clientes, destino=destino, status=status, colonia=colonia)
+    else:
+        return render_template("inicio/iniciar_sesion.html")
+
+
+@app.route('/apartados', methods=['GET'])
+def apartados():
+    if "email" in session:
+        cur = mysql.connection.cursor()
+        cur.execute("""
+        SELECT
+            clientes.Nombres,
+            clientes.Apellido_P,
+            envios.*,
+            destino.Destino,
+            status_envio.Status_Envio
+        FROM
+            clientes,
+            envios,
+            relacion_c_p_a_e,
+            destino,
+            status_envio
+        WHERE
+            relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
+            AND relacion_c_p_a_e.ID_Envio  = envios.ID_Envios
+            AND envios.ID_Destino = destino.ID_Destino
+            AND envios.ID_StatusE = status_envio.ID_StatusE ;
+            """)
+        apartados = cur.fetchall()
+        cur.close()
+        return render_template("apartados.html", apartados=apartados)
+    else:
+        return render_template("inicio/iniciar_sesion.html")
 
 
 @app.route('/categorias', methods=['GET'])
@@ -110,7 +340,7 @@ def categorias():
         cur.close()
         return render_template('categorias.html', categorias=categorias)
     else:
-        return render_template("iniciar_sesion.html")
+        return render_template("inicio/iniciar_sesion.html")
 
 
 @app.route('/proveedor', methods=['GET'])
@@ -124,10 +354,6 @@ def proveedor():
     else:
         return render_template("inventario.html")
 
-
-@app.route('/resultado')
-def resultado():
-    return render_template("resultado.html")
 
 # Registro y login
 
@@ -147,7 +373,7 @@ def iniciar_sesion():
         if not existing_email:
             # El correo electrónico no está registrado
             correo_no_encontrado = True
-            return render_template("iniciar_sesion.html", correo_no_encontrado=correo_no_encontrado)
+            return render_template("inicio/iniciar_sesion.html", correo_no_encontrado=correo_no_encontrado)
         else:
             # El correo electrónico está registrado
             # En el cuarto campo de la tupla (Contraseña) se compara con la contraseña del Form
@@ -155,14 +381,14 @@ def iniciar_sesion():
                 # Contraseña correcta
                 # Crear session email con el email
                 session["email"] = correo
-                return render_template("iniciar_sesion.html", user=correo, registration_login=True)
+                return render_template("inicio/iniciar_sesion.html", user=correo, registration_login=True)
             else:
                 # Contraseña incorrecta
                 bad_password = True
                 return render_template(
-                    "iniciar_sesion.html", bad_password=bad_password, email=correo
+                    "inicio/iniciar_sesion.html", bad_password=bad_password, email=correo
                 )
-    return render_template("iniciar_sesion.html")
+    return render_template("inicio/iniciar_sesion.html")
 
 
 @app.route("/registro", methods=["GET", "POST"])
@@ -187,14 +413,14 @@ def registro():
             email_found = True
             error_message = "El correo electrónico ya está registrado"
             return render_template(
-                "registro.html", email_found=email_found, error_message=error_message
+                "inicio/registro.html", email_found=email_found, error_message=error_message
             )
 
         elif existing_user:  # ya exis  te usuario
             user_found = True
             error_message = "El usuario ya existe. Por favor, elija otro"
             return render_template(
-                "registro.html", user_found=user_found, error_message=error_message
+                "inicio/registro.html", user_found=user_found, error_message=error_message
             )
         else:
             # registrar en base de datos
@@ -204,8 +430,8 @@ def registro():
             )
             mysql.connection.commit()
             session["email"] = correo  # crear sesion del email
-            return render_template("registro.html", registration_successful=True)
-    return render_template("registro.html")
+            return render_template("inicio/registro.html", registration_successful=True)
+    return render_template("inicio/registro.html")
 
 
 # Agregar productos
@@ -223,7 +449,7 @@ def agregar_producto():
 
         print(existencias_deseadas)
         if existencias_deseadas == '':
-            existencias_deseadas = None
+            existencias_deseadas = 0
 
         cur = mysql.connection.cursor()
         # Obtener la fecha y hora actual
@@ -342,7 +568,7 @@ def editar_cliente(id):
         telefono = request.form['telefono']
         cur = mysql.connection.cursor()
         cur.execute(
-            "UPDATE clientes SET Nombre = %s, Apellido_P = %s, Apellido_M = %s, ID_CEL = %s WHERE ID_Cliente = %s", (nombre, apellido_p, apellido_m, telefono, id))
+            "UPDATE clientes SET Nombres = %s, Apellido_P = %s, Apellido_M = %s, ID_CEL = %s WHERE ID_Cliente = %s", (nombre, apellido_p, apellido_m, telefono, id))
         mysql.connection.commit()
         cur.close()
         return redirect(url_for('clientes'))
@@ -358,34 +584,71 @@ def eliminar_cliente():
     cur.close()
     return redirect(url_for('clientes'))
 
+# Agregar envio a cleinte
 
-@app.route('/ver_productos_categoria', methods=['POST'])
-def ver_productos_categoria():
-    cur = mysql.connection.cursor()
-    id = request.form['indice_id']
-    print("El valor de 'id' es:", id)
-    cur.execute("""
-    SELECT
-        Producto.Nombre,
-        categorias.Categoria
-    FROM
-        Producto,
-        categorias 
-    WHERE
-        producto.ID_C = categorias.ID_C
-        AND categorias.ID_C  = %s;
-""", (id,))
-    mysql.connection.commit()
-    resultados = cur.fetchone()
-    print(resultados)
-    return redirect(url_for("resultado", resultados=resultados))
+
+@app.route('/agregar_envio', methods=['POST'])  # insertar datos
+def agregar_envio():
+    if request.method == 'POST':
+        cliente = request.form['cliente']
+        print(cliente)
+        producto = request.form['producto']
+        calle = request.form['calle']
+        cruzamiento_1 = request.form['cruzamiento_1']
+        cruzamiento_2 = request.form['cruzamiento_2']
+        fecha = datetime.strptime(request.form['fecha'], '%Y-%m-%d')
+        # Obtener el día, mes y año de la fecha
+        id_dia = fecha.day
+        id_mes = fecha.month
+        id_año = fecha.year - 2023
+        destino = request.form['destino']
+        status = request.form['status']
+        colonia = request.form['colonia']
+        cur = mysql.connection.cursor()
+        cur.execute(
+            "INSERT INTO envios (Calle, Cruzamiento_1, Cruzamiento_2, ID_DE, ID_ME, ID_AE, ID_Destino, ID_StatusE, ID_C) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+            (calle, cruzamiento_1, cruzamiento_2, id_dia, id_mes, id_año, destino, status, colonia))
+        mysql.connection.commit()
+        # Obtener el último ID insertado en la tabla 'envios'
+        cur.execute("SELECT MAX( envios.ID_Envios) FROM envios ;")
+        id_envio = cur.fetchone()[0]
+        print(id_envio)
+        # Insertar en la tabla 'relacion_c_p_a_e'
+        cur.execute(
+            "INSERT INTO relacion_c_p_a_e (ID_Cliente, ID_Producto, ID_Envio) VALUES (%s, %s, %s)",
+            (cliente, producto, id_envio)
+        )
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('envios'))
+
+# @app.route('/ver_productos_categoria', methods=['POST'])
+# def ver_productos_categoria():
+#     cur = mysql.connection.cursor()
+#     id = request.form['indice_id']
+#     print("El valor de 'id' es:", id)
+#     cur.execute("""
+#     SELECT
+#         Producto.Nombre,
+#         categorias.Categoria
+#     FROM
+#         Producto,
+#         categorias
+#     WHERE
+#         producto.ID_C = categorias.ID_C
+#         AND categorias.ID_C  = %s;
+# """, (id,))
+#     mysql.connection.commit()
+#     resultados = cur.fetchone()
+#     print(resultados)
+#     return redirect(url_for("resultado", resultados=resultados))
 
 
 @app.route("/cerrar_sesion")
 def cerrar_sesion():
     if "email" in session:
         session.pop("email")
-        return render_template("iniciar_sesion.html")
+        return render_template("inicio/iniciar_sesion.html")
     else:
         return redirect(url_for("iniciar_sesion"))
 

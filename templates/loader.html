@@ -1,0 +1,27 @@
+{%extends 'base.html'%}
+
+{%block title%} loader{%endblock%}
+
+{%block inventario%}
+<section class="loader loader--modify">
+    <div class="spinner-border spinner__tamaño" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</section>
+
+
+<script>
+    setTimeout(function () {
+        window.location.href = "{{ url_for('tablero')}}";
+    }, 1000);
+</script>
+<!-- 
+<script>
+    // Abrir el modal cuando la página se cargue
+    window.onload = function () {
+        var myModal = new bootstrap.Modal(document.getElementById('abrirModalVer'));
+        myModal.show();
+    };
+</script> -->
+
+{%endblock%}
