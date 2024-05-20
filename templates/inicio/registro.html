@@ -30,8 +30,9 @@
                 <!-- Username input -->
                 <div class="">
                     <label for="username">Nombre</label>
-                    <input type="text" class="login__input {% if user_found %}is-invalid{% endif %} " id="username"
-                        name="nombre" required="" minlength="4" maxlength="15" pattern="[a-zA-Z]+" />
+                    <input data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Ingresa solo letras."
+                        type="text" class="login__input {% if user_found %}is-invalid{% endif %} " id="username"
+                        name="nombre" required="" minlength="4" maxlength="15" pattern="[a-zA-Z]+">
                     {% if user_found %}
                     <div class="invalid-feedback">{{ error_message }}</div>
                     {% endif %}
@@ -64,6 +65,11 @@
         </div>
     </section>
 
+    <!--Iniciar los popover-->
+    <script>
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))      
+    </script>
 
 
     {% if registration_successful %}

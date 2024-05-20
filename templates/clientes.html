@@ -21,7 +21,7 @@
 
     <h1 class="inventario__titulo text-center">Clientes</h1>
 
-    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
+    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModalCliente"
         data-taskid="0">Agregar un cliente
     </button>
     <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal"
@@ -54,7 +54,7 @@
                 <td >
                     <div class="editar__botones">
                         <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
-                            data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
+                            data-bs-target="#abrirModalCliente" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
                             data-bs-apellido_p="{{indice[2]}}" data-bs-apellido_m="{{indice[3]}}"
                             data-bs-telefono="{{indice[5]}}">Editar <i class=" fas fa-edit "></i>
                             <!--Cambia el orden del modal js-->
@@ -82,7 +82,7 @@
 
 
 <!-- Modal para crear/editar tarea -->
-<div class="modal fade" id="abrirModal" tabindex="-1">
+<div class="modal fade" id="abrirModalCliente" tabindex="-1">
 
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -194,9 +194,9 @@
 <!-- <script src="../static/Js/ModalEditar.js"></script> -->
 <script>
     //< !--Codigo para obtner los datos del fomr segun si id(Editar)-- >
-    const abrirModal = document.getElementById('abrirModal')
-    if (abrirModal) {
-        abrirModal.addEventListener('show.bs.modal', event => {
+    const abrirModalCliente = document.getElementById('abrirModalCliente')
+    if (abrirModalCliente) {
+        abrirModalCliente.addEventListener('show.bs.modal', event => {
             // Button that triggered the modal
             const button = event.relatedTarget
             //Obtneer los datos del boton con los id
@@ -207,10 +207,10 @@
             const telefono = button.getAttribute('data-bs-telefono')
 
             // Seleccionar los campos para actulizarlos en el modal
-            const modalNombre = abrirModal.querySelector('#nombre')
-            const modalApellido_p = abrirModal.querySelector('#apellido_p')
-            const modalApellido_m = abrirModal.querySelector('#apellido_m')
-            const modalTelefono = abrirModal.querySelector('#telefono')
+            const modalNombre = abrirModalCliente.querySelector('#nombre')
+            const modalApellido_p = abrirModalCliente.querySelector('#apellido_p')
+            const modalApellido_m = abrirModalCliente.querySelector('#apellido_m')
+            const modalTelefono = abrirModalCliente.querySelector('#telefono')
 
 
             // Acutualizar el modal con los datos de los atributos.
@@ -221,12 +221,12 @@
 
             //Titulo segun la funcion
             if (id) {
-                abrirModal.querySelector('.modal-title').textContent = 'Editar cliente';
+                abrirModalCliente.querySelector('.modal-title').textContent = 'Editar cliente';
                 console.log(id)
-                abrirModal.querySelector('#agregar_cliente').setAttribute('action', '{{ url_for("editar_cliente", id=0) }}'.replace('0', id));
+                abrirModalCliente.querySelector('#agregar_cliente').setAttribute('action', '{{ url_for("editar_cliente", id=0) }}'.replace('0', id));
                 //Enviar a editar
             } else {
-                abrirModal.querySelector('.modal-title').textContent = 'Agregar cliente';
+                abrirModalCliente.querySelector('.modal-title').textContent = 'Agregar cliente';
             }
         })
     }

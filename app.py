@@ -68,6 +68,11 @@ def tablero():
             FROM caja
             ORDER BY ID_Caja DESC
             LIMIT 1) AS Ganancias,
+            
+            (SELECT caja.Reeinvertir 
+            FROM caja
+            ORDER BY ID_Caja DESC
+            LIMIT 1) AS Reeinvertir,
 
             (SELECT COUNT(*)
             FROM envios
@@ -78,22 +83,94 @@ def tablero():
             WHERE apartados.ID_Status = 1) AS apartados;
         """
         cur.execute(query)
-
         data = cur.fetchone()
         # Acceder a los elementos de la tupla correctamente
         if data:
             ingresos_del_corte = data[0]
             ganancias = data[1]
-            envios = data[2]
-            apartados = data[3]
+            reeinvertir = data[2]
+            envios = data[3]
+            apartados = data[4]
         else:
             ingresos_del_corte = None
             ganancias = None
             envios = None
+            reeinvertir = None
             apartados = None
-
-        return render_template("tablero.html", email=session["email"], clientes=clientes, ingresos_del_corte=ingresos_del_corte, ganancias=ganancias, envios=envios, apartados=apartados,
-                               )
+        cur.execute("""
+        SELECT COUNT(*) AS total_productos
+        FROM producto;
+        """)
+        total_producto = cur.fetchone()
+        cur.execute("""
+        SELECT COUNT(*) AS total_ventas
+            FROM ventas
+            JOIN anio_venta ON ventas.ID_AV = anio_venta.ID_AV 
+            JOIN mes_venta ON ventas.ID_MV  = mes_venta.ID_MV 
+            JOIN dia_venta ON ventas.ID_DV = dia_venta.ID_DV 
+            WHERE CURDATE() = STR_TO_DATE(CONCAT(anio_venta.Anio_Venta, '-', 
+                CASE mes_venta.Mes_Venta
+                    WHEN 'Enero' THEN '01'
+                    WHEN 'Febrero' THEN '02'
+                    WHEN 'Marzo' THEN '03'
+                    WHEN 'Abril' THEN '04'
+                    WHEN 'Mayo' THEN '05'
+                    WHEN 'Junio' THEN '06'
+                    WHEN 'Julio' THEN '07'
+                    WHEN 'Agosto' THEN '08'
+                    WHEN 'Septiembre' THEN '09'
+                    WHEN 'Octubre' THEN '10'
+                    WHEN 'Noviembre' THEN '11'
+                    WHEN 'Diciembre' THEN '12'
+                END, '-', dia_venta.Dia_Venta), '%Y-%m-%d');
+        """)
+        total_ventas = cur.fetchone()
+        cur.execute("""
+            SELECT COUNT(*) AS total_clientes
+            FROM clientes;
+        """)
+        total_clientes = cur.fetchone()
+        cur.execute("""
+            SELECT 
+            clientes.ID_Cliente,
+            clientes.Nombres,	
+            clientes.Apellido_P,
+            apartados.*,
+            status_apartados.Status_Apartado,
+            producto.ID_Producto,
+            producto.Nombre
+        FROM 
+            clientes,
+            apartados,
+            relacion_c_p_a_e,
+            status_apartados,
+            producto 
+        WHERE 
+            relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente 
+            AND relacion_c_p_a_e.ID_Apartado  = apartados.ID_Apartados
+            AND relacion_c_p_a_e.ID_Producto = producto.ID_Producto 
+            AND apartados.ID_Status = status_apartados.ID_Status
+            AND status_apartados.ID_Status = 1; 
+        """)
+        deudores = cur.fetchall()
+        cur.execute("""
+        SELECT 
+            producto.Nombre,
+            producto_venta.ID_Producto,
+            COUNT(*) AS cantidad
+        FROM 
+            producto_venta
+        JOIN 
+            producto ON producto_venta.ID_Producto = producto.ID_Producto
+        GROUP BY  
+            producto_venta.ID_Producto, producto.Nombre
+        ORDER BY 
+            cantidad DESC
+        LIMIT 5;
+        """)
+        mas_vendidos = cur.fetchall()
+        return render_template("tablero.html", email=session["email"], clientes=clientes, reeinvertir=reeinvertir, ingresos_del_corte=ingresos_del_corte, ganancias=ganancias,
+                               envios=envios, mas_vendidos=mas_vendidos,apartados=apartados, deudores=deudores, total_producto=total_producto, total_ventas=total_ventas, total_clientes=total_clientes)
     else:
         return render_template("inicio/iniciar_sesion.html")
 
@@ -132,7 +209,7 @@ def inventario():
             WHERE producto.Existencias <=5;
         """)
         producto_escaso = cur.fetchall()
-        print(producto_escaso)
+        # print(producto_escaso)
         cur.execute("SELECT ID_Proveedor, Empresa  FROM proveedor")
         Proveedor = cur.fetchall()
         cur.execute("SELECT * FROM categorias")
@@ -141,6 +218,23 @@ def inventario():
         return render_template('inventario.html', Productos=Productos, Proveedor=Proveedor, Categorias=Categorias, producto_escaso=producto_escaso)
     else:
         return render_template("inicio/iniciar_sesion.html")
+
+@app.route("/caja", methods=['GET'])
+def caja():
+    if "email" in session:
+        cur = mysql.connection.cursor()
+        cur.execute("""
+        SELECT
+            caja.*
+        FROM
+            caja;
+        """)
+        caja = cur.fetchall()
+        cur.close()
+        return render_template('caja.html', caja=caja)
+    else:
+        return render_template("inicio/iniciar_sesion.html")
+    
 
 
 @app.route('/clientes', methods=['GET'])
@@ -272,6 +366,7 @@ def envios():
             producto;
             """)
         productos = cur.fetchall()
+        # Para obtener la fecha en el form date
         cur.execute("""
         UPDATE envios, dia_envio, mes_envio, anio_envio SET envios.Dias_Para_El_Envio = DATEDIFF(STR_TO_DATE(CONCAT(anio_envio.Anio_Envio, '-', 
             CASE mes_envio.Mes_Envio
@@ -294,8 +389,143 @@ def envios():
             AND envios.ID_AE = anio_envio.ID_AE;
         """)
         mysql.connection.commit()
+        # Para los clientes marcados en enviar
+        cur.execute("""
+        SELECT 
+            clientes.ID_Cliente,
+            clientes.Nombres,    
+            clientes.Apellido_P,
+            envios.*,
+            destino.Destino,
+            producto.ID_Producto,
+            producto.Nombre,
+            STR_TO_DATE(CONCAT(
+                anio_envio.Anio_Envio, '-', 
+                CASE 
+                    WHEN mes_envio.Mes_Envio = 'Enero' THEN '01'
+                    WHEN mes_envio.Mes_Envio = 'Febrero' THEN '02'
+                    WHEN mes_envio.Mes_Envio = 'Marzo' THEN '03'
+                    WHEN mes_envio.Mes_Envio = 'Abril' THEN '04'
+                    WHEN mes_envio.Mes_Envio = 'Mayo' THEN '05'
+                    WHEN mes_envio.Mes_Envio = 'Junio' THEN '06'
+                    WHEN mes_envio.Mes_Envio = 'Julio' THEN '07'
+                    WHEN mes_envio.Mes_Envio = 'Agosto' THEN '08'
+                    WHEN mes_envio.Mes_Envio = 'Septiembre' THEN '09'
+                    WHEN mes_envio.Mes_Envio = 'Octubre' THEN '10'
+                    WHEN mes_envio.Mes_Envio = 'Noviembre' THEN '11'
+                    WHEN mes_envio.Mes_Envio = 'Diciembre' THEN '12'
+                END, '-', dia_envio.Dia_Envio), '%Y-%m-%d') AS Fecha_Envio
+        FROM 
+            clientes
+            INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
+            INNER JOIN envios ON relacion_c_p_a_e.ID_Envio = envios.ID_Envios
+            INNER JOIN destino ON envios.ID_Destino = destino.ID_Destino
+            INNER JOIN status_envio ON envios.ID_StatusE = status_envio.ID_StatusE
+            INNER JOIN producto ON relacion_c_p_a_e.ID_Producto = producto.ID_Producto
+            INNER JOIN dia_envio ON envios.ID_DE = dia_envio.ID_DE
+            INNER JOIN mes_envio ON envios.ID_ME = mes_envio.ID_ME
+            INNER JOIN anio_envio ON envios.ID_AE = anio_envio.ID_AE
+        WHERE 
+            envios.ID_StatusE = 1
+        ORDER BY 
+            envios.ID_Envios ASC;
+        """)
+        envios_enviados = cur.fetchall()
+        # Para los clientes marcados en cancelar
+        cur.execute("""
+        SELECT 
+            clientes.ID_Cliente,
+            clientes.Nombres,    
+            clientes.Apellido_P,
+            envios.*,
+            destino.Destino,
+            producto.ID_Producto,
+            producto.Nombre,
+            STR_TO_DATE(CONCAT(
+                anio_envio.Anio_Envio, '-', 
+                CASE 
+                    WHEN mes_envio.Mes_Envio = 'Enero' THEN '01'
+                    WHEN mes_envio.Mes_Envio = 'Febrero' THEN '02'
+                    WHEN mes_envio.Mes_Envio = 'Marzo' THEN '03'
+                    WHEN mes_envio.Mes_Envio = 'Abril' THEN '04'
+                    WHEN mes_envio.Mes_Envio = 'Mayo' THEN '05'
+                    WHEN mes_envio.Mes_Envio = 'Junio' THEN '06'
+                    WHEN mes_envio.Mes_Envio = 'Julio' THEN '07'
+                    WHEN mes_envio.Mes_Envio = 'Agosto' THEN '08'
+                    WHEN mes_envio.Mes_Envio = 'Septiembre' THEN '09'
+                    WHEN mes_envio.Mes_Envio = 'Octubre' THEN '10'
+                    WHEN mes_envio.Mes_Envio = 'Noviembre' THEN '11'
+                    WHEN mes_envio.Mes_Envio = 'Diciembre' THEN '12'
+                END, '-', dia_envio.Dia_Envio), '%Y-%m-%d') AS Fecha_Envio
+        FROM 
+            clientes
+            INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
+            INNER JOIN envios ON relacion_c_p_a_e.ID_Envio = envios.ID_Envios
+            INNER JOIN destino ON envios.ID_Destino = destino.ID_Destino
+            INNER JOIN status_envio ON envios.ID_StatusE = status_envio.ID_StatusE
+            INNER JOIN producto ON relacion_c_p_a_e.ID_Producto = producto.ID_Producto
+            INNER JOIN dia_envio ON envios.ID_DE = dia_envio.ID_DE
+            INNER JOIN mes_envio ON envios.ID_ME = mes_envio.ID_ME
+            INNER JOIN anio_envio ON envios.ID_AE = anio_envio.ID_AE
+        WHERE 
+            envios.ID_StatusE = 4
+        ORDER BY 
+            envios.ID_Envios ASC;
+        """)
+        envios_cancelados = cur.fetchall()
+        # print(envios_enviados)
+        cur.execute("""
+         SELECT 
+            clientes.ID_Cliente,
+            clientes.Nombres,    
+            clientes.Apellido_P,
+            envios.*,
+            destino.Destino,
+            producto.ID_Producto,
+            producto.Nombre,
+            STR_TO_DATE(CONCAT(
+                anio_envio.Anio_Envio, '-', 
+                CASE 
+                    WHEN mes_envio.Mes_Envio = 'Enero' THEN '01'
+                    WHEN mes_envio.Mes_Envio = 'Febrero' THEN '02'
+                    WHEN mes_envio.Mes_Envio = 'Marzo' THEN '03'
+                    WHEN mes_envio.Mes_Envio = 'Abril' THEN '04'
+                    WHEN mes_envio.Mes_Envio = 'Mayo' THEN '05'
+                    WHEN mes_envio.Mes_Envio = 'Junio' THEN '06'
+                    WHEN mes_envio.Mes_Envio = 'Julio' THEN '07'
+                    WHEN mes_envio.Mes_Envio = 'Agosto' THEN '08'
+                    WHEN mes_envio.Mes_Envio = 'Septiembre' THEN '09'
+                    WHEN mes_envio.Mes_Envio = 'Octubre' THEN '10'
+                    WHEN mes_envio.Mes_Envio = 'Noviembre' THEN '11'
+                    WHEN mes_envio.Mes_Envio = 'Diciembre' THEN '12'
+                END, '-', dia_envio.Dia_Envio), '%Y-%m-%d') AS Fecha_Envio
+        FROM 
+            clientes
+            INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
+            INNER JOIN envios ON relacion_c_p_a_e.ID_Envio = envios.ID_Envios
+            INNER JOIN destino ON envios.ID_Destino = destino.ID_Destino
+            INNER JOIN status_envio ON envios.ID_StatusE = status_envio.ID_StatusE
+            INNER JOIN producto ON relacion_c_p_a_e.ID_Producto = producto.ID_Producto
+            INNER JOIN dia_envio ON envios.ID_DE = dia_envio.ID_DE
+            INNER JOIN mes_envio ON envios.ID_ME = mes_envio.ID_ME
+            INNER JOIN anio_envio ON envios.ID_AE = anio_envio.ID_AE
+        WHERE 
+            envios.ID_StatusE = 2
+        ORDER BY 
+            envios.ID_Envios ASC;
+        """)
+        envios_entregados = cur.fetchall()
+        cur.execute("""
+        SELECT
+            envios.Dias_Para_El_Envio
+        FROM
+            envios  
+        WHERE 
+            envios.Dias_Para_El_Envio <=1;
+        """)
+        pocos_dias = cur.fetchall()
         cur.close()
-        return render_template("envios.html", envios=envios, productos=productos, clientes=clientes, destino=destino, status=status, colonia=colonia)
+        return render_template("envios.html", envios_cancelados=envios_cancelados, pocos_dias=pocos_dias, envios=envios, envios_enviados=envios_enviados, envios_entregados=envios_entregados, productos=productos, clientes=clientes, destino=destino, status=status, colonia=colonia)
     else:
         return render_template("inicio/iniciar_sesion.html")
 
@@ -336,7 +566,6 @@ def categorias():
         cur = mysql.connection.cursor()
         cur.execute("SELECT * FROM categorias")
         categorias = cur.fetchall()
-        print(categorias)
         cur.close()
         return render_template('categorias.html', categorias=categorias)
     else:
@@ -368,7 +597,6 @@ def iniciar_sesion():
         cur.execute("SELECT * FROM login WHERE Correo = %s", (correo,))
         existing_email = cur.fetchone()  # Si existe, Guardar la tupla
         cur.close()
-        print(existing_email)
 
         if not existing_email:
             # El correo electrónico no está registrado
@@ -447,7 +675,6 @@ def agregar_producto():
         proveedor = request.form['proveedor']
         categoria = request.form['categoria']
 
-        print(existencias_deseadas)
         if existencias_deseadas == '':
             existencias_deseadas = 0
 
@@ -551,9 +778,7 @@ def agregar_telefono_cliente():
         telefono = request.form['telefono']
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO celulares (Celular) VALUES (%s)", (telefono,))
-
         mysql.connection.commit()
-        print(cur.fetchone())
         cur.close()
         return redirect(url_for('clientes'))
 
@@ -591,7 +816,6 @@ def eliminar_cliente():
 def agregar_envio():
     if request.method == 'POST':
         cliente = request.form['cliente']
-        print(cliente)
         producto = request.form['producto']
         calle = request.form['calle']
         cruzamiento_1 = request.form['cruzamiento_1']
@@ -612,7 +836,7 @@ def agregar_envio():
         # Obtener el último ID insertado en la tabla 'envios'
         cur.execute("SELECT MAX( envios.ID_Envios) FROM envios ;")
         id_envio = cur.fetchone()[0]
-        print(id_envio)
+        # print(id_envio)
         # Insertar en la tabla 'relacion_c_p_a_e'
         cur.execute(
             "INSERT INTO relacion_c_p_a_e (ID_Cliente, ID_Producto, ID_Envio) VALUES (%s, %s, %s)",
@@ -621,6 +845,109 @@ def agregar_envio():
         mysql.connection.commit()
         cur.close()
         return redirect(url_for('envios'))
+
+
+@app.route('/editar_envio/<int:id>', methods=['POST'])  # Enviar
+def editar_envio(id):
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        # Obtener el valor del formulario
+        cliente_original = request.form['cliente']
+        # Hacer una copia del formulario antes de modificarlo
+        cliente_original_copy = request.form.copy()
+        print("cliente original", cliente_original)
+        cliente_modificado = request.form['cliente']
+        print("cliente modificado", cliente_modificado)
+        producto = request.form['producto']
+        calle = request.form['calle']
+        cruzamiento_1 = request.form['cruzamiento_1']
+        cruzamiento_2 = request.form['cruzamiento_2']
+        fecha = datetime.strptime(request.form['fecha'], '%Y-%m-%d')
+        # Obtener el día, mes y año de la fecha
+        id_dia = fecha.day
+        id_mes = fecha.month
+        id_año = fecha.year - 2023
+        destino = request.form['destino']
+        status = request.form['status']
+        colonia = request.form['colonia']
+        cur = mysql.connection.cursor()
+
+    cur.execute(
+        "UPDATE envios SET Calle = %s,  Cruzamiento_1 = %s,  Cruzamiento_2 = %s, ID_DE = %s, ID_ME = %s,ID_AE = %s ,ID_Destino = %s ,ID_StatusE = %s,ID_C = %s   WHERE ID_Envios = %s",
+        (calle, cruzamiento_1, cruzamiento_2, id_dia, id_mes, id_año, destino, status, colonia, id))
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('envios'))
+
+
+@app.route('/regresar_envio', methods=['POST'])  # Enviar
+def regresar_envio():
+    if request.method == 'POST':
+        id = request.form['indice_id']
+        cur = mysql.connection.cursor()
+        cur.execute("""
+        UPDATE 
+            envios 
+        SET 
+            envios.ID_StatusE = 3
+        WHERE 
+            envios.ID_Envios = %s;
+                    """, (id,))
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('envios'))
+
+
+@app.route('/marcar_enviado', methods=['POST'])
+def marcar_enviado():
+    cur = mysql.connection.cursor()
+    id = request.form['indice_id']
+    cur.execute("""
+        UPDATE 
+            envios 
+        SET 
+            envios.ID_StatusE = 1
+        WHERE 
+            envios.ID_Envios = %s;
+    """, (id,))
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('envios'))
+
+
+@app.route('/marcar_entregado', methods=['POST'])
+def marcar_entregado():
+    cur = mysql.connection.cursor()
+    id = request.form['indice_id']
+    cur.execute("""
+        UPDATE 
+            envios 
+        SET 
+            envios.ID_StatusE = 2
+        WHERE 
+            envios.ID_Envios = %s;
+    """, (id,))
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('envios'))
+
+
+@app.route('/marcar_cancelado', methods=['POST'])
+def marcar_cancelado():
+    cur = mysql.connection.cursor()
+    id = request.form['indice_id']
+    cur.execute("""
+        UPDATE 
+            envios 
+        SET 
+            envios.ID_StatusE = 4
+        WHERE 
+            envios.ID_Envios = %s;
+    """, (id,))
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('envios'))
+
 
 # @app.route('/ver_productos_categoria', methods=['POST'])
 # def ver_productos_categoria():

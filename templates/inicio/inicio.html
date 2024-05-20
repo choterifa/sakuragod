@@ -33,7 +33,7 @@
             </div>
 
             <div class="Inicio__Enlaces__Contenedor">
-                <a href="/" class="Inicio__Enlace">Inicio
+                <a href="/" class="Inicio__Enlace" id="">Inicio
                 </a>
                 <a href="/ubicacion" class="Inicio__Enlace">Ubicación
                 </a>
@@ -80,25 +80,64 @@
                 </div>
             </div>
             <!--Imagen Cover-->
+
             <figure class="Inicio__Imagen__Container">
                 <img src="../static/imagenes/Cover6.jpg" alt="Cover" loading="lazy" class="Inicio__Imagen">
             </figure>
-            <figure class="Inicio__Imagen__Container">
-                <img src="../static/imagenes/Cover6.jpg" alt="Cover" loading="lazy"  class=" Inicio__Imagen">
-            </figure>
-            <figure class="Inicio__Imagen__Container">
-                <img src="../static/imagenes/Cover6.jpg" alt="Cover" loading="lazy" class=" Inicio__Imagen">
-            </figure>
-            <figure class="Inicio__Imagen__Container">
-                <img src="../static/imagenes/Cover6.jpg" alt="Cover" loading="lazy" class=" Inicio__Imagen">
-            </figure> 
-            <figure class="Inicio__Imagen__Container">
-                <img src="../static/imagenes/Cover6.jpg" alt="Cover" loading="lazy" class=" Inicio__Imagen">
-            </figure>
-
-
-
         </div> <!--Fin Hero-->
+
+        <!--Desmostrativos-->
+        <div class="demostrativos__flex">
+            <h2 class="Inicio__titulo__desmostrativos ">Acceso rápido a la información</h2>
+            <p class="Inicio__descripcion__demostrativos">Obtén la información crítica al instante desde el panel
+                principal del
+                gestor.
+                Ahorra tiempo y toma decisiones informadas
+                rápidamente sin necesidad de navegar por múltiples menús.
+            </p>
+            <video autoplay loop class="video__container__inicio" id="myVideo">
+                <source src="../../static/videos/desmotrativo1-studio.mp4" type="video/mp4" class="video__inicio">
+            </video>
+        </div>
+
+        <!--Desmostrativos-->
+        <div class="demostrativos__flex demostrativos__flex--alineado">
+            <h2 class="Inicio__titulo__desmostrativos ">Controla tus envios</h2>
+            <p class="Inicio__descripcion__demostrativos Inicio__descripcion__demostrativos--alineado">Mantén el control
+                total de tus envíos con nuestra plataforma
+                intuitiva. Supervisa cada envio, rastrea su status en
+                tiempo real y recibe notificaciones instantáneas sobre el estado de entrega
+            </p>
+            <video autoplay loop class="video__container__inicio" id="myVideo">
+                <source src="../../static/videos/envios.mp4" type="video/mp4" class="video__inicio">
+            </video>
+        </div>
+
+        <!--Desmostrativos-->
+        <div class="demostrativos__flex">
+            <h2 class="Inicio__titulo__desmostrativos ">Productos en orden</h2>
+            <p class="Inicio__descripcion__demostrativos">Organiza y gestiona tus productos de manera eficiente con
+                nuestra solución. Mantén un inventario actualizado, clasifica
+                tus productos fácilmente y asegura que siempre estén listos para tus clientes.
+            </p>
+            <video autoplay loop class="video__container__inicio" id="myVideo">
+                <source src="../../static/videos/productos.mp4" type="video/mp4" class="video__inicio">
+            </video>
+        </div>
+
+        <!--Desmostrativos-->
+        <div class="demostrativos__flex demostrativos__flex--alineado">
+            <h2 class="Inicio__titulo__desmostrativos  ">Manten tus datos seguros</h2>
+            <p class="Inicio__descripcion__demostrativos Inicio__descripcion__demostrativos--alineado">Garantiza la
+                seguridad de tu información y operaciones.
+                Nuestra plataforma requiere login para acceder, asegurando que
+                solo el personal autorizado tenga acceso. Mantén tus datos protegidos y tu entorno libre de intrusos.
+            </p>
+            <video autoplay loop class="video__container__inicio" id="myVideo">
+                <source src="../../static/videos/login.mp4" type="video/mp4" class="video__inicio">
+            </video>
+        </div>
+
 
         {%endblock%}
         <!--Musica-->
@@ -122,7 +161,27 @@
         </footer>
 
 
+        <!--Puaser el video fuera de wp-->
+        <!-- <script>
+            // Selecciona el video
+            const video = document.getElementById('myVideo');
 
+            // Crea un Intersection Observer
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                });
+            });
+
+            // Observa el video
+            observer.observe(video);
+        </script> -->
+
+      
     </section>
 
 </body>

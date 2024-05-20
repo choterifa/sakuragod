@@ -151,11 +151,12 @@ label {
     color: white;
     text-decoration: none;
     text-align: center;
+    opacity: 0;
 }
 
-.btn__form--salir:hover {
+/* .btn__form--salir:hover {
     background-color: #4B60EB;
-}
+} */
 
 /*Margen al modal de login*/
 

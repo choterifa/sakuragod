@@ -23,7 +23,11 @@
     <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
         data-taskid="0">Agregar envio
     </button>
-
+    <a href="/clientes">
+        <button type="button" class="btn_agregar btn btn-primary my-2">
+            Agregar un cliente
+        </button>
+    </a>
     <!--Nueva tabla-->
     <table class="table  table-hover table-striped align-middle">
         <thead>
@@ -33,6 +37,7 @@
                 <th scope="col">Dias restantes</th>
                 <th scope="col">Destino</th>
                 <th scope="col">Producto a enviar</th>
+                <th scope="col">Ediciones</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -47,29 +52,184 @@
                 <td>
                     <div class="editar__botones">
                         <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
-                            data-bs-target="#abrirModal" data-bs-cliente="{{indice[0]}}"
-                            data-bs-producto="{{indice[15]}}" data-bs-calle="{{indice[4]}}"
-                            data-bs-cruzamiento_1="{{indice[5]}}" data-bs-cruzamiento_2="{{indice[6]}}"
-                            data-bs-destino="{{indice[11]}}" data-bs-fecha="{{indice[17]}}"
-                            data-bs-status="{{indice[12]}}" data-bs-colonia="{{indice[13]}}">Editar <i
-                                class="fas fa-edit "></i>
+                            data-bs-target="#abrirModal" data-bs-id-envio="{{indice[3]}}"
+                            data-bs-cliente="{{indice[0]}}" data-bs-producto="{{indice[15]}}"
+                            data-bs-calle="{{indice[4]}}" data-bs-cruzamiento_1="{{indice[5]}}"
+                            data-bs-cruzamiento_2="{{indice[6]}}" data-bs-destino="{{indice[11]}}"
+                            data-bs-fecha="{{indice[17]}}" data-bs-status="{{indice[12]}}"
+                            data-bs-colonia="{{indice[13]}}">Editar <i class="fas fa-edit "></i>
                             <!--Cambia el orden del modal js-->
                         </button>
 
-                        <!-- <form action="/eliminar_producto" method="POST" id="eliminarp">
-                            <input type="hidden" name="indice_id" value="{{indice[0]}}">Form oculto para el id  -->
-                        <!-- </form> -->
+                        <form action="/marcar_enviado" method="POST" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[3]}}">
+                            <button type="submit" class="btn btn-dark">Marcar enviado</button>
+                        </form>
 
-                        <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
-                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar<i
-                                class="fas fa-trash-alt"></i>
-                        </button>
+                        <form action="/marcar_entregado" method="POST" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[3]}}">
+                            <button type="submit" class="btn btn-primary">Marcar entregado</button>
+                        </form>
+
+                        <form action="/marcar_cancelado" method="POST" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[3]}}">
+                            <button type="submit" class="btn btn-primary">Cancelar</button>
+                        </form>
+
                     </div>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <br></br>
+    <h2 class="inventario__titulo text-center">Enviados</h2>
+    <!--Tabla para los marcados en enviado-->
+    <table class="table  table-hover table-striped align-middle">
+        <thead>
+            <tr>
+                <th scope="col">Nombres</th> <!--Columna Encabezados-->
+                <th scope="col">Apellido P</th>
+                <th scope="col">Dias restantes</th>
+                <th scope="col">Destino</th>
+                <th scope="col">Producto a enviar</th>
+                <th scope="col">Ediciones</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for indice in envios_enviados%} <!--Nombre cualquiera + el que recibe de la variable-->
+            <tr class="doble_click" style="cursor: pointer;">
+                <td>{{ indice[1] }}</td>
+                <td>{{ indice[2] }}</td>
+                <td>{{ indice[7] }}</td> <!--derivar en bd-->
+                <td>{{ indice[14] }}</td>
+                <td>{{ indice[16] }}</td>
+                <!--Seccion de edicion (Editar/Eliminar)-->
+                <td>
+                    <div class="editar__botones">
+                        <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
+                            data-bs-target="#abrirModal" data-bs-id-envio="{{indice[3]}}"
+                            data-bs-cliente="{{indice[0]}}" data-bs-producto="{{indice[15]}}"
+                            data-bs-calle="{{indice[4]}}" data-bs-cruzamiento_1="{{indice[5]}}"
+                            data-bs-cruzamiento_2="{{indice[6]}}" data-bs-destino="{{indice[11]}}"
+                            data-bs-fecha="{{indice[17]}}" data-bs-status="{{indice[12]}}"
+                            data-bs-colonia="{{indice[13]}}">Editar <i class="fas fa-edit "></i>
+                            <!--Cambia el orden del modal js-->
+                        </button>
+                        <!-- 
+                        <form action="/marcar_enviado" method="POST" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[3]}}">
+                            <button type="submit" class="btn btn-dark">Devolver</button>
+                        </form> -->
+
+                        <form action="/regresar_envio" method="POST" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[3]}}">
+                            <button type="submit" class="btn btn-dark">Regresar a envio</button>
+                        </form>
+
+                        <form action="/marcar_entregado" method="POST" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[3]}}">
+                            <button type="submit" class="btn btn-primary">Marcar entregado</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+    <h2 class="inventario__titulo text-center">Entregados</h2>
+    <!--Tabla para los marcados en entregados-->
+    <table class="table  table-hover table-striped align-middle">
+        <thead>
+            <tr>
+                <th scope="col">Nombres</th> <!--Columna Encabezados-->
+                <th scope="col">Apellido P</th>
+                <th scope="col">Dias de entregado</th>
+                <th scope="col">Destino</th>
+                <th scope="col">Producto recibido</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for indice in envios_entregados%} <!--Nombre cualquiera + el que recibe de la variable-->
+            <tr class="doble_click" style="cursor: pointer;">
+                <td>{{ indice[1] }}</td>
+                <td>{{ indice[2] }}</td>
+                <td>{{ indice[7] }}</td> <!--derivar en bd-->
+                <td>{{ indice[14] }}</td>
+                <td>{{ indice[16] }}</td>
+                <!--Seccion de edicion (Editar/Eliminar)-->
+                <!-- <td>
+                    <div class="editar__botones">
+                        <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
+                            data-bs-target="#abrirModal" data-bs-id-envio="{{indice[3]}}" data-bs-cliente="{{indice[0]}}"
+                            data-bs-producto="{{indice[15]}}" data-bs-calle="{{indice[4]}}"
+                            data-bs-cruzamiento_1="{{indice[5]}}" data-bs-cruzamiento_2="{{indice[6]}}"
+                            data-bs-destino="{{indice[11]}}" data-bs-fecha="{{indice[17]}}"
+                            data-bs-status="{{indice[12]}}" data-bs-colonia="{{indice[13]}}">Editar <i
+                                class="fas fa-edit "></i>
+                        </button>
+
+                       <form action="/marcar_entregado" method="POST" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[3]}}">
+                            <button type="submit" class="btn btn-dark">Marcar entregado</button>
+                        </form> 
+
+                    </div>
+                </td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <br>
+    <br>
+    <h2 class="inventario__titulo text-center">Cancelados</h2>
+    <!--Tabla para los marcados en entregados-->
+    <table class="table  table-hover table-striped align-middle">
+        <thead>
+            <tr>
+                <th scope="col">Nombres</th> <!--Columna Encabezados-->
+                <th scope="col">Apellido P</th>
+                <th scope="col">Destino</th>
+                <th scope="col">Producto cancelado</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for indice in envios_cancelados%} <!--Nombre cualquiera + el que recibe de la variable-->
+            <tr class="doble_click" style="cursor: pointer;">
+                <td>{{ indice[1] }}</td>
+                <td>{{ indice[2] }}</td>
+                <td>{{ indice[14] }}</td>
+                <td>{{ indice[16] }}</td>
+                <!--Seccion de edicion (Editar/Eliminar)-->
+                <!-- <td>
+                    <div class="editar__botones">
+                        <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
+                            data-bs-target="#abrirModal" data-bs-id-envio="{{indice[3]}}" data-bs-cliente="{{indice[0]}}"
+                            data-bs-producto="{{indice[15]}}" data-bs-calle="{{indice[4]}}"
+                            data-bs-cruzamiento_1="{{indice[5]}}" data-bs-cruzamiento_2="{{indice[6]}}"
+                            data-bs-destino="{{indice[11]}}" data-bs-fecha="{{indice[17]}}"
+                            data-bs-status="{{indice[12]}}" data-bs-colonia="{{indice[13]}}">Editar <i
+                                class="fas fa-edit "></i>
+                        </button>
+
+                       <form action="/marcar_entregado" method="POST" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[3]}}">
+                            <button type="submit" class="btn btn-dark">Marcar entregado</button>
+                        </form> 
+
+                    </div>
+                </td> -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+
 </section>
 
 <!-- Modal para crear/editar envio -->
@@ -86,21 +246,20 @@
 
             <div class="modal-body"> <!--Formulario-->
                 <form id="agregar_envio" method="POST" action="{{ url_for('agregar_envio')}}">
-
                     <div class="">
                         <label for="cliente">Cliente:</label>
-                        <select class="form-control" id="cliente" name="cliente" required>
+                        <select class="form-control " id="cliente" name="cliente" required>
                             <!-- Opción por defecto -->
                             <option value="">Selecciona una opción</option>
-                            {% for cliente in clientes %}
-                            <option value="{{ cliente[0] }}">{{ cliente[1] }} {{ cliente[2] }} </option>
+                            {% for client in clientes %}
+                            <option value="{{ client[0] }}">{{ client[1] }} {{ client[2] }} </option>
                             {% endfor %}
                         </select>
                     </div>
 
                     <div class="">
                         <label for="producto">Elige el producto:</label>
-                        <select class="form-control" id="producto" name="producto" required>
+                        <select class="form-control disabled" id="producto" name="producto" required>
                             <!-- Opción por defecto -->
                             <option value="">Selecciona una opción</option>
                             {% for producto in productos %}
@@ -108,7 +267,6 @@
                             {% endfor %}
                         </select>
                     </div>
-
                     <div class="">
                         <label for="calle">Calle</label>
                         <input type="number" class="form-control" id="calle" name="calle" min="0" required>
@@ -133,28 +291,27 @@
                         <select class="form-control" id="destino" name="destino" required>
                             <!-- Opción por defecto -->
                             <option value="">Selecciona una opción</option>
-                            {% for destino in destino %}
-                            <option value="{{ destino[0] }}">{{ destino[1] }}</option>
+                            {% for destin in destino %}
+                            <option value="{{ destin[0] }}">{{ destin[1] }}</option>
                             {% endfor %}
                         </select>
                     </div>
+                    
                     <div class="">
                         <label for="status">Status:</label>
                         <select class="form-control" id="status" name="status" required>
                             <!-- Opción por defecto -->
-                            <option value="">Selecciona una opción</option>
-                            {% for status in status %}
-                            <option value="{{ status[0] }}">{{ status[1] }}</option>
+                            {% for statu in status %}
+                            <option value="{{ statu[0] }}">{{ statu[1] }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="">
                         <label for="colonia">Colonia:</label>
                         <select class="form-control" id="colonia" name="colonia" required>
-                            <!-- Opción por defecto -->
                             <option value="">Selecciona una opción</option>
-                            {% for colonia in colonia %}
-                            <option value="{{ colonia[0] }}">{{ colonia[1] }}</option>
+                            {% for coloni in colonia %}
+                            <option value="{{ coloni[0] }}">{{ coloni[1] }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -172,13 +329,13 @@
 
 <script>
     //< !--Codigo para obtner los datos del fomr segun si id(Editar)-- >
-    const abrirModal = document.getElementById('abrirModal')
+    const abrirModal = document.getElementById('abrirModal') //obtiene que modal 
     if (abrirModal) {
         abrirModal.addEventListener('show.bs.modal', event => {
             // Button that triggered the modal
             const button = event.relatedTarget
             //Obtneer los valores 
-            const id = button.getAttribute('data-bs-id')
+            const id = button.getAttribute('data-bs-id-envio')
             const cliente = button.getAttribute('data-bs-cliente')
             const producto = button.getAttribute('data-bs-producto')
             const calle = button.getAttribute('data-bs-calle')
@@ -188,6 +345,9 @@
             const destino = button.getAttribute('data-bs-destino')
             const status = button.getAttribute('data-bs-status')
             const colonia = button.getAttribute('data-bs-colonia')
+            console.log("id status:", status)
+            console.log("id colonia:", colonia)
+
 
             // Seleccionar los campos del formulario
             const modalCliente = abrirModal.querySelector('#cliente')
@@ -196,10 +356,11 @@
             const modalCruzamiento_1 = abrirModal.querySelector('#cruzamiento_1')
             const modalCruzamiento_2 = abrirModal.querySelector('#cruzamiento_2')
             const modalFecha = abrirModal.querySelector('#fecha')
-
             const modalDestino = abrirModal.querySelector('#destino')
             const modalStatus = abrirModal.querySelector('#status')
             const modalColonia = abrirModal.querySelector('#colonia')
+            console.log("el modal es",modalStatus)
+            console.log("el modal es",modalColonia)
 
 
             // Acutualizar el formulario con los valores.
@@ -212,15 +373,30 @@
             modalDestino.value = destino
             modalStatus.value = status
             modalColonia.value = colonia
+            console.log("el valor mostrado es", modalStatus.value) //no le asgina nada aparecese vacion
+            console.log("el mvalor mostrado  es",  modalColonia.value)
+
 
             //Titulo segun la funcion
             if (id) {
+                // Solo editar los datos de envio 
+                const clienteSelect = abrirModal.querySelector('#cliente');
+                const productoSelect = abrirModal.querySelector('#producto');
+                clienteSelect.disabled = true;
+                productoSelect.disabled = true;
+
                 abrirModal.querySelector('.modal-title').textContent = 'Editar envio';
-                console.log(id)
-                abrirModal.querySelector('#agregar_envio').setAttribute('action', '{{ url_for("editar_cliente", id=0) }}'.replace('0', id));
+                console.log("id edicion: ", id)
+                abrirModal.querySelector('#agregar_envio').setAttribute('action', '{{ url_for("editar_envio", id=0) }}'.replace('0', id));
                 //Enviar a editar
+
             } else {
                 abrirModal.querySelector('.modal-title').textContent = 'Agregar envio';
+                //Quitar el bloquea cuando ya se dio en selccionar al modal
+                const clienteSelect = abrirModal.querySelector('#cliente');
+                const productoSelect = abrirModal.querySelector('#producto');
+                clienteSelect.disabled = false;
+                productoSelect.disabled = false;
             }
         })
     }
@@ -233,5 +409,38 @@
         document.getElementById('indice_id').value = productId;
     }
 </script>
+
+<!--Banner de alerta producto bajo-->
+{% if pocos_dias %}
+<div class="toast-container position-fixed bottom-0 end-0 p-4">
+    {% for producto in pocos_dias %}
+
+    {% if producto[0] <= 0 %} <div class="toast text-bg-danger"> <!--Cambiar color del toast-->
+        {% else %}
+        <div class="toast text-bg-warning">
+            {% endif %}
+            <div class="toast-header">
+                <strong class="me-auto">Envios proximos</strong>
+                <small class="text-body-secondary">just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Hay un envio con ({{ producto[0] }} dias) para su envio
+            </div>
+        </div>
+        {% endfor %}
+</div>
+
+<!--Pocas existencias-->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl);
+        });
+        toastList.forEach(toast => toast.show());
+    });
+</script>
+{% endif %}
 
 {%endblock %}

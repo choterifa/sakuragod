@@ -68,7 +68,7 @@
                 <a href="/ventas" class="resumen__card__enlace">
                     <div class="resumen__card__textos resumen__card__textos--modify">
                         <p class="resumen__paragraph__bandera">Ventas del dia</p>
-                        <h3 class="resumen__card__titulo__bandera">20</h3>
+                        <h3 class="resumen__card__titulo__bandera">{{total_ventas[0]}}</h3>
                     </div>
                 </a>
             </div>
@@ -77,7 +77,7 @@
                 <a href="/clientes" class="resumen__card__enlace">
                     <div class="resumen__card__textos resumen__card__textos--modify">
                         <p class="resumen__paragraph__bandera">Clientes</p>
-                        <h3 class="resumen__card__titulo__bandera">40</h3>
+                        <h3 class="resumen__card__titulo__bandera">{{total_clientes[0]}}</h3>
                     </div>
                 </a>
 
@@ -89,71 +89,67 @@
     <div class="resumen__cards">
 
         <div class="resumen__card__item2 ">
-            <h3 class="resumen__card__titulo2">Más vendidos</h3>
-            <div class="resumen__card__items__vendidos">
-
-                <div class="resumen__card__items">
-                    <figure class="resumen__imagen__container">
-                        <img src="https://images.unsplash.com/photo-1569411032431-07598b0012c2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTMyNTI5MzZ8&ixlib=rb-4.0.3&q=80&w=1080"
-                            alt="" class="imagen">
-                    </figure>
-                    <p class="resumen__paragraph2">Sabana</p>
-                    <h3 class="resumen__card__pzas">60 pzas</h3>
-                </div>
-
-                <div class="resumen__card__items">
-                    <figure>
-                        <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTU2OTgzODF8&ixlib=rb-4.0.3&q=80&w=1080"
-                            alt="" class="imagen">
-                    </figure>
-                    <p class="resumen__paragraph2">Bolsa</p>
-                    <h3 class="resumen__card__pzas">40 pzas</h3>
-                </div>
-
-                <div class="resumen__card__items">
-                    <figure>
-                        <img src="https://images.unsplash.com/photo-1620987278429-ab178d6eb547?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzNjE3NjF8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MTU2OTgzMDV8&ixlib=rb-4.0.3&q=80&w=1080"
-                            alt="" class="imagen">
-                    </figure>
-                    <p class="resumen__paragraph2">Toallas</p>
-                    <h3 class="resumen__card__pzas">30 pzas</h3>
-                </div>
-
-            </div>
+            <a href="/ventas" style="text-decoration: none; color: black;">
+                <h3 class="resumen__card__titulo2">Más vendidos</h3>
+                <!--Nueva tabla-->
+                <table
+                    class="tabla__tablero table  table-hover  table-borderless table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th style="text-align: center;"" scope=" col">Veces vendido</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        {% for indice in mas_vendidos %}
+                        <tr>
+                            <td>{{ indice[0] }}</td>
+                            <td style="text-align: center;">{{ indice[2] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </a>
         </div>
+
+
+
 
 
         <!-- Clientes que deben-->
         <div class="resumen__card__item2">
-            <h3 class="resumen__card__titulo2">Deudores</h3>
+            <a href="/apartados" style="text-decoration: none; color: black;">
+                <h3 class="resumen__card__titulo2">Deudores</h3>
+                <!--Nueva tabla-->
+                <table
+                    class="tabla__tablero table  table-borderless table-hover table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th> <!--Columna Encabezados-->
+                            <th scope="col">Apellido P</th>
+                            <th style="text-align: center;" scope="col">Total adeudo</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        {% for indice in deudores %} <!--Nombre cualquiera + el que recibe de la variable-->
+                        <tr>
+                            <td>{{ indice[1] }}</td>
+                            <td>{{ indice[2] }}</td>
+                            <td style="text-align: center;">{{ indice[4] }}</td>
+                            <!--Seccion de edicion (Editar/Eliminar)-->
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </a>
+        </div>
 
-            <!--Nueva tabla-->
-            <table class="table  table-hover table-striped align-middle">
-                <thead>
-                    <tr>
-                        <th scope="col">Nombre</th> <!--Columna Encabezados-->
-                        <th scope="col">Apellido P</th>
-                        <th scope="col">Total adeudo</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    {% for indice in clientes %} <!--Nombre cualquiera + el que recibe de la variable-->
-                    <tr>
-                        <td>{{ indice[1] }}</td>
-                        <td>{{ indice[2] }}</td>
-                        <td>{{ indice[3] }}</td>
-                        <!--Seccion de edicion (Editar/Eliminar)-->
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
 
 
-            <!-- <div class="resumen__card__paragraph">
+        <!-- <div class="resumen__card__paragraph">
                     <i class="bi bi-receipt resumen__card__icon"></i>
                     <p class="resumen__paragraph">proxomios a vencer su pago</p>
                 </div> -->
-        </div>
     </div>
 
 
@@ -161,17 +157,23 @@
     <div class="resumen__cards resumen__cards--modify ">
 
         <div class="resumen__card__item2 resumen__card__item2--reebolso">
-            <div class="resumen__card__reembolso__flex">
-                <p class="resumen__paragraph__invertir">Dinero a Reinvertir</p>
-                <h3 class="resumen__card__invertir">5000</h3>
-            </div>
+            <a href="/caja" style="text-decoration: none;">
+                <div class="resumen__card__reembolso__flex">
+                    <p class="resumen__paragraph__invertir">Dinero a Reinvertir</p>
+                    <h3 class="resumen__card__invertir">{{reeinvertir}}</h3>
+                </div>
+            </a>
+
         </div>
 
         <div class="resumen__card__item2 resumen__card__item2--reebolso">
-            <div class="resumen__card__reembolso__flex">
-                <p class="resumen__paragraph__invertir">Total de productos</p>
-                <h3 class="resumen__card__invertir">100</h3>
-            </div>
+            <a href="/inventario" style="text-decoration: none;">
+                <div class="resumen__card__reembolso__flex">
+                    <p class="resumen__paragraph__invertir">Total de productos</p>
+                    <h3 class="resumen__card__invertir">{{total_producto[0]}}</h3>
+                </div>
+            </a>
+
         </div>
         <!--ultimo-->
         <div class="resumen__card__item2 resumen__card__item2--ultimo">

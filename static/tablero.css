@@ -244,3 +244,8 @@
     text-decoration: none;
     color: black;
 }
+
+.tabla__tablero{
+    width: 90% !important;
+    margin: auto;
+}
