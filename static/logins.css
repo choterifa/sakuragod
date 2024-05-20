@@ -139,11 +139,12 @@ label {
 
 /*Salirse alv*/
 .btn__form--salir {
-    width: 80px;
+    width: 140px;
+    height: 95vh;
     padding: 7px 10px;
-    position: relative;
-    left: 710;
-    bottom: 620;
+    position: absolute;
+    right: 40;
+    top: 20;
     font-size: 15px;
     border: none;
     border-radius: 5px;
@@ -177,4 +178,36 @@ label {
 
 .modal-content--logins {
     border-radius: 120px !important;
+}
+
+.imagen__pillow__container{
+    width: 200px;
+    height: 200px;
+    position: absolute;
+    top: 10px;
+}
+
+.imagen__pillow{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.imagen__pillow__1{
+    top: 150px;
+    left: 100px;
+}
+
+.imagen__pillow__2{
+    top: 150px;
+    left: 200px;
+}
+
+.imagen__pillow__3{
+    top: 150px;
+    left: 300px;
+}
+
+.imagen__pillow__4{
+    top: 150px;
 }

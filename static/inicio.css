@@ -95,16 +95,27 @@ html {
     line-height: 72px;
     text-align: center;
     width: 73%;
-    /* background-color: yellow; */
 }
+
+.cifrado {
+    filter: blur(calc(1rem * var(--blur, 1)));
+    transition: filter var(--speed, 5s);
+}
+
+.cifrado:hover {
+    --blur: 0;
+    --speed: .7s;
+}
+
+
 
 .Inicio__descripcion {
     font-family: 'Inter', sans-serif;
     margin-top: 5px;
-    font-size: 18.5px;
+    font-size: 18.7px;
     font-weight: 400;
-    letter-spacing: -0.2px;
-    line-height: 32px;
+    letter-spacing: -0.25px;
+    line-height: 35px;
     width: 62%;
     /* background-color: #1c8d56; */
 }
@@ -158,14 +169,14 @@ html {
 .Inicio__Imagen__Container {
     margin-top: 37px;
     width: 103%;
-    background-color: #1c8d56;
+    /* background-color: #1c8d56; */
 }
 
 .Inicio__Imagen {
     width: 100%;
     height: 100%;
     display: block;
-    background-color: #5060e3;
+    /* background-color: #5060e3; */
 }
 
 .Inicio__Imagen {
@@ -320,7 +331,7 @@ span {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* opacity: 0; */
+    opacity: .02;
 }
 
 .modo__Oscuro {
@@ -338,7 +349,7 @@ span {
     display: flex;
     justify-content: center;
     align-items: center;
-    display: none;
+    /* display: none; */
 
 }
 
@@ -380,7 +391,7 @@ span {
     font-size: 20px;
     text-align: left;
     margin-bottom: 40px;
-    width: 80%;
+    width: 75%;
     line-height: 2;
 }
 

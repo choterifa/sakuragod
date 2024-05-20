@@ -41,4 +41,21 @@ document.addEventListener('DOMContentLoaded', function () {
         // Cambia el icono después de cambiar el modo oscuro
         cambiarIconoModoOscuro();
     });
+
+    
+    // // Obtén el elemento nav por su clase
+    // const nav = document.querySelector('.Inicio__Nav');
+
+    // // Obtén todos los enlaces dentro del nav
+    // const enlaces = nav.querySelectorAll('.Inicio__Enlace');
+
+    // // Cambia el color de fondo del nav
+    // nav.style.backgroundColor = '#404040'; // Cambia el color de fondo del nav
+
+    // // Itera sobre cada enlace y cambia su color
+    // enlaces.forEach(enlace => {
+    //     enlace.style.color = 'white'; // Cambia el color de cada enlace
+    // });
+
+
 });

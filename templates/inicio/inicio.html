@@ -28,7 +28,7 @@
         <nav class="Inicio__Nav nav-underline">
             <div class="Inicio__Nav__Logo__Contenedor">
                 <a href="">
-                    <img src="../static/imagenes/Logo/Icono.jpg" class="Inicio__Nav__Logo" alt="Logo">
+                    <img src="../../static/imagenes/Logo/iconosinfondo.png" class="Inicio__Nav__Logo" alt="Logo">
                 </a>
             </div>
 
@@ -59,7 +59,7 @@
         <div class="Inicio__Hero">
             <div class="Inicio__Contenedor__Parrafos">
                 <a class="Inicio__Hero__Logo" href="#">
-                    <img src="../static/imagenes/Logo/Icono.jpg" alt="" class="Inicio__Hero__Imagen">
+                    <img src="../../static/imagenes/Logo/iconosinfondo.png" alt="" class="Inicio__Hero__Imagen">
                 </a>
                 <h2 class="Inicio__titulo">Donde la calidad encuentra la comodidad</h2>
                 <p class="Inicio__descripcion">Un gestor diseñado meticulosamente para Blancos Valentina, una
@@ -82,13 +82,14 @@
             <!--Imagen Cover-->
 
             <figure class="Inicio__Imagen__Container">
-                <img src="../static/imagenes/Cover6.jpg" alt="Cover" loading="lazy" class="Inicio__Imagen">
+                <img src="../../static/imagenes/Cover2.png" alt="Cover" loading="lazy" class="Inicio__Imagen">
             </figure>
         </div> <!--Fin Hero-->
 
         <!--Desmostrativos-->
         <div class="demostrativos__flex">
-            <h2 class="Inicio__titulo__desmostrativos ">Acceso rápido a la información</h2>
+            <h2 class="Inicio__titulo__desmostrativos ">Acceso rápido a la información <i
+                    class="bi bi-lightning-fill"></i></h2>
             <p class="Inicio__descripcion__demostrativos">Obtén la información crítica al instante desde el panel
                 principal del
                 gestor.
@@ -102,11 +103,10 @@
 
         <!--Desmostrativos-->
         <div class="demostrativos__flex demostrativos__flex--alineado">
-            <h2 class="Inicio__titulo__desmostrativos ">Controla tus envios</h2>
+            <h2 class="Inicio__titulo__desmostrativos "><i class="bi bi-box-seam-fill"></i> Controla tus envios </h2>
             <p class="Inicio__descripcion__demostrativos Inicio__descripcion__demostrativos--alineado">Mantén el control
                 total de tus envíos con nuestra plataforma
-                intuitiva. Supervisa cada envio, rastrea su status en
-                tiempo real y recibe notificaciones instantáneas sobre el estado de entrega
+                intuitiva. Supervisa cada envio, rastrea su status y recibe notificaciones instantáneas sobre el estado de entrega
             </p>
             <video autoplay loop class="video__container__inicio" id="myVideo">
                 <source src="../../static/videos/envios.mp4" type="video/mp4" class="video__inicio">
@@ -115,9 +115,10 @@
 
         <!--Desmostrativos-->
         <div class="demostrativos__flex">
-            <h2 class="Inicio__titulo__desmostrativos ">Productos en orden</h2>
-            <p class="Inicio__descripcion__demostrativos">Organiza y gestiona tus productos de manera eficiente con
-                nuestra solución. Mantén un inventario actualizado, clasifica
+            <h2 class="Inicio__titulo__desmostrativos ">Productos en orden <i class="bi bi-calendar2-check-fill"></i>
+            </h2>
+            <p class="Inicio__descripcion__demostrativos">Organiza y gestiona tus productos de manera eficiente. Mantén
+                un inventario actualizado, clasifica
                 tus productos fácilmente y asegura que siempre estén listos para tus clientes.
             </p>
             <video autoplay loop class="video__container__inicio" id="myVideo">
@@ -127,11 +128,15 @@
 
         <!--Desmostrativos-->
         <div class="demostrativos__flex demostrativos__flex--alineado">
-            <h2 class="Inicio__titulo__desmostrativos  ">Manten tus datos seguros</h2>
-            <p class="Inicio__descripcion__demostrativos Inicio__descripcion__demostrativos--alineado">Garantiza la
-                seguridad de tu información y operaciones.
-                Nuestra plataforma requiere login para acceder, asegurando que
-                solo el personal autorizado tenga acceso. Mantén tus datos protegidos y tu entorno libre de intrusos.
+            <h2 class="Inicio__titulo__desmostrativos "><i class="bi bi-fingerprint"></i> Manten tus datos seguros</h2>
+            <p class="Inicio__descripcion__demostrativos Inicio__descripcion__demostrativos--alineado">
+                <span class="cifrado">
+                    Garantiza la
+                    seguridad de tu información.
+                    Nuestra plataforma requiere login para acceder, asegurando que
+                    solo el personal autorizado tenga acceso. Mantén tus datos protegidos y tu entorno libre de
+                    intrusos.
+                </span>
             </p>
             <video autoplay loop class="video__container__inicio" id="myVideo">
                 <source src="../../static/videos/login.mp4" type="video/mp4" class="video__inicio">
@@ -161,6 +166,32 @@
         </footer>
 
 
+        <script>
+            const images = document.querySelectorAll('.demostrativos__flex');
+
+            const options = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5 // Se activa cuando la mitad del elemento es visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const image = entry.target;
+                        const src = image.getAttribute('data-src');
+                        image.style.backgroundImage = `url(${src})`;
+                        observer.unobserve(image);
+                    }
+                });
+            }, options);
+
+            images.forEach(image => {
+                observer.observe(image);
+            });
+
+        </script>
+
         <!--Puaser el video fuera de wp-->
         <!-- <script>
             // Selecciona el video
@@ -181,7 +212,7 @@
             observer.observe(video);
         </script> -->
 
-      
+
     </section>
 
 </body>
