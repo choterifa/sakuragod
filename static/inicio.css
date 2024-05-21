@@ -205,7 +205,12 @@ iframe {
     height: 640px;
     box-shadow: 2px 4px 12px -2px #3c3a3c4e;
     border-radius: 5px;
-    pointer-events: none;
+    /* pointer-events: none; */
+    transition: all .5s ease;
+}
+
+.iframe__container:hover > iframe{  
+    transform: scale(1.005);
 }
 
 .Ubicacion__Titulo {
@@ -431,13 +436,13 @@ span {
 .card-img-top{
     width: 400px;
     height: 400px;
-    
     object-fit: cover;
 }
 
 .card-text-title{
-    /* font-family: 'Helvetica Now Text'; */
-    font-size: 17px;
+    font-family: 'inter';
+    font-size: 19px;
+    font-style: 600;
 }
 
 .carousel{
