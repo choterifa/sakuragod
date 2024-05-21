@@ -1,11 +1,13 @@
-{%extends 'inicio/inicio.html'%}
+{%extends 'base.html'%}
 
 {%block title%} Promocional{%endblock%}
 
-{%block contenido%}
+{%block inventario%}
+<div class="video-container">
+    <video autoplay loop preload="auto" class="video">
+        <source src="../../static/videos/Arc.mp4" type="video/mp4" class="">
+    </video>
+</div>
 
-<video controls  loop preload="auto" class="video__container">
-    <source src="../../static/videos/Arc.mp4" type="video/mp4" class="video">
-</video>
 
 {%endblock%}

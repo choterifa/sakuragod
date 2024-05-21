@@ -48,6 +48,16 @@ def promocional():
 def spinner():
     return render_template("loader.html")
 
+
+@app.route("/terminosycondiciones")
+def terminosycondiciones():
+    return render_template("terminosycondiciones.html")
+
+
+@app.route("/productos")
+def productos():
+    return render_template("inicio/productos.html")
+
 # Seccion del gestor
 
 

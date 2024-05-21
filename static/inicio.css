@@ -43,7 +43,7 @@ html {
 
 .Inicio__Enlaces__Contenedor {
     display: flex;
-    margin-left: 100px;
+    margin-left: 84px;
     justify-content: center;
     align-items: center;
     gap: 75px;
@@ -203,6 +203,9 @@ html {
 iframe {
     width: 88vw;
     height: 640px;
+    box-shadow: 2px 4px 12px -2px #3c3a3c4e;
+    border-radius: 5px;
+    pointer-events: none;
 }
 
 .Ubicacion__Titulo {
@@ -298,6 +301,7 @@ span {
 .imagen__contacto__container {
     width: 34%;
     height: 510px;
+    position: relative;
 }
 
 .imagen__contacto {
@@ -308,9 +312,18 @@ span {
     transition: all 1s;
 }
 
+.imagen__parche{
+    position: absolute;
+    width: 200px;
+    top: 0;
+    left: -20px;
+    display: none;
+}
+
 .imagen__contacto:hover {
-    transform: scale(1.04);
+    transform: scale(1.022) rotate(4deg);
     cursor: pointer;
+
 }
 
 
@@ -331,7 +344,7 @@ span {
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: .02;
+    /* opacity: .02; */
 }
 
 .modo__Oscuro {
@@ -406,4 +419,37 @@ span {
 .video__inicio {
     width: 100%;
     height: 100%;
+}
+
+.producto__card{
+}
+
+.card{
+    width: 400px;
+}
+
+.card-img-top{
+    width: 400px;
+    height: 400px;
+    
+    object-fit: cover;
+}
+
+.card-text-title{
+    /* font-family: 'Helvetica Now Text'; */
+    font-size: 17px;
+}
+
+.carousel{
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    margin-bottom: 100px;
+}
+
+.card__productos__flex{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    /* background-color: yellow; */
 }
