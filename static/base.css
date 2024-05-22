@@ -4,6 +4,7 @@
 .container__principal {
     /*De todo el gestor*/
     width: 100vw;
+    min-height: 100vh;
     /* background-color: red; */
 }
 
@@ -11,6 +12,7 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
+    min-height: 100vh;
     /* background-color: yellow; */
 }
 
@@ -18,10 +20,9 @@
     display: flex;
     flex-direction: column;
     width: 15%;
-    height: 900px;
     background-color: #eff2f9;
     background-color: #0f1013;
-    /* overflow: hidden; */
+    overflow: hidden;
     position: relative;
 }
 
@@ -36,7 +37,6 @@
     border-radius: 50%;
 }
 
-
 .navbar__lista {
     display: flex;
     flex-direction: column;
@@ -44,9 +44,20 @@
     height: 100%;
     gap: 40px;
     margin-top: 40px;
-    text-align: center;
-
     /* background-color: red; */
+}
+
+.nav__icon__flex {
+    display: flex;
+    flex-direction: column;
+    gap: 41px;
+    align-items: center;
+    /* background-color: greenyellow; */
+}
+
+.nav__icon__flex i {
+    color: #eff2f9;
+    font-size: 17px;
 }
 
 .navbar__hero ul {
@@ -55,28 +66,27 @@
 }
 
 .navbar__hero ul li a {
-    color: black;
     color: white;
     text-decoration: none;
     padding: 5px;
 }
 
-.item__nav:hover {
+
+/* .nav__icon__flex li .item__nav:hover,
+.nav__icon__flex li .item__nav:hover i {
+    transition: all .6s ease;
+} */
+
+/* Estilos para el primer elemento .item__nav */
+.nav__icon__flex li .item__nav:hover,
+.nav__icon__flex li .item__nav:hover i {
     color: rgb(38, 230, 176);
-
 }
+    
 
-.nav__icon__flex {
-    display: flex;
-    flex-direction: column;
-    gap: 40px;
-    align-items: center;
-    /* background-color: red; */
-}
 
-.nav__icon__flex i {
-    color: #eff2f9;
-}
+
+
 
 .tooggle_position {
     position: sticky;

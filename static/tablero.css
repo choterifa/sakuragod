@@ -249,3 +249,13 @@
     width: 90% !important;
     margin: auto;
 }
+
+.terminos__link{
+    margin: 12px;
+}
+
+.items__terminos{
+    margin: 10px;
+    width: 85%;
+}
+

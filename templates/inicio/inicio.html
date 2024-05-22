@@ -50,9 +50,7 @@
             </a>
         </nav>
 
-        <!--Audio Btn-->
-        <a href="#" id="audio" class="Audio__Btn "><i class="bi bi-pause-fill"></i>
-        </a>
+       
         <!--ModoNocturno-->
         <!-- <a href="#" id="cambiarTema" class="modo__Oscuro "><i class="bi bi-moon-fill"></i></i></i>
         </a> -->
@@ -153,13 +151,20 @@
 
 
         {%endblock%} <!--contenido reemplazable-->
+
         <!--Musica-->
         <audio id="audio-fondo" autoplay>
             <source src="../../static/Audio/ventura.mp3" type="audio/mpeg">
             Tu navegador no soporta el elemento de audio
         </audio>
-        <script src="../../static/Js/audio.js"></script>
+        <!--Audio Btn-->
+        <a href="#" id="audio" class="Audio__Btn "><i class="bi bi-pause-fill"></i>
+        </a>
 
+        <div class="volume-control">
+            <input type="range" id="volume" name="volume" min="0" max="1" step="0.01" value="1">
+        </div>
+        <script src="../../static/Js/audio.js"></script>
 
         <!-- <script src="../../static/Js/modoOscuro.js"></script> -->
 

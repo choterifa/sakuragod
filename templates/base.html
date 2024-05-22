@@ -65,19 +65,16 @@
                     </div>
 
                     <div class="nav__icon__flex">
-                        <li><i class="bi bi-house-fill"></i><a href="/spinner" class="item__nav">Tablero</a></li>
-                        <li><i class="bi bi-shop"></i><a href="/inventario" class="item__nav">Inventario</a></li>
-                        <li><i class="bi bi-file-earmark"></i><a href="/ventas" class="item__nav">Ventas</a></li>
-                        <li><i class="bi bi-people"></i><a href="/clientes" class="item__nav">Clientes</a></li>
-                        <li><i class="bi bi-truck"></i><a href="/envios" class="item__nav">Envios</a></li>
-                        <li><i class="bi bi-people"></i><a href="/apartados" class="item__nav">Apartados</a></li>
-                        <li><i class="bi bi-tags"></i><a href="/categorias" class="item__nav">Categorias</a></li>
-                        <li><i class="bi bi-wallet2"></i><a href="/caja" class="item__nav">Caja</a></li>
+                        <li><a href="/spinner" class="item__nav"><i class="bi bi-house-fill"></i>Tablero</a></li>
+                        <li><a href="/inventario" class="item__nav"><i class="bi bi-shop"></i> Inventario</a></li>
+                        <li><a href="/ventas" class="item__nav"><i class="bi bi-file-earmark"></i> Ventas</a></li>
+                        <li><a href="/clientes" class="item__nav"><i class="bi bi-people"></i> Clientes</a></li>
+                        <li><a href="/envios" class="item__nav"><i class="bi bi-truck"></i> Envios</a></li>
+                        <li><a href="/apartados" class="item__nav"><i class="bi bi-people"></i> Apartados</a></li>
+                        <li><a href="/categorias" class="item__nav"><i class="bi bi-tags"></i> Categorias</a></li>
+                        <li><a href="/caja" class="item__nav"><i class="bi bi-wallet2"></i> Caja</a></li>
                         <!-- <li><i class="bi bi-graph-up"></i><a href="/reportes" class="item__nav">Reportes</a></li> -->
-                        <li>
-                            <i class="bi bi-door-closed"></i>
-                            <a class="item__nav" href="/cerrar_sesion">Cerrar Sesion</a>
-                        </li>
+                        <li><a class="item__nav" href="/cerrar_sesion"><i class="bi bi-door-closed"></i> Cerrar Sesion</a></li>
                     </div>
 
                 </ul>
@@ -86,21 +83,8 @@
                 <i class="bi bi-x-lg"></i>
             </a>
 
-
-            {%block index%}
+            {%block contenido%}
             {%endblock%}
-            {%block inventario%}
-
-            {%endblock%}
-            {%block sign%}
-            {%endblock%}
-            {%block singup%}
-            {%endblock%}
-            {%block registro_exitoso%}
-            {%endblock%}
-            {%block task%}
-            {%endblock%}
-
         </div>
     </div>
 

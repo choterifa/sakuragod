@@ -2,21 +2,19 @@
 
 {%block title%} Caja{%endblock%}
 
-{%block inventario%}
-<div class="row">
+{%block contenido%}
     <div class="col-3">
-        <nav id="navbar-example3" class="h-100 flex-column align-items-stretch pe-4 border-end">
-            <nav class="nav nav-pills flex-column">
-                <a class="nav-link" href="#item-1">Terminos y condiciones</a>
-                <a class="nav-link" href="#item-2">Aceptación de los Términos</a>
-                <a class="nav-link" href="#item-3">Descripción del Servicio
-</a>
-                <a class="nav-link" href="#item-4">Propiedad Intelectual</a>
-                <a class="nav-link" href="#item-5">Limitaciones de Uso</a>
-                <a class="nav-link" href="#item-6">Privacidad</a>
-                <a class="nav-link" href="#item-7">Limitación de Responsabilidad</a>
-                <a class="nav-link" href="#item-8">Modificaciones a los Términos</a>
-                <a class="nav-link" href="#item-9">Contacto</a>
+        <nav id="navbar-example3" class="h-100  border-end">
+            <nav class="nav nav-pills ">
+                <a class="nav-link terminos__link" href="#item-1">Terminos y condiciones</a>
+                <a class="nav-link terminos__link" href="#item-2">Aceptación de los Términos</a>
+                <a class="nav-link terminos__link" href="#item-3">Descripción del Servicio
+                <a class="nav-link terminos__link" href="#item-4">Propiedad Intelectual</a>
+                <a class="nav-link terminos__link" href="#item-5">Limitaciones de Uso</a>
+                <a class="nav-link terminos__link" href="#item-6">Privacidad</a>
+                <a class="nav-link terminos__link" href="#item-7">Limitación de Responsabilidad</a>
+                <a class="nav-link terminos__link" href="#item-8">Modificaciones a los Términos</a>
+                <a class="nav-link terminos__link" href="#item-9">Contacto</a>
             </nav>
         </nav>
     </div>
@@ -24,7 +22,7 @@
     <div class="col-6">
         <div data-bs-spy="scroll" data-bs-target="#navbar-example3" data-bs-smooth-scroll=""
             class="scrollspy-example-2" tabindex="0">
-            <div id="item-1">
+            <div id="item-1"  class="items__terminos">
                 <h3>Terminos y condiciones</h3>
                 <p>Bienvenido a nuestro Gestor de Inventario para Tienda de Blancos. Estos Términos y Condiciones
                     regulan el uso de nuestra
@@ -33,14 +31,14 @@
                     términos. Si no está de acuerdo con estos términos, por favor, no utilice nuestro servicio.
                 </p>
             </div>
-            <div id="item-2">
+            <div id="item-2" class="items__terminos">
                 <h5>1. Aceptación de los Términos</h5>
                 <p>Al acceder y utilizar nuestro gestor de inventario, usted acepta y se compromete a cumplir con estos
                     Términos y
                     Condiciones, así como con todas las leyes y regulaciones aplicables.
                 </p>
             </div>
-            <div id="item-3">
+            <div id="item-3" class="items__terminos">
                 <h5>2. Descripción del Servicio</h5>
                 <p>Nuestro Gestor de Inventario es una aplicación diseñada para facilitar la gestión de inventarios en
                     una tienda de
@@ -48,7 +46,7 @@
                     productos.
                 </p>
             </div>
-            <div id="item-4">
+            <div id="item-4" class="items__terminos">
                 <h5>3. Propiedad Intelectual
                 </h5>
                 <p>Todos los derechos, títulos e intereses en y para el Gestor de Inventario, incluidos pero no
@@ -57,21 +55,21 @@
                     propiedad intelectual.
                 </p>
             </div>
-            <div id="item-5">
+            <div id="item-5" class="items__terminos">
                 <h5>4. Limitaciones de Uso
                 </h5>
                 <p>Usted no puede:
                     Modificar, copiar, distribuir o descompilar el software.
                     Utilizar el software para cualquier propósito ilegal o no autorizado.</p>
             </div>
-            <div id="item-6">
+            <div id="item-6" class="items__terminos">
                 <h5>5. Privacidad</h5>
                 <p>Nos comprometemos a proteger su privacidad. Los datos que ingresen en el gestor de inventario solo se
                     utilizarán para
                     los fines de gestión del inventario y no se compartirán con terceros sin su consentimiento.
                 </p>
             </div>
-            <div id="item-7">
+            <div id="item-7" class="items__terminos">
                 <h5>6. Limitación de Responsabilidad</h5>
                 <p>Dado que esta aplicación es un proyecto académico, se proporciona "tal cual" sin garantías de ningún
                     tipo. No
@@ -82,7 +80,7 @@
 
                 </p>
             </div>
-            <div id="item-8">
+            <div id="item-8" class="items__terminos">
                 <h5>7. Modificaciones a los Términos</h5>
                 <p>Nos reservamos el derecho de modificar estos Términos y Condiciones en cualquier momento. Cualquier
                     cambio será efectivo
@@ -92,7 +90,7 @@
 
                 </p>
             </div>
-            <div id="item-9">
+            <div id="item-9" class="items__terminos">
                 <h5>8. Contacto</h5>
                 <p>Si tiene alguna pregunta o inquietud acerca de estos Términos y Condiciones, por favor contáctenos a
                     través de la
@@ -101,7 +99,6 @@
             </div>
         </div>
     </div>
-</div>
 
 
 {%endblock%}
