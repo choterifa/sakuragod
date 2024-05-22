@@ -208,6 +208,8 @@ iframe {
     border-radius: 5px;
     /* pointer-events: none; */
     transition: all .5s ease;
+    background-color: white;
+    /* Establece un fondo sólido */
 }
 
 .iframe__container:hover>iframe {
@@ -317,6 +319,15 @@ span {
     transition: all 1s;
 }
 
+.imagen__contacto:hover {
+    transform: scale(1.022) rotate(4deg);
+    cursor: pointer;
+}
+
+.imagen__contacto:active {
+    transform: scale(1.3);
+}
+
 .contacto__parche__container {
     position: absolute;
     width: 95px;
@@ -331,11 +342,6 @@ span {
 }
 
 
-.imagen__contacto:hover {
-    transform: scale(1.022) rotate(4deg);
-    cursor: pointer;
-
-}
 
 
 /*Otros*/
@@ -483,9 +489,7 @@ span {
     color: gray;
 }
 
-.carrusel_titulo--hot {
-    
-}
+.carrusel_titulo--hot {}
 
 .contacto__flor__container {
     position: absolute;
@@ -517,23 +521,24 @@ span {
     z-index: -1;
 }
 
-.contacto__flor4__container{
+.contacto__flor4__container {
     width: 400px;
     right: 0;
     top: 600;
     z-index: 1;
+    pointer-events: none;
 }
 
-.contacto__banner__container{
+.contacto__banner__container {
     margin-top: 7vh;
     width: 77vw;
 }
 
-.contacto__banner{
+.contacto__banner {
     width: 100%;
     height: 100%;
 }
 
-.carrusel_titulo--hot{
+.carrusel_titulo--hot {
     margin-top: 0px;
 }

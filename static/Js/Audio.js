@@ -22,9 +22,9 @@ toggleAudio.addEventListener("click", function (event) {
 
 // Lista de reproducción de audios
 const playlist = [
-    "../../static/Audio/Audio.mp3",
     "../../static/Audio/ventura.mp3",
-    "../../static/Audio/mavine.mp3"
+    "../../static/Audio/mavine.mp3",
+    "../../static/Audio/Audio.mp3"
 ];
 
 let currentTrack = 0;
