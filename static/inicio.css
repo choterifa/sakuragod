@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@200;300;400;500;600;700&display=swap');
 
 * {
     margin: 0px;
@@ -209,7 +210,7 @@ iframe {
     transition: all .5s ease;
 }
 
-.iframe__container:hover > iframe{  
+.iframe__container:hover>iframe {
     transform: scale(1.005);
 }
 
@@ -306,7 +307,6 @@ span {
 .imagen__contacto__container {
     width: 34%;
     height: 510px;
-    position: relative;
 }
 
 .imagen__contacto {
@@ -317,13 +317,19 @@ span {
     transition: all 1s;
 }
 
-.imagen__parche{
+.contacto__parche__container {
     position: absolute;
-    width: 200px;
-    top: 0;
-    left: -20px;
-    display: none;
+    width: 95px;
+    top: 190px;
+    left: 500px;
 }
+
+.contacto__parche {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
 
 .imagen__contacto:hover {
     transform: scale(1.022) rotate(4deg);
@@ -349,6 +355,7 @@ span {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 100;
     /* opacity: .02; */
 }
 
@@ -426,35 +433,107 @@ span {
     height: 100%;
 }
 
-.producto__card{
-}
-
-.card{
-    width: 400px;
-}
-
-.card-img-top{
-    width: 400px;
-    height: 400px;
-    object-fit: cover;
-}
-
-.card-text-title{
-    font-family: 'inter';
-    font-size: 19px;
-    font-style: 600;
-}
-
-.carousel{
+/*Carrusel*/
+.carousel {
     width: 100vw;
     display: flex;
-    align-items: center;
-    margin-bottom: 100px;
 }
 
-.card__productos__flex{
+.card__productos__flex {
     display: flex;
     justify-content: space-around;
     align-items: center;
     /* background-color: yellow; */
+}
+
+.card {
+    width: 400px;
+}
+
+.carrusel_titulo {
+    margin: 30px;
+    margin-left: 38px;
+}
+
+#Edredon {
+    margin-top: 100px;
+}
+
+.card-img-top {
+    /*poroporcion imagen*/
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 0 !important;
+}
+
+.card-text-title {
+    font-family: 'Raleway';
+    font-weight: bold;
+    font-size: 20px;
+    font-style: 600;
+    margin-top: 11px;
+}
+
+.card-text-price {
+    font-family: 'Raleway';
+    font-size: 19px;
+    font-weight: 500;
+    margin-top: -15px;
+    color: gray;
+}
+
+.carrusel_titulo--hot {
+    
+}
+
+.contacto__flor__container {
+    position: absolute;
+    z-index: -1;
+}
+
+.contacto__flor {
+    width: 100%;
+    height: 100%;
+}
+
+.contacto__flor1__container {
+    width: 430px;
+    right: 70px;
+    top: 120px;
+}
+
+.contacto__flor2__container {
+    width: 480px;
+    right: -10;
+    top: 900;
+    z-index: 0;
+}
+
+.contacto__flor3__container {
+    width: 480px;
+    left: -10;
+    top: 110;
+    z-index: -1;
+}
+
+.contacto__flor4__container{
+    width: 400px;
+    right: 0;
+    top: 600;
+    z-index: 1;
+}
+
+.contacto__banner__container{
+    margin-top: 7vh;
+    width: 77vw;
+}
+
+.contacto__banner{
+    width: 100%;
+    height: 100%;
+}
+
+.carrusel_titulo--hot{
+    margin-top: 0px;
 }

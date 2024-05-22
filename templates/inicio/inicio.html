@@ -148,15 +148,14 @@
         </div>
 
 
+
+        {%endblock%} <!--contenido reemplazable-->
         <!--Musica-->
-        <audio id="audio-fondo" autoplay loop>
+        <audio id="audio-fondo" autoplay>
             <source src="../../static/Audio/ventura.mp3" type="audio/mpeg">
             Tu navegador no soporta el elemento de audio
         </audio>
         <script src="../../static/Js/Audio.js"></script>
-        {%endblock%} <!--contenido reemplazable-->
-
-
         <!-- <script src="../../static/Js/modoOscuro.js"></script> -->
 
         <!--Footer-->
@@ -170,58 +169,6 @@
             </ul>
             <p class="text-center text-body-secondary">© 2024 Blancos Valentina, Inc</p>
         </footer>
-
-
-        <script>
-            const images = document.querySelectorAll('.demostrativos__flex');
-
-            const options = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.5 // Se activa cuando la mitad del elemento es visible
-            };
-
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const image = entry.target;
-                        const src = image.getAttribute('data-src');
-                        image.style.backgroundImage = `url(${src})`;
-                        observer.unobserve(image);
-                    }
-                });
-            }, options);
-
-            images.forEach(image => {
-                observer.observe(image);
-            });
-
-        </script>
-
-        <embed src="/html/Kalimba.mp3" loop="true" autostart="true" width="2" height="0">
-
-
-        <!--Puaser el video fuera de wp-->
-        <!-- <script>
-            // Selecciona el video
-            const video = document.getElementById('myVideo');
-
-            // Crea un Intersection Observer
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        video.play();
-                    } else {
-                        video.pause();
-                    }
-                });
-            });
-
-            // Observa el video
-            observer.observe(video);
-        </script> -->
-
-
     </section>
 
 </body>
