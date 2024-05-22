@@ -180,7 +180,7 @@ def tablero():
         """)
         mas_vendidos = cur.fetchall()
         return render_template("tablero.html", email=session["email"], clientes=clientes, reeinvertir=reeinvertir, ingresos_del_corte=ingresos_del_corte, ganancias=ganancias,
-                               envios=envios, mas_vendidos=mas_vendidos,apartados=apartados, deudores=deudores, total_producto=total_producto, total_ventas=total_ventas, total_clientes=total_clientes)
+                               envios=envios, mas_vendidos=mas_vendidos, apartados=apartados, deudores=deudores, total_producto=total_producto, total_ventas=total_ventas, total_clientes=total_clientes)
     else:
         return render_template("inicio/iniciar_sesion.html")
 
@@ -229,6 +229,7 @@ def inventario():
     else:
         return render_template("inicio/iniciar_sesion.html")
 
+
 @app.route("/caja", methods=['GET'])
 def caja():
     if "email" in session:
@@ -244,7 +245,6 @@ def caja():
         return render_template('caja.html', caja=caja)
     else:
         return render_template("inicio/iniciar_sesion.html")
-    
 
 
 @app.route('/clientes', methods=['GET'])
@@ -318,7 +318,9 @@ def envios():
                     WHEN mes_envio.Mes_Envio = 'Octubre' THEN '10'
                     WHEN mes_envio.Mes_Envio = 'Noviembre' THEN '11'
                     WHEN mes_envio.Mes_Envio = 'Diciembre' THEN '12'
-                END, '-', dia_envio.Dia_Envio), '%Y-%m-%d') AS Fecha_Envio
+                END, '-', dia_envio.Dia_Envio), '%Y-%m-%d') AS Fecha_Envio,
+            clientes.Apellido_M
+
         FROM 
             clientes
             INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
@@ -531,7 +533,9 @@ def envios():
         FROM
             envios  
         WHERE 
-            envios.Dias_Para_El_Envio <=1;
+            envios.Dias_Para_El_Envio <=1
+            AND  envios.ID_StatusE = 3;
+
         """)
         pocos_dias = cur.fetchall()
         cur.close()
@@ -862,13 +866,13 @@ def editar_envio(id):
     cur = mysql.connection.cursor()
     if request.method == 'POST':
         # Obtener el valor del formulario
-        cliente_original = request.form['cliente']
-        # Hacer una copia del formulario antes de modificarlo
-        cliente_original_copy = request.form.copy()
-        print("cliente original", cliente_original)
-        cliente_modificado = request.form['cliente']
-        print("cliente modificado", cliente_modificado)
-        producto = request.form['producto']
+        # cliente_original = request.form['cliente']
+        # # Hacer una copia del formulario antes de modificarlo
+        # cliente_original_copy = request.form.copy()
+        # print("cliente original", cliente_original)
+        # cliente_modificado = request.form['cliente']
+        # print("cliente modificado", cliente_modificado)
+        # producto = request.form['producto']
         calle = request.form['calle']
         cruzamiento_1 = request.form['cruzamiento_1']
         cruzamiento_2 = request.form['cruzamiento_2']
