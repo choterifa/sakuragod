@@ -31,7 +31,7 @@
         <thead>
             <tr>
                 <th scope="col">Categorias</th>
-                <th scope="col">Cantidad</th>
+                <th scope="col">Productos en la categoria</th>
                 <th scope="col">Edición</th>
             </tr>
         </thead>
@@ -39,7 +39,8 @@
             {% for indice in categorias %} <!--Nombre cualquiera + el que recibe de la variable-->
             <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
-                <td>{{ indice[4] }}</td>
+                <td>{{ indice[2] }}</td>
+
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
@@ -48,18 +49,34 @@
                             data-bs-nombre="{{indice[1]}}">Editar <i class="fas fa-edit "></i>
                             <!--Cambia el orden del modal js-->
                         </button>
+
                         <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
                             data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar<i
                                 class="fas fa-trash-alt"></i>
                         </button>
 
+                        
+                        <!-- <button data-bs-toggle="modal" data-bs-target="#verProductos" type="button" id="ver__btn"
+                            class="btn btn-secondary">Ver
+                            productos<i class="fas fa-trash-alt"></i></button>
 
-                        <!-- <form action="/ver_productos_categoria" method="POST" id="miFormulario">
-                            <input type="hidden" name="indice_id" value="{{indice[0]}}">
-                            <button type="submit" id="btnEnviar" class="btn btn-primary">Ver productos<i
-                                    class="bi bi-eye"></i>
-                            </button>
-                        </form> -->
+                        <form action="/categorias" method="POST" id="categoriaForm" onsubmit="abrirVer(event)">
+                            <input type="hidden" name="idcategoria" id="idcategoria" value="{{ indice[0] }}">
+                            <button type="submit" id="enviarID" class="btn btn-danger">Enviar ID</button>
+                        </form>
+
+                        <script>
+
+                            // Después de 1 segundo, abrir el modal
+                            setTimeout(function () {
+                                var verBtn = document.getElementById('ver__btn');
+                                verBtn.click();
+                            }, 1000);
+                        </script> -->
+
+
+
+
                     </div>
                 </td>
             </tr>
@@ -85,7 +102,8 @@
                 <form id="enviarCategoria" method="POST" action="{{ url_for('agregar_categoria')}}">
                     <div class="">
                         <label for="nombre">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" pattern="^[A-Za-z\s]+$" required>
+                        <input type="text" class="form-control" id="nombre" name="nombre" pattern="^[A-Za-z\s]+$"
+                            required>
                     </div>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary">Guardar</button>
@@ -97,7 +115,7 @@
 </div>
 
 <!-- Modal para eliminar -->
-<div class="modal fade" id="Eliminar" tabindex="-1">
+<div class="modal fade" data-bs-backdrop="static" id="Eliminar" tabindex="-1">
 
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -124,6 +142,56 @@
         </div>
     </div>
 </div>
+
+<!-- Modal para ver prodcutos -->
+<div class="modal fade" data-bs-backdrop="static" id="verProductos" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header"><!--Header-->
+                <h5 class="modal-title">Productos</h5> <!--id-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body"> <!--Formulario-->
+                <table class="table  table-hover table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Productos en la categoria</th>
+                            <th scope="col">Existencias</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        {% for indice in verProductos %} <!--Nombre cualquiera + el que recibe de la variable-->
+                        <tr class="doble_click" style="cursor: pointer;">
+                            <td>{{ indice[3] }}</td>
+                            <td>{{ indice[4] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="modal-footer">
+                <!-- <form action="/categorias" method="POST" id="categoriaForm">
+                    <input type="hidden" name="idcategoria" id="idcategoria" value="">
+                    <button type="submit" id="submitButton" class="btn btn-danger">Refrescar</button>
+                </form> -->
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salir</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 
+<script>
+    // Función para enviar el formulario al abrir el modal
+    $('#verProductos').on('shown.bs.modal', function () {
+        document.getElementById('submitButton').click();
+    });
+</script> -->
 
 <!--Actualizar modal-->
 <script>
@@ -158,6 +226,7 @@
 <script>
     function setProductId(productId) {
         document.getElementById('indice_id').value = productId;
+        document.getElementById('idcategoria').value = productId;
     }
 </script>
 

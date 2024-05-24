@@ -7,7 +7,7 @@
 <section class="inventario">
     <!--Breadcrumb-->
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
+        <ol class="breadcrumb p-3 bg-body-tertiary rounded-3">
             <li class="breadcrumb-item">
                 <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Tablero</a>
             </li>
@@ -19,6 +19,23 @@
 
 
     <h1 class="inventario__titulo text-center">Inventario de productos</h1>
+
+    <!--Alerta de actualizados y eliminados-->
+    {% if update %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Se actualizó un producto!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% if eliminado %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Se eliminó un producto!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+
 
     <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
         data-taskid="0">Agregar Producto
@@ -49,7 +66,7 @@
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
-                        <button type="button" id="editar_btn" class="btn btn-primary btn-sm btn__editar"
+                        <button type="button" id="editar_btn" class=" btn btn-primary btn-sm btn__editar"
                             data-bs-toggle="modal" data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}"
                             data-bs-nombre="{{indice[1]}}" data-bs-compra="{{indice[2]}}" data-bs-venta="{{indice[3]}}"
                             data-bs-ganancia="{{indice[4]}}" data-bs-existencias="{{indice[5]}}"
@@ -76,197 +93,212 @@
     </table>
 </section>
 
+
+
+
 <!--Banner de alerta producto bajo-->
 {% if producto_escaso %}
 <div class="toast-container position-fixed bottom-0 end-0 p-4">
     {% for producto in producto_escaso %}
-    <div class="toast text-bg-warning">
-        <div class="toast-header">
-            <strong class="me-auto">Alerta</strong>
-            <small class="text-body-secondary">just now</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+    {% if producto[1] == 0%}
+    <div class="toast text-bg-danger">
+        {% else %}
+        <div class="toast text-bg-warning">
+            {% endif %}
+            <div class="toast-header">
+                <strong class="me-auto">Alerta</strong>
+                <small class="text-body-secondary">just now</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                {% if producto[1] == 0%}
+                El producto ({{ producto[0] }}) se agoto
+                {% else %}
+                El producto ({{ producto[0] }}) tiene {{producto[1]}} existencias
+                {% endif %}
+            </div>
         </div>
-        <div class="toast-body">
-            El producto ({{ producto[0] }}) tiene pocas existencias
-        </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
-<!--Pocas existencias-->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-        var toastList = toastElList.map(function (toastEl) {
-            return new bootstrap.Toast(toastEl);
+
+
+
+    <!--Pocas existencias-->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var toastElList = [].slice.call(document.querySelectorAll('.toast'));
+            var toastList = toastElList.map(function (toastEl) {
+                return new bootstrap.Toast(toastEl);
+            });
+            toastList.forEach(toast => toast.show());
         });
-        toastList.forEach(toast => toast.show());
-    });
-</script>
-{% endif %}
+    </script>
+    {% endif %}
 
-<!-- Modal para crear/editar tarea -->
-<div class="modal fade " data-bs-backdrop="static" id="abrirModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered ">
-        <div class="modal-content">
+    <!-- Modal para crear/editar tarea -->
+    <div class="modal fade " data-bs-backdrop="static" id="abrirModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered ">
+            <div class="modal-content">
 
-            <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Agregar Producto</h5> <!--id-->
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-
-            <div class="modal-body"> <!--Formulario-->
-                <form id="taskForm" method="POST" action="{{ url_for('agregar_producto')}}"> <!--Añadir producto-->
-                    <div class="">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" pattern="^[A-Za-z\s]+$"
-                            required>
-                    </div>
-                    <div class="">
-                        <label for="precio_compra">Precio Compra:</label>
-                        <input type="number" class="form-control" id="precio_compra" step="0.1" name="precio_compra"
-                            min="0" required>
-                    </div>
-                    <div class="">
-                        <label for="precio_venta">Precio Venta:</label>
-                        <input type="number" class="form-control" id="precio_venta" step="0.1" name="precio_venta"
-                            min="0" required>
-                    </div>
-                    <div class="">
-                        <label for="ganancia">Ganancia:</label>
-                        <input type="number" class="form-control" id="ganancia" step="0.1" name="ganancia" min="0"
-                            required>
-                    </div>
-                    <div class="">
-                        <label for="existencias">Existencias:</label>
-                        <input type="number" class="form-control" id="existencias" name="existencias" min="0" required>
-                    </div>
-                    <div class="">
-                        <label for="existencias_deseadas">Existencias deseadas:</label>
-                        <input type="number" class="form-control" id="existencias_deseadas" name="existencias_deseadas"
-                            min="0" placeholder="Opcional">
-                    </div>
-                    <div class="">
-                        <label for="proveedor">Proveedor:</label>
-                        <select class="form-control" id="proveedor" name="proveedor" required>
-                            <!-- Opción por defecto -->
-                            <option value="">Selecciona una opción</option>
-                            {% for proveedor in Proveedor %}
-                            <option value="{{ proveedor[0] }}">{{ proveedor[1] }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="">
-                        <label for="categoria">Categoria:</label>
-                        <select class="form-control" id="categoria" name="categoria" required>
-                            <option value="">Selecciona una opción</option>
-                            {% for Categorias in Categorias %}
-                            <option value="{{ Categorias[0] }}">{{ Categorias[1] }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="text-center mt-2">
-                        <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
-                    </div>
-                    <script src="../static/Js/validar_form.js"></script><!--Validar forms-->
-                </form>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal para eliminar -->
-<div class="modal fade" id="Eliminar" tabindex="-1">
-
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-
-            <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Eliminar Producto</h5> <!--id-->
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                </button>
-            </div>
-
-            <div class="modal-body"> <!--Formulario-->
-                <h3>¿Deseas eliminarlo?</h3>
-
-            </div>
-            <div class="modal-footer">
-                <form action="/eliminar_producto" method="POST" id="eliminarp">
-                    <input type="hidden" name="indice_id" id="indice_id" value="">
-                    <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
+                <div class="modal-header"><!--Header-->
+                    <h5 class="modal-title ">Agregar Producto</h5> <!--id-->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     </button>
-                </form>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salir
-                </button>
+                </div>
+
+                <div class="modal-body"> <!--Formulario-->
+                    <form id="taskForm" method="POST" action="{{ url_for('agregar_producto')}}"> <!--Añadir producto-->
+                        <div class="">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" onpaste="return false;" class="form-control" id="nombre" name="nombre"
+                                pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" minlength="3" maxlength="40" required>
+                        </div>
+                        <div class="">
+                            <label for="precio_compra">Precio Compra:</label>
+                            <input type="number" onpaste="return false;" class="form-control" id="precio_compra"
+                                step="0.1" name="precio_compra" min="0" max="1000"   required>
+                        </div>
+                        <div class="">
+                            <label for="precio_venta">Precio Venta:</label>
+                            <input type="number" onpaste="return false;" class="form-control" id="precio_venta"
+                                step="0.1" name="precio_venta" min="0" max="1000" required>
+                        </div>
+                        <div class="">
+                            <label for="ganancia">Ganancia:</label>
+                            <input type="number" onpaste="return false;" class="form-control" id="ganancia" step="0.1"
+                                name="ganancia" min="0" max="1000" required>
+                        </div>
+                        <div class="">
+                            <label for="existencias" onpaste="return false;">Existencias:</label>
+                            <input type="number" class="form-control" id="existencias" name="existencias" min="0"
+                                max="500" autocomplete="off" required>
+                        </div>
+                        <div class="">
+                            <label for="existencias_deseadas" onpaste="return false;">Existencias deseadas:</label>
+                            <input type="number" class="form-control" id="existencias_deseadas"
+                                name="existencias_deseadas" min="0" max="500" placeholder="Opcional" autocomplete="off">
+                        </div>
+                        <div class="">
+                            <label for="proveedor">Proveedor:</label>
+                            <select class="form-control" id="proveedor" name="proveedor" required>
+                                <!-- Opción por defecto -->
+                                <option selected disabled value="">Selecciona una opción</option>
+                                {% for proveedor in Proveedor %}
+                                <option value="{{ proveedor[0] }}">{{ proveedor[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="">
+                            <label for="categoria">Categoria:</label>
+                            <select class="form-control" id="categoria" name="categoria" required>
+                                <option selected disabled value="">Selecciona una opción</option>
+                                {% for Categorias in Categorias %}
+                                <option value="{{ Categorias[0] }}">{{ Categorias[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="text-center mt-2">
+                            <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                        <script src="../static/Js/validar_form.js"></script><!--Validar forms-->
+                    </form>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- <script src="../static/Js/ModalEditar.js"></script> -->
-<script>
-    //< !--Codigo para obtner los datos del form segun si id(Editar)-- >
-    const abrirModal = document.getElementById('abrirModal')
-    if (abrirModal) {
-        abrirModal.addEventListener('show.bs.modal', event => {
-            // Button that triggered the modal
-            const button = event.relatedTarget
-            //Obtneer los datos del botones que tienen esos ID y los guarda
-            const id = button.getAttribute('data-bs-id')
-            const name = button.getAttribute('data-bs-nombre')
-            const compra = button.getAttribute('data-bs-compra')
-            const venta = button.getAttribute('data-bs-venta')
-            const ganancia = button.getAttribute('data-bs-ganancia')
-            const existencias = button.getAttribute('data-bs-existencias')
-            const existencias_deseadas = button.getAttribute('data-bs-existencias-deseadas')
-            const proveedor = button.getAttribute('data-bs-proveedor')
-            const categoria = button.getAttribute('data-bs-categoria')
+    <!-- Modal para eliminar -->
+    <div class="modal fade" id="Eliminar" tabindex="-1">
 
-            // Selecciona los formularios en donde se actualizaran los datos y los guarda
-            const modalNombre = abrirModal.querySelector('#nombre')
-            const modalCompra = abrirModal.querySelector('#precio_compra')
-            const modalVenta = abrirModal.querySelector('#precio_venta')
-            const modalGanancia = abrirModal.querySelector('#ganancia')
-            const modalExistencias = abrirModal.querySelector('#existencias')
-            const modalExistencias_deseadas = abrirModal.querySelector('#existencias_deseadas')
-            const modalProveedor = abrirModal.querySelector('#proveedor')
-            const modalCategoria = abrirModal.querySelector('#categoria')
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
 
-            // Acutualizar los campos con los datos de los atributos.
-            modalNombre.value = name
-            modalCompra.value = compra
-            modalVenta.value = venta
-            modalGanancia.value = ganancia
-            modalExistencias.value = existencias
-            modalExistencias_deseadas.value = existencias_deseadas
-            modalProveedor.value = proveedor
-            modalCategoria.value = categoria
+                <div class="modal-header"><!--Header-->
+                    <h5 class="modal-title">Eliminar Producto</h5> <!--id-->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
 
-            //Titulo segun la funcion
-            if (id) {
-                abrirModal.querySelector('.modal-title').textContent = 'Editar Producto';
-                console.log(id)
-                abrirModal.querySelector('#taskForm').setAttribute('action', '{{ url_for("editar_producto", id=0) }}'.replace('0', id));
-                //Enviar a editar
-            } else {
-                abrirModal.querySelector('.modal-title').textContent = 'Agregar Producto';
-            }
-        })
-    }
-</script>
+                <div class="modal-body"> <!--Formulario-->
+                    <h3>¿Deseas eliminarlo?</h3>
 
-<!--Para obtener el id y mandarlo al modal-->
-<script>
-    function setProductId(productId) {
-        document.getElementById('indice_id').value = productId;
-    }
-</script>
+                </div>
+                <div class="modal-footer">
+                    <form action="/eliminar_producto" method="POST" id="eliminarp">
+                        <input type="hidden" name="indice_id" id="indice_id" value="">
+                        <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
+                        </button>
+                    </form>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script src="../static/Js/ModalEditar.js"></script> -->
+    <script>
+        //< !--Codigo para obtner los datos del form segun si id(Editar)-- >
+        const abrirModal = document.getElementById('abrirModal')
+        if (abrirModal) {
+            abrirModal.addEventListener('show.bs.modal', event => {
+                // Button that triggered the modal
+                const button = event.relatedTarget
+                //Obtneer los datos del botones que tienen esos ID y los guarda
+                const id = button.getAttribute('data-bs-id')
+                const name = button.getAttribute('data-bs-nombre')
+                const compra = button.getAttribute('data-bs-compra')
+                const venta = button.getAttribute('data-bs-venta')
+                const ganancia = button.getAttribute('data-bs-ganancia')
+                const existencias = button.getAttribute('data-bs-existencias')
+                const existencias_deseadas = button.getAttribute('data-bs-existencias-deseadas')
+                const proveedor = button.getAttribute('data-bs-proveedor')
+                const categoria = button.getAttribute('data-bs-categoria')
+
+                // Selecciona los formularios en donde se actualizaran los datos y los guarda
+                const modalNombre = abrirModal.querySelector('#nombre')
+                const modalCompra = abrirModal.querySelector('#precio_compra')
+                const modalVenta = abrirModal.querySelector('#precio_venta')
+                const modalGanancia = abrirModal.querySelector('#ganancia')
+                const modalExistencias = abrirModal.querySelector('#existencias')
+                const modalExistencias_deseadas = abrirModal.querySelector('#existencias_deseadas')
+                const modalProveedor = abrirModal.querySelector('#proveedor')
+                const modalCategoria = abrirModal.querySelector('#categoria')
+
+                // Acutualizar los campos con los datos de los atributos.
+                modalNombre.value = name
+                modalCompra.value = compra
+                modalVenta.value = venta
+                modalGanancia.value = ganancia
+                modalExistencias.value = existencias
+                modalExistencias_deseadas.value = existencias_deseadas
+                modalProveedor.value = proveedor
+                modalCategoria.value = categoria
+
+                //Titulo segun la funcion
+                if (id) {
+                    abrirModal.querySelector('.modal-title').textContent = 'Editar Producto';
+                    console.log(id)
+                    abrirModal.querySelector('#taskForm').setAttribute('action', '{{ url_for("editar_producto", id=0) }}'.replace('0', id));
+                    //Enviar a editar
+                } else {
+                    abrirModal.querySelector('.modal-title').textContent = 'Agregar Producto';
+                }
+            })
+        }
+    </script>
+
+    <!--Para obtener el id y mandarlo al modal-->
+    <script>
+        function setProductId(productId) {
+            document.getElementById('indice_id').value = productId;
+        }
+    </script>
 
 
 
 
-{%endblock%}
+    {%endblock%}

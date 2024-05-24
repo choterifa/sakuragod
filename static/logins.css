@@ -229,3 +229,21 @@ label {
 .password-input button:focus {
     outline: none;
 }
+
+#generatePasswordBtn {
+    position: absolute;
+    top: 50px;
+    right: 15;
+}
+
+#togglePasswordBtn {
+    position: absolute;
+    background-color: transparent;
+    font-size: 17.5px;
+    border: none;
+    /* background-color: red; */
+    top: 54px;
+    padding: 5px;
+    right: 15;
+    
+}

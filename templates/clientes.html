@@ -21,11 +21,8 @@
 
     <h1 class="inventario__titulo text-center">Clientes</h1>
 
-    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModalCliente"
-        data-taskid="0">Agregar un cliente
-    </button>
-    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal"
-        data-bs-target="#agregarTelefono" data-taskid="0">Agregar telefono
+    <button type="button" class="btn_agregar btn btn-dark my-2" data-bs-toggle="modal"
+        data-bs-target="#abrirModalCliente" data-taskid="0">Agregar un Cliente
     </button>
 
     <!--Nueva tabla-->
@@ -33,11 +30,10 @@
         <thead>
             <tr>
                 <th scope="col">Nombre</th> <!--Columna Encabezados-->
-                <th scope="col">Apellido P</th>
-                <th scope="col">Apellido M</th>
-                <th scope="col">Total adeudo</th>
+                <th scope="col">Apellidos</th>
+                <th scope="col"><a href="/caja">Total adeudo</a></th>
                 <th scope="col">Celular</th>
-                <th scope="col">Apartados</th>
+                <th scope="col"><a href="/apartados">Apartados</a></th>
                 <th scope="col">Editar</th>
             </tr>
         </thead>
@@ -45,19 +41,22 @@
             {% for indice in clientes %} <!--Nombre cualquiera + el que recibe de la variable-->
             <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
-                <td>{{ indice[2] }}</td>
-                <td>{{ indice[3] }}</td>
-                <td>{{ indice[4] }}</td>
+                <td>{{ indice[2] }} {{ indice[3] }}</td>
+                <td>
+
+                        {{ '-' if indice[4] is none else indice[4]}}
+                </td>
+                <td>{{  '-' if indice[5] is none else indice[5] }}</td> 
+
                 <td>{{ indice[6] }}</td>
-                <td>{{ indice[7] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
-                <td >
+                <td>
                     <div class="editar__botones">
-                        <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
-                            data-bs-target="#abrirModalCliente" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
-                            data-bs-apellido_p="{{indice[2]}}" data-bs-apellido_m="{{indice[3]}}"
-                            data-bs-telefono="{{indice[5]}}">Editar <i class=" fas fa-edit "></i>
-                            <!--Cambia el orden del modal js-->
+                        <button type="button" class="d-none btn btn-dark btn-sm btn__editar" data-bs-toggle="modal"
+                            data-bs-target="#abrirModalCliente" data-bs-id="{{indice[0]}}"
+                            data-bs-nombre="{{indice[1]}}" data-bs-apellido_p="{{indice[2]}}"
+                            data-bs-apellido_m="{{indice[3]}}" data-bs-telefono="{{indice[5]}}">Editar <i
+                                class=" fas fa-edit "></i>
                         </button>
 
                         <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
@@ -82,7 +81,7 @@
 
 
 <!-- Modal para crear/editar tarea -->
-<div class="modal fade" id="abrirModalCliente" tabindex="-1">
+<div class="modal fade " data-bs-backdrop="static" id="abrirModalCliente" tabindex="-1">
 
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -98,30 +97,37 @@
                     <!--Añadir producto-->
                     <div class="">
                         <label for="nombre">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre"  pattern="^[A-Za-z\s]+$" required>
+                        <input type="text" onpaste="return false;" class="form-control" id="nombre" name="nombre"
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" maxlength="40" required>
+                            <small>solo letras</small>
                     </div>
                     <div class="">
                         <label for="apellido_p">Apellido Paterno:</label>
-                        <input type="text" class="form-control" id="apellido_p" name="apellido_p"   pattern="^[A-Za-z\s]+$" required>
+                        <input type="text" onpaste="return false;" class="form-control" id="apellido_p"
+                            name="apellido_p" pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$"  maxlength="20" required>
                     </div>
                     <div class="">
                         <label for="apellido_m">Apellido Materno:</label>
-                        <input type="text" class="form-control" id="apellido_m" name="apellido_m"  pattern="^[A-Za-z\s]+$" required>
+                        <input type="text" onpaste="return false;" class="form-control" id="apellido_m"
+                            name="apellido_m" pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$"  maxlength="20" required>
                     </div>
                     <div class="">
+                        <label for="telefono">Teléfono:</label>
+                        <input type="tel" class="form-control" onpaste="return false;" id="telefono" name="telefono" minlength="10"
+                            maxlength="10" pattern="[0-9]{10}" placeholder="1234567890" required>
+                    </div>
+                    <!-- <div class="">
                         <label for="telefono">Telefono:</label>
-                        <select class="form-control" id="telefono" name="telefono" required>
-                            <!-- Opción por defecto -->
-                            <option value="">Selecciona una opción</option>
+                        <select class="form-select" id="telefono" name="telefono" required>
+                            <option selected disabled value="">Selecciona una opción</option>
                             {% for telefono in Telefono %}
                             <option value="{{ telefono[0] }}">{{ telefono[1] }}</option>
                             {% endfor %}
                         </select>
-                    </div>
+                    </div> -->
 
                     <div class="text-center mt-2">
-                        <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
-
+                        <button type="reset" class="btn btn-secondary">Resetear</button>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
                 </form>
@@ -132,29 +138,34 @@
 </div>
 
 <!-- Modal telefono-->
-<div class="modal fade" id="agregarTelefono" tabindex="-1">
+<div class="modal fade" data-bs-backdrop="static" id="agregarTelefono" tabindex="-1">
 
     <div class="modal-dialog modal-dialog-centered modal-sm">
         <div class="modal-content">
 
             <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Agregar telefono</h5> <!--id-->
+                <h5 class="modal-title">Agregar Teléfono</h5> <!--id-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
 
             <div class="modal-body"> <!--Formulario-->
-                <form id="agregar_telefono_cliente" method="POST" action="{{ url_for('agregar_telefono_cliente')}}">
+                <form id="agregar_telefono_cliente" class="needs-validation" novalidate method="POST"
+                    action="{{ url_for('agregar_telefono_cliente')}}">
                     <!--Añadir producto o-->
                     <div class="">
-                        <label for="telefono">Telefono:</label>
-                        <input type="tel" class="form-control" id="telefono" name="telefono" minlength="10"
-                            maxlength="10" required>
+                        <label for="telefono">Teléfono:</label>
+                        <input type="tel" class="form-control" onpaste="return false;" id="telefono" name="telefono"
+                            minlength="10" maxlength="10" pattern="[0-9]{10}" placeholder="1234567890" required>
+                        <div class="invalid-feedback">
+                            Ingresa solo números.
+                        </div>
                     </div>
                     <div class="text-center mt-2">
-                        <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
+                        <button type="reset" class="btn btn-secondary">Resetear</button>
                         <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
+
                 </form>
             </div>
 
@@ -179,7 +190,7 @@
             </div>
             <div class="modal-footer">
                 <form action="/eliminar_cliente" method="POST" id="eliminarp">
-                    <input type="" name="indice_id" id="indice_id" value="">
+                    <input type="hidden" name="indice_id" id="indice_id" value="">
                     <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
                     </button>
                 </form>
@@ -189,6 +200,30 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (() => {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        const forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+
+</script>
 
 
 <!-- <script src="../static/Js/ModalEditar.js"></script> -->

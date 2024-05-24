@@ -99,8 +99,8 @@ html {
 }
 
 .cifrado {
-    filter: blur(calc(1rem * var(--blur, 1)));
-    transition: filter var(--speed, 5s);
+    filter: blur(calc(1.05rem * var(--blur, 1)));
+    transition: filter var(--speed, 7s);
 }
 
 .cifrado:hover {
@@ -206,7 +206,7 @@ iframe {
     height: 640px;
     box-shadow: 2px 4px 12px -2px #3c3a3c4e;
     border-radius: 5px;
-    /* pointer-events: none; */
+    pointer-events: none;
     transition: all .5s ease;
     background-color: white;
     /* Establece un fondo sólido */
@@ -435,6 +435,10 @@ span {
     text-align: right;
 }
 
+.cifrado{
+    line-height: -.5;
+}
+
 .video__container__inicio {
     width: 1100px;
 }
@@ -464,10 +468,6 @@ span {
     width: 400px;
 }
 
-.carrusel_titulo {
-    margin-bottom: 25px;
-    margin-left: 38px;
-}
 
 #Edredon {
     margin-top: 100px;
@@ -481,12 +481,19 @@ span {
     border-radius: 0 !important;
 }
 
+.carrusel_titulo {
+    margin-bottom: 25px;
+    margin-left: 38px;
+    color: #717a78;
+}
+
 .card-text-title {
     font-family: 'Raleway';
     font-weight: bold;
     font-size: 18.5px;
     font-style: 600;
     margin-top: 11px;
+    color: #717a78;
 }
 
 .card-text-price {
@@ -494,7 +501,6 @@ span {
     font-size: 17px;
     font-weight: 400;
     margin-top: -15px;
-    color: gray;
 }
 
 
