@@ -47,23 +47,14 @@ document.addEventListener("DOMContentLoaded", function () {
 // Desoculatr contraseña
 document.addEventListener("DOMContentLoaded", function () {
     const passwordInput = document.getElementById("password");
-    const generatePasswordBtn = document.getElementById("generatePasswordBtn");
 
-    // Función para cambiar entre mostrar y ocultar la contraseña
-    function togglePasswordVisibility(event) {
-        if (event.target !== generatePasswordBtn) {
-            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
-        }
-    }
+    // Evento focus en el campo de contraseña para mostrarla
+    passwordInput.addEventListener("focus", function () {
+        passwordInput.type = "text";
+    });
 
-    // Evento clic en el campo de contraseña para alternar la visibilidad
-    passwordInput.addEventListener("click", togglePasswordVisibility);
-
-    // Evento blur en el campo de contraseña para volver a ocultar la contraseña cuando pierda el foco,
-    // solo si no se hizo clic en el botón "Generar"
-    passwordInput.addEventListener("blur", function (event) {
-        if (event.relatedTarget !== generatePasswordBtn && passwordInput.type === "text") {
-            passwordInput.type = "password";
-        }
+    // Evento blur en el campo de contraseña para volver a ocultarla cuando pierde el foco
+    passwordInput.addEventListener("blur", function () {
+        passwordInput.type = "password";
     });
 });

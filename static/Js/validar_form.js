@@ -34,6 +34,15 @@ document.getElementById('nombre').addEventListener('input', function (e) {
     }
 });
 
+document.getElementById('username').addEventListener('input', function (e) {
+    var value = e.target.value;
+    // Permitir solo letras con acentos y espacios
+    var pattern = /^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]*$/;
+    if (!pattern.test(value)) {
+        e.target.value = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚüÜ\s]/g, '');
+    }
+});
+
 
 function validateInput(event, maxLength, minValue, maxValue) {
     var value = event.target.value;

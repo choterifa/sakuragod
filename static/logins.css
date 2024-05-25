@@ -29,10 +29,10 @@ body {
 
 .container__sigin__titulos {
     /*El card*/
-    width: 31%;
+    width: 30.3%;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 18px;
     padding: 30px;
     border-radius: 12px;
     /* background-color: #28033142; */
@@ -41,7 +41,7 @@ body {
 .signin__titulo {
     font-size: 56px;
     font-weight: bold;
-    margin: 10px 0px;
+    margin: 5px 0px;
     color: rgba(0, 0, 0, 0.742);
 }
 
@@ -52,7 +52,7 @@ body {
     padding: 19px;
     border-radius: 15px;
     border: 1.85px solid #75757527;
-    margin: 10px 0;
+    margin: 11px 0;
 }
 
 .forget {
@@ -62,7 +62,7 @@ body {
 
 .btn__form {
     width: 100%;
-    margin-top: 12px;
+    margin-top: 17px;
     font-size: 1rem;
     padding: 14px;
     border: none;
@@ -98,6 +98,7 @@ body {
 
 /*informacion*/
 .informacion__mensaje {
+    margin-top: 3px;
     font-size: 1rem;
     text-decoration: none;
     text-align: center;
@@ -134,16 +135,16 @@ body {
 
 label {
     /*Sus etiquetas*/
-    color: #757575;
+    color: #757575 ;
 }
 
 /*Salirse alv*/
 .btn__form--salir {
-    width: 140px;
+    width: 250px;
     height: 95vh;
     padding: 7px 10px;
     position: absolute;
-    right: 40;
+    right: 90;
     top: 20;
     font-size: 15px;
     border: none;
@@ -234,6 +235,14 @@ label {
     position: absolute;
     top: 50px;
     right: 15;
+    color: rgba(113, 111, 111, 0.794);
+    opacity: 0;
+}
+
+
+#generatePasswordBtn:hover,
+.singup__password:hover + #generatePasswordBtn {
+    opacity: 1;
 }
 
 #togglePasswordBtn {
@@ -245,5 +254,16 @@ label {
     top: 54px;
     padding: 5px;
     right: 15;
-    
+}
+
+.btn__form.disabled {
+    pointer-events: none;
+    opacity: 0.65;
+    /* Esto aplica un estilo visual de deshabilitado */
+}
+
+/*Color de los tooltips*/
+.custom-tooltip {
+    --bs-tooltip-bg: #aab4f2 !important;
+    --bs-tooltip-color: var(--bs-white);
 }

@@ -21,51 +21,86 @@
 
 <body>
 
+
     <section class="Inicio__Sesion">
+
 
         <div class="container__sigin__titulos">
 
+
             <h1 class="signin__titulo">Inicia Sesion</h1>
 
-            <form method="post" action="{{ url_for('iniciar_sesion') }}" "> <!--Se pasa la funcion-->
+            <form method="post" action="{{ url_for('iniciar_sesion') }}"> <!--Se pasa la funcion-->
                 <!-- Email input -->
+
                 <div class=" ">
-                    <label for="email">Correo Electrónico</label>
-                <input type="email" onpaste="return false;"  class="login__input {% if correo_no_encontrado %}is-invalid{% endif %}" id="email"
-                    name="correo" maxlength="40" required>
-                {% if correo_no_encontrado %}
-                <div class="invalid-feedback">Correo no encontrado</div>
-                {% endif %}
+                    <label for="email">Correo </label>
+                    <input type="email" onpaste="return false;"
+                        class="login__input {% if correo_no_encontrado %}is-invalid{% endif %}" id="email" name="correo"
+                        maxlength="30" required>
+                    {% if correo_no_encontrado %}
+                    <div class="invalid-feedback">Correo no encontrado</div>
+                    {% endif %}
+                </div>
+
+
+
+                <!-- Password input -->
+                <div class="">
+                    <label for="password">Contraseña</label>
+                    <input type="password" onpaste="return false;"
+                        class="login__input {% if bad_password %}is-invalid{% endif %} " id="password" name="contraseña"
+                        maxlength="30" pattern="[a-zA-Z1-9]+" required="">
+                    {% if bad_password %}
+                    <div class="invalid-feedback">Contraseña incorrecta</div>
+                    {% endif %}
+                </div>
+
+                <!-- Button trigger modal -->
+                <button type="submit" class="btn__form">
+                    Iniciar Sesion
+                </button>
+            </form>
+
+            <!--Boton google-->
+
+            <!--Extras-->
+            <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
+            <a class=" btn__form--salir" href="/">Salir</a>
         </div>
 
-
-
-        <!-- Password input -->
-        <div class="">
-            <label for="password">Contraseña</label>
-            <input type="password" onpaste="return false;"  class="login__input {% if bad_password %}is-invalid{% endif %} " id="password"
-                name="contraseña" maxlength="40" pattern="[a-zA-Z1-9]+" required="">
-            {% if bad_password %}
-            <div class="invalid-feedback">Contraseña incorrecta</div>
-            {% endif %}
+        <!-- toasts
+        {% if correo_no_encontrado %}
+        <div class="toast-container position-absolute bottom-0 end-0 p-4">
+            <div class="toast text-bg-danger">
+                <div class="toast-header">
+                    <strong class="me-auto">Alerta</strong>
+                    <small class="text-body-secondary">just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">
+                    Correo no encotrado
+                </div>
+            </div>
         </div>
+        <script src="../static/Js/activar_toast.js"></script>
+        {% endif %}
 
-        <!-- Button trigger modal -->
-        <button type="submit" class="btn__form">
-            Iniciar Sesion
-        </button>
-        </form>
-
-        <!--Boton google-->
-        <a class="btn__form" href="#">
-            <i class="fab fa-google me-2"></i>Continuar con Google
-        </a>
-
-        <!--Extras-->
-        <a class="informacion__mensaje" href="/registro">¿No tienes una cuenta?</a>
-        <a class=" btn__form--salir" href="/">Salir</a>
+        {% if bad_password %}
+        <div class="toast-container position-absolute bottom-0 end-0 p-4">
+            <div class="toast text-bg-danger">
+                <div class="toast-header">
+                    <strong class="me-auto">Alerta</strong>
+                    <small class="text-body-secondary">just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+                </div>
+                <div class="toast-body">
+                    Contraseña incorrecta
+                </div>
+            </div>
         </div>
-
+        <script src="../static/Js/activar_toast.js"></script>
+        {% endif %} -->
 
     </section>
 
@@ -107,22 +142,8 @@
             </div>
         </div>
     </div>
+
     {% endif %}
-
-    <!-- <div class="imagen__pillow__container imagen__pillow__1">
-        <img src="../../static/imagenes/pillows/pillow1.png" class="imagen__pillow">
-    </div>
-    <div class="imagen__pillow__container imagen__pillow__2">
-        <img src="../../static/imagenes/pillows/pillow2.png" class="imagen__pillow">
-    </div>
-    <div class="imagen__pillow__container imagen__pillow__3">
-        <img src="../../static/imagenes/pillows/pillow4.png" class="imagen__pillow">
-    </div>
-    <div class="imagen__pillow__container imagen__pillow__4">
-        <img src="../../static/imagenes/pillows/pillow5.png" class="imagen__pillow">
-    </div> -->
-
 </body>
 
 </html>
-

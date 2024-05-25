@@ -18,7 +18,6 @@
         </ol>
     </nav>
 
-
     <h1 class="inventario__titulo text-center">Clientes</h1>
 
     <button type="button" class="btn_agregar btn btn-dark my-2" data-bs-toggle="modal"
@@ -38,7 +37,7 @@
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            {% for indice in clientes %} <!--Nombre cualquiera + el que recibe de la variable-->
+            {% for indice in clientes %}
             <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
                 <td>{{ indice[2] }} {{ indice[3] }}</td>
@@ -201,32 +200,9 @@
     </div>
 </div>
 
+<!-- <script src="../static/Js/validarform_boostrap.js"></script> -->
 
-<script>
-    // Example starter JavaScript for disabling form submissions if there are invalid fields
-    (() => {
-        'use strict'
-
-        // Fetch all the forms we want to apply custom Bootstrap validation styles to
-        const forms = document.querySelectorAll('.needs-validation')
-
-        // Loop over them and prevent submission
-        Array.from(forms).forEach(form => {
-            form.addEventListener('submit', event => {
-                if (!form.checkValidity()) {
-                    event.preventDefault()
-                    event.stopPropagation()
-                }
-
-                form.classList.add('was-validated')
-            }, false)
-        })
-    })()
-
-</script>
-
-
-<!-- <script src="../static/Js/ModalEditar.js"></script> -->
+<!--Scrpits -->
 <script>
     //< !--Codigo para obtner los datos del fomr segun si id(Editar)-- >
     const abrirModalCliente = document.getElementById('abrirModalCliente')

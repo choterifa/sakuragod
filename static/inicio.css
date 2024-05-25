@@ -63,6 +63,7 @@ html {
     border-bottom: 2px solid rgb(0, 0, 0);
 }
 
+
 /*Pagina de Presentacion*/
 .Inicio__Hero {
     display: flex;
@@ -344,10 +345,8 @@ span {
 }
 
 
-
-
+/*Botonos extras*/
 /*Otros*/
-
 .Audio__Btn {
     position: fixed;
     bottom: 10px;
@@ -388,20 +387,17 @@ span {
     justify-content: center;
     align-items: center;
     /* display: none; */
+}
+
+.modo_oscuro2 {
+    position: fixed !important;
+    bottom: 15px;
+    right: 15px;
 
 }
 
-.video__container {
-    height: 91vh;
-    background-color: red;
-}
 
-
-.video {
-    width: 100%;
-    height: 100%;
-}
-
+/*Videos de inicio*/
 .demostrativos__flex {
     display: flex;
     flex-direction: column;
@@ -409,7 +405,6 @@ span {
     width: 70%;
     align-self: flex-start;
     margin-left: 180px;
-    /* background-color: red; */
 }
 
 .demostrativos__flex--alineado {
@@ -423,10 +418,10 @@ span {
 .Inicio__titulo__desmostrativos {
     font-weight: bold;
     font-size: 37px;
-    margin-top: 65px;   
+    margin-top: 65px;
 }
 
-.Inicio__titulo__desmostrativos i{
+.Inicio__titulo__desmostrativos i {
     padding: 5px 0;
     margin: 0 6.5px;
 }
@@ -443,13 +438,14 @@ span {
     text-align: right;
 }
 
-.cifrado{
+.cifrado {
     line-height: -.5;
 }
 
 .video__container__inicio {
     width: 1100px;
     border-radius: 5px;
+    /* box-shadow: 0px 7px 15px -5.5px rgba(0, 0, 0, 0.119); */
 }
 
 .video__inicio {
@@ -457,14 +453,12 @@ span {
     height: 100%;
 }
 
-/*Carrusel*/
+/*Carrusel de productos*/
 .carousel {
     width: 100vw;
     display: flex;
     margin: 25px;
 }
-
-
 
 .card__productos__flex {
     display: flex;
@@ -573,3 +567,69 @@ span {
 .carousel-item img:hover {
     transform: scale(1.02);
 }
+
+/*toggle boostrap*/
+
+.btn-bd-primary {
+    --bd-violet-bg: #712cf9;
+    --bs-btn-font-weight: 600;
+    --bs-btn-bg: var(--bd-violet-bg);
+    --bs-btn-border-color: var(--bd-violet-bg);
+    --bs-btn-hover-color: var(--bs-white);
+    --bs-btn-hover-bg: #6528e0;
+    --bs-btn-hover-border-color: #6528e0;
+    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+    --bs-btn-active-color: var(--bs-btn-hover-color);
+    --bs-btn-active-bg: #5a23c8;
+    --bs-btn-active-border-color: #5a23c8;
+}
+
+
+/* Custom style for dropdown items */
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: #6528e0 !important;
+    color: #ffffff;
+}
+
+.dropdown-item.active .bi,
+.dropdown-item:active .bi {
+    color: #ffffff;
+    /* Color del ícono del ítem seleccionado */
+}
+
+/* Modo oscuridad  */
+.dark-mode {
+    background-color: #141313 !important;
+    /* Cambia el color de fondo del cuerpo en modo oscuro */
+    color: #fff;
+}
+
+body.dark-mode .Inicio__Nav {
+    background-color: #141313;
+}
+
+/*Modo noche*/
+
+
+body.dark-mode .Inicio__Enlace {
+    color: white;
+}
+
+body.dark-mode .Ubicacion__Galeria__Imagen {
+    filter: saturate(1);
+}
+
+.imagen-oscura {
+    display: none;
+}
+
+.dark-mode .imagen-oscura {
+    display: block;
+}
+
+.dark-mode .imagen-clara {
+    display: none;
+}
+
+/*Fin oscuro*/

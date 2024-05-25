@@ -266,7 +266,8 @@
                     </div>
                     <div class="">
                         <label for="calle">Calle</label>
-                        <input type="number" class="form-control" id="calle" name="calle" min="0" max="1000" placeholder="57" required>
+                        <input type="number" class="form-control" id="calle" name="calle" min="0" max="1000"
+                            placeholder="57" required>
                     </div>
                     <div class="">
                         <label for="cruzamiento_1">Cruzamiento 1</label>
@@ -280,8 +281,7 @@
                     </div>
                     <div class="">
                         <label for="fecha">Fecha:</label>
-                        <input type="date" class="form-control" id="fecha" name="fecha"
-                            required>
+                        <input type="date" class="form-control" id="fecha" name="fecha" required>
                     </div>
                     <div class="">
                         <label for="destino">Destino:</label>
@@ -458,15 +458,7 @@
 </div>
 
 <!--Pocas existencias-->
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var toastElList = [].slice.call(document.querySelectorAll('.toast'));
-        var toastList = toastElList.map(function (toastEl) {
-            return new bootstrap.Toast(toastEl);
-        });
-        toastList.forEach(toast => toast.show());
-    });
-</script>
+<script src="../static/Js/activar_toast.js"></script>
 {% endif %}
 
 {%endblock %}

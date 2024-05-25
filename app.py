@@ -58,6 +58,60 @@ def terminosycondiciones():
 def productos():
     return render_template("inicio/productos.html")
 
+
+@app.route("/editar_perfil")
+def editar_perfil():
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM login WHERE Correo = %s", (session["email"],))
+    login = cur.fetchone()
+
+    return render_template("editar_perfil.html", login=login)
+
+
+@app.route('/editar_login', methods=['POST'])
+def editar_login():
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        id = request.form['indice_id']
+        user = request.form['nombre']
+        correo = request.form['correo']
+        contraseña = request.form['contraseña']
+
+        # Comprobar si el correo ya está registrado
+        cur.execute(
+            "SELECT * FROM login WHERE Correo = %s AND ID_Login != %s", (correo, id))
+        existing_email = cur.fetchone()
+
+        # Comprobar si el usuario ya existe
+        cur.execute(
+            "SELECT * FROM login WHERE Nombre = %s AND ID_Login != %s", (user, id))
+        existing_user = cur.fetchone()
+
+        if existing_email:
+            flash("El correo electrónico ya está registrado", "error_email")
+            cur.close()
+            return redirect(url_for('editar_perfil'))
+
+        elif existing_user:
+            flash("El usuario ya existe. Por favor, elija otro", "error_user")
+            cur.close()
+            return redirect(url_for('editar_perfil'))
+
+        else:
+            # Actualizar los datos del usuario
+            cur.execute(
+                "UPDATE login SET Nombre = %s, Correo = %s, Contraseña = %s WHERE ID_Login = %s",
+                (user, correo, contraseña, id)
+            )
+            mysql.connection.commit()
+            cur.close()
+
+            # Actualizar la sesión
+            session["email"] = correo
+
+    return redirect(url_for('editar_perfil'))
+
+
 # Seccion del gestor
 
 
@@ -278,7 +332,7 @@ def clientes():
             t_apartado ON clientes.ID_TAP = t_apartado.ID_TAP;
         """)
         clientes = cur.fetchall()
-        
+
         #  Actualizar si tiene o no apartados un cliente segun CPAE
         cur.execute("""
             UPDATE clientes
@@ -724,8 +778,8 @@ def registro():
         else:
             # registrar en base de datos
             cur.execute(
-                "INSERT INTO login (Nombre, Correo, Contraseña) VALUES (%s, %s, %s)",
-                (nombre, correo, contraseña),
+                "INSERT INTO login (Nombre, Correo, Contraseña, Fecha_Registro) VALUES (%s, %s, %s, CURRENT_TIMESTAMP)",
+                (nombre, correo, contraseña)
             )
             mysql.connection.commit()
             session["email"] = correo  # crear sesion del email
