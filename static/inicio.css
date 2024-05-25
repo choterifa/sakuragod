@@ -201,19 +201,21 @@ html {
     height: 100%;
 }
 
-iframe {
-    width: 88vw;
-    height: 640px;
+.iframe__container__img {
+    width: 87vw;
+    height: 645px;
     box-shadow: 2px 4px 12px -2px #3c3a3c4e;
-    border-radius: 5px;
+    border-radius: 7px;
     pointer-events: none;
     transition: all .5s ease;
     background-color: white;
+    object-fit: cover;
+
     /* Establece un fondo sólido */
 }
 
-.iframe__container:hover>iframe {
-    transform: scale(1.005);
+.iframe__container:hover>img {
+    transform: scale(1.008);
 }
 
 .Ubicacion__Titulo {
@@ -391,6 +393,7 @@ span {
 
 .video__container {
     height: 91vh;
+    background-color: red;
 }
 
 
@@ -419,15 +422,20 @@ span {
 
 .Inicio__titulo__desmostrativos {
     font-weight: bold;
-    font-size: 36px;
-    margin-top: 40px;
+    font-size: 37px;
+    margin-top: 65px;   
+}
+
+.Inicio__titulo__desmostrativos i{
+    padding: 5px 0;
+    margin: 0 6.5px;
 }
 
 .Inicio__descripcion__demostrativos {
     font-size: 20px;
     text-align: left;
-    margin-bottom: 40px;
-    width: 75%;
+    margin-bottom: 48px;
+    width: 65%;
     line-height: 2;
 }
 
@@ -441,6 +449,7 @@ span {
 
 .video__container__inicio {
     width: 1100px;
+    border-radius: 5px;
 }
 
 .video__inicio {

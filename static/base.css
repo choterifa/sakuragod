@@ -22,7 +22,7 @@
     width: 15%;
     background-color: #eff2f9;
     background-color: #0f1013;
-    overflow: hidden;
+    /* overflow: hidden; */
     position: relative;
 }
 
@@ -51,7 +51,7 @@
 .dropdown-toggle{
     width: 100% !important;
     font-size: 15px !important;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .navbar__lista {
