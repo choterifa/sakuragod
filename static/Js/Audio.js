@@ -6,9 +6,9 @@ let audioEncendido = true; // Inicialmente true porque el audio está reproduci�
 
 // Lista de reproducción de audios
 const playlist = [
-    "../../static/Audio/ventura.mp3",
     "../../static/Audio/mavine.mp3",
-    "../../static/Audio/Audio.mp3"
+    "../../static/Audio/Audio.mp3",
+    "../../static/Audio/ventura.mp3"
 ];
 
 let currentTrack = 0;

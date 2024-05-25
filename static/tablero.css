@@ -251,11 +251,22 @@
 }
 
 .terminos__link{
-    margin: 12px;
+    margin: 15px;
+    text-align: left;
+    color: rgba(47, 44, 44, 0.894) !important;
+}
+
+body.dark-mode .terminos__link {
+    color: #6a99ef !important;
 }
 
 .items__terminos{
-    margin: 10px;
-    width: 85%;
+    margin: 29px 0;
+    width: 84%;
+    padding: 5px;
+    line-height: 2;
+    font-size: 1.02rem;
+
 }
 
+/*  */
