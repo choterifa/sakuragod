@@ -23,11 +23,11 @@
     <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
         data-taskid="0">Agregar envio
     </button>
-    <a href="/clientes">
+    <!-- <a href="/clientes">
         <button type="button" class="btn_agregar btn border-secondary my-2">
             Agregar un cliente
         </button>
-    </a>
+    </a> -->
     <!--Nueva tabla-->
     <table class="table  table-hover table-striped align-middle">
         <thead>
@@ -247,7 +247,7 @@
                         <label for="cliente">Cliente:</label>
                         <select class="form-control " id="cliente" name="cliente" required>
                             <!-- Opción por defecto -->
-                            <option value="">Selecciona una opción</option>
+                            <option selected disabled value="">Selecciona una opción</option>
                             {% for client in clientes %}
                             <option value="{{ client[0] }}">{{ client[1] }} {{ client[2] }} </option>
                             {% endfor %}
@@ -258,7 +258,7 @@
                         <label for="producto">Elige el producto:</label>
                         <select class="form-control disabled" id="producto" name="producto" required>
                             <!-- Opción por defecto -->
-                            <option value="">Selecciona una opción</option>
+                            <option selected value="">Selecciona una opción</option>
                             {% for producto in productos %}
                             <option value="{{ producto[0] }}">{{ producto[1] }} </option>
                             {% endfor %}
@@ -293,16 +293,15 @@
                             {% endfor %}
                         </select>
                     </div>
-
-                    <div class="">
-                        <label for="status">Status:</label>
-                        <select class="form-select" id="status" name="status" required>
-                            <!-- Opción por defecto -->
+                    <!--Le queite el status lo puse fijo en 3 al ser creado-->
+                    <!-- <div class="">
+                        <label for="status">Status:</label> 
+                        <select class="form-select" id="status" name="status" disabled required>
                             {% for statu in status %}
                             <option value="{{ statu[0] }}">{{ statu[1] }}</option>
                             {% endfor %}
                         </select>
-                    </div>
+                    </div> -->
                     <div class="">
                         <label for="colonia">Colonia:</label>
                         <select class="form-select" id="colonia" name="colonia" required>

@@ -100,8 +100,8 @@ html {
 }
 
 .cifrado {
-    filter: blur(calc(1.05rem * var(--blur, 1)));
-    transition: filter var(--speed, 7s);
+    filter: blur(calc(.24rem * var(--blur, 1)));
+    transition: filter var(--speed, 6s);
 }
 
 .cifrado:hover {
@@ -428,6 +428,7 @@ span {
 
 .Inicio__descripcion__demostrativos {
     font-size: 20px;
+    font-weight: 500;
     text-align: left;
     margin-bottom: 48px;
     width: 65%;
@@ -444,7 +445,7 @@ span {
 
 .video__container__inicio {
     width: 1100px;
-    border-radius: 5px;
+    /* border-radius: 4px; */
     /* box-shadow: 0px 7px 15px -5.5px rgba(0, 0, 0, 0.119); */
 }
 
@@ -610,8 +611,6 @@ body.dark-mode .Inicio__Nav {
 }
 
 /*Modo noche*/
-
-
 body.dark-mode .Inicio__Enlace {
     color: white;
 }

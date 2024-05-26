@@ -19,42 +19,39 @@
 
     <h1 class="inventario__titulo text-center">Clientes con apartos</h1>
 
-    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
-        data-taskid="0">Apartar producto
+    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal"
+        data-bs-target="#apartarProducto" data-taskid="0">Apartar producto
     </button>
 
     <!--Nueva tabla-->
     <table class="table  table-hover table-striped align-middle">
         <thead>
             <tr>
-                <th scope="col">Nombre</th> <!--Columna Encabezados-->
-                <th scope="col">Precio Compra</th>
-                <th scope="col">Precio Venta</th>
-                <th scope="col">Existencias</th>
-                <th scope="col">Proveedor</th>
-                <th scope="col">Categoria</th>
+                <th scope="col">Nombres</th> <!--Columna Encabezados-->
+                <th scope="col">Apellidos</th>
+                <th scope="col">Abonado</th>
+                <th scope="col">Pendiente</th>
+                <th scope="col">Dias restantes</th>
+                <th scope="col">Producto apartado</th>
                 <th scope="col">Editar</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            {% for indice in caja %} <!--Nombre cualquiera + el que recibe de la variable-->
+            {% for indice in apartados %}
             <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
-                <td>${{ indice[2] }}</td>
-                <td>${{ indice[3] }}</td>
+                <td>{{ indice[2] }} {{ indice[3]}}</td>
                 <td>{{ indice[5] }}</td>
-                <td>{{ indice[8] }}</td>
-                <td>{{ indice[10] }}</td>
+                <td>{{ indice[6] }}</td>
+                <td>{{ indice[7] }}</td>
+                <td>{{ indice[14] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
                         <button type="button" id="editar_btn" class="btn btn-primary btn-sm btn__editar"
-                            data-bs-toggle="modal" data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}"
-                            data-bs-nombre="{{indice[1]}}" data-bs-compra="{{indice[2]}}" data-bs-venta="{{indice[3]}}"
-                            data-bs-ganancia="{{indice[4]}}" data-bs-existencias="{{indice[5]}}"
-                            data-bs-existencias-deseadas="{{indice[6]}}" data-bs-proveedor="{{indice[7]}}"
-                            data-bs-categoria="{{indice[9]}}">Editar <i class="fas fa-edit "></i>
-                            <!--Cambia el orden del modal js-->
+                            data-bs-toggle="modal" data-bs-target="#apartarProducto" data-bs-cliente="{{indice[0]}}"
+                            data-bs-producto="{{indice[13]}}" data-bs-abonado="{{indice[5]}}"
+                            data-bs-pendiente="{{indice[6]}}">Editar <i class="fas fa-edit "></i>
                         </button>
 
                         <!-- <form action="/eliminar_producto" method="POST" id="eliminarp">
@@ -75,5 +72,76 @@
     </table>
 </section>
 
+
+<!-- Modal para Apartar prodcuto -->
+<div class="modal fade" id="apartarProducto" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header"><!--Header-->
+                <h5 class="modal-title">Apartar producto</h5> <!--id-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body"> <!--Formulario-->
+                <form id="apartar_producto" method="POST" action="{{ url_for('agregar_apartado')}}">
+                    <div class="">
+                        <label for="cliente">Cliente:</label>
+                        <select class="form-select" id="cliente" name="cliente" required>
+                            <!-- Opción por defecto -->
+                            <option selected value="">Selecciona una opción</option>
+                            {% for client in clientes %}
+                            <option value="{{ client[0] }}">{{ client[1] }} {{ client[2] }} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="">
+                        <label for="producto">Producto a apartar:</label>
+                        <select class="form-select" id="producto" name="producto" required>
+                            <!-- Opción por defecto -->
+                            <option selected value="">Selecciona una opción</option>
+                            {% for producto in productos %}
+                            <option value="{{ producto[0] }}">{{ producto[1] }} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="">
+                        <label for="id_apartado">Nº Apartado</label>
+                        <input type="number" class="form-control" id="id_apartado" name="id_apartado" min="1" max="1000"
+                            value="0" placeholder="Opcional" disabled required>
+                    </div>
+                    <div class="">
+                        <label for="cantidad">Cantidad</label>
+                        <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" max="100"
+                            placeholder="2" required>
+                    </div>
+                    <div class="">
+                        <label for="abono">Abono Incial</label>
+                        <input type="number" class="form-control" id="abono" name="abono" min="0" max="2000"
+                            placeholder="500" required>
+                    </div>
+
+                    <div class="text-center mt-2">
+                        <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<!--Para obtener el id y mandarlo al modal-->
+<script>
+    function setProductId(productId) {
+        document.getElementById('indice_id').value = productId;
+    }
+</script>
 
 {%endblock%}

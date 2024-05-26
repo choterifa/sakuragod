@@ -10,7 +10,7 @@ from flask import (
 )
 import os
 import config
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
@@ -274,6 +274,7 @@ def inventario():
             producto.ID_Producto DESC;
         """)
         Productos = cur.fetchall()
+        # Avisos de escasos productos
         cur.execute("""
         SELECT
             producto.Nombre,
@@ -283,9 +284,17 @@ def inventario():
             WHERE producto.Existencias <=5;
         """)
         producto_escaso = cur.fetchall()
-        # print(producto_escaso)
+        # Actualizar ganancia del producto
+        cur.execute("""
+        UPDATE 
+            producto 
+        SET producto.Ganancia_Producto = Precio_Venta - Precio_Compra;
+        """)
+        mysql.connection.commit()
+        # proveedor form
         cur.execute("SELECT ID_Proveedor, Empresa  FROM proveedor")
         Proveedor = cur.fetchall()
+        # Categorias form
         cur.execute("SELECT * FROM categorias")
         Categorias = cur.fetchall()
         cur.close()
@@ -318,7 +327,7 @@ def clientes():
         cur = mysql.connection.cursor()
         # Ver todos los datos de clientes
         cur.execute("""
-       SELECT
+        SELECT
             clientes.ID_Cliente,
             clientes.Nombres,
             clientes.Apellido_P,
@@ -426,6 +435,7 @@ def envios():
             envios.ID_Envios ASC;
             """)
         envios = cur.fetchall()
+        # Obtener clientes para form
         cur.execute("""
         SELECT
             clientes.ID_Cliente,
@@ -435,6 +445,7 @@ def envios():
             clientes;
             """)
         clientes = cur.fetchall()
+        # Obtener destino para form
         cur.execute("""
         SELECT
             destino.ID_Destino,
@@ -467,7 +478,7 @@ def envios():
             producto;
             """)
         productos = cur.fetchall()
-        # Para obtener la fecha en el form date
+        # Actualizar dias de envio para los que estan en cpae
         cur.execute("""
         UPDATE envios, dia_envio, mes_envio, anio_envio SET envios.Dias_Para_El_Envio = DATEDIFF(STR_TO_DATE(CONCAT(anio_envio.Anio_Envio, '-',
             CASE mes_envio.Mes_Envio
@@ -579,7 +590,7 @@ def envios():
         envios_cancelados = cur.fetchall()
         # Envios entregados
         cur.execute("""
-         SELECT
+        SELECT
             clientes.ID_Cliente,
             clientes.Nombres,
             clientes.Apellido_P,
@@ -642,28 +653,74 @@ def envios():
 def apartados():
     if "email" in session:
         cur = mysql.connection.cursor()
+        # tabla principal
         cur.execute("""
-        SELECT
-            clientes.Nombres,
+        SELECT 
+            clientes.ID_Cliente,
+            clientes.Nombres,    
             clientes.Apellido_P,
-            envios.*,
-            destino.Destino,
-            status_envio.Status_Envio
-        FROM
-            clientes,
-            envios,
-            relacion_c_p_a_e,
-            destino,
-            status_envio
-        WHERE
-            relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
-            AND relacion_c_p_a_e.ID_Envio  = envios.ID_Envios
-            AND envios.ID_Destino = destino.ID_Destino
-            AND envios.ID_StatusE = status_envio.ID_StatusE ;
+            clientes.Apellido_M,
+            apartados.ID_Apartados,
+            apartados.Cantidad_Abonada,
+            apartados.Deuda_Pendiente,
+            apartados.Dias_Restantes,
+            apartados.Fecha_Apartado,
+            apartados.Fecha_Limite,
+            apartados.Fecha_UltimoPago,    
+            apartados.ID_Status,
+            status_apartados.Status_Apartado,
+            producto.ID_Producto,
+            producto.Nombre
+        FROM 
+            clientes
+            INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
+            INNER JOIN apartados ON relacion_c_p_a_e.ID_Apartado = apartados.ID_Apartados
+            INNER JOIN status_apartados ON apartados.ID_Status = status_apartados.ID_Status
+            INNER JOIN producto ON relacion_c_p_a_e.ID_Producto = producto.ID_Producto
+            WHERE 
+            status_apartados.ID_Status = 1
+        ORDER BY 
+            apartados.ID_Apartados ASC;
             """)
         apartados = cur.fetchall()
+        cur = mysql.connection.cursor()
+        # clientes form
+        cur.execute("""
+        SELECT 
+                clientes.ID_Cliente,
+                clientes.Nombres,
+                clientes.Apellido_P
+            FROM 
+                clientes;
+            """)
+        clientes = cur.fetchall()
+        # productos form
+        cur.execute("""
+        SELECT 
+            producto.ID_Producto,
+            producto.Nombre  
+        FROM 
+            producto;
+            """)
+        productos = cur.fetchall()
+        # dias restantes
+        cur.execute(
+            """
+            UPDATE apartados
+            SET Dias_Restantes = DATEDIFF(Fecha_Limite, CURDATE());
+            """, )
+        mysql.connection.commit()
+        # deuda pendiente
+        cur.execute(
+            """
+            UPDATE 
+                apartados 
+            SET 
+                apartados.Deuda_Pendiente   = Deuda_Inicial  - Cantidad_Abonada;
+            """, )
+        mysql.connection.commit()
         cur.close()
-        return render_template("apartados.html", apartados=apartados)
+        return render_template("apartados.html", productos=productos, clientes=clientes, apartados=apartados)
     else:
         return render_template("inicio/iniciar_sesion.html")
 
@@ -958,6 +1015,7 @@ def agregar_envio():
     if request.method == 'POST':
         cliente = request.form['cliente']
         producto = request.form['producto']
+        # Foraneas para 'relacion_c_p_a_e'
         calle = request.form['calle']
         cruzamiento_1 = request.form['cruzamiento_1']
         cruzamiento_2 = request.form['cruzamiento_2']
@@ -967,26 +1025,75 @@ def agregar_envio():
         id_mes = fecha.month
         id_año = fecha.year - 2023
         destino = request.form['destino']
-        status = request.form['status']
+        # status = request.form['status']
         colonia = request.form['colonia']
         cur = mysql.connection.cursor()
         cur.execute(
             "INSERT INTO envios (Calle, Cruzamiento_1, Cruzamiento_2, ID_DE, ID_ME, ID_AE, ID_Destino, ID_StatusE, ID_C) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-            (calle, cruzamiento_1, cruzamiento_2, id_dia, id_mes, id_año, destino, status, colonia))
+            (calle, cruzamiento_1, cruzamiento_2, id_dia, id_mes, id_año, destino, 3, colonia))
         mysql.connection.commit()
         # Obtener el último ID insertado en la tabla 'envios'
         cur.execute("SELECT MAX( envios.ID_Envios) FROM envios ;")
         id_envio = cur.fetchone()[0]
-        # print(id_envio)
         # Insertar en la tabla 'relacion_c_p_a_e'
         cur.execute(
             "INSERT INTO relacion_c_p_a_e (ID_Cliente, ID_Producto, ID_Envio) VALUES (%s, %s, %s)",
             (cliente, producto, id_envio)
         )
-
         mysql.connection.commit()
         cur.close()
         return redirect(url_for('envios'))
+
+
+@app.route('/agregar_apartado', methods=['POST'])  # insertar datos
+def agregar_apartado():
+    if request.method == 'POST':
+        cliente = request.form['cliente']
+        producto = request.form['producto']
+        # Foraneas para 'relacion_c_p_a_e'
+        # id_editar_apartado = request.form['id_apartado']
+        cantidad = request.form['cantidad']
+        abonoInicial = request.form['abono']
+
+        # Obtener la fecha actual
+        fecha_actual = datetime.now()
+
+        # Agregar 15 días a la fecha actual
+        fecha_limite = fecha_actual + timedelta(days=15)
+
+        # Formatear las fechas a formato 'YYYY-MM-DD'
+        fecha_actual = fecha_actual.strftime('%Y-%m-%d')
+        fecha_limite = fecha_limite.strftime('%Y-%m-%d')
+
+        cur = mysql.connection.cursor()
+        # Obtener la dueda multiplicando producto * cantidad
+        cur.execute("""
+            SELECT 
+                producto.Precio_Venta * %s as Deuda
+            FROM 
+                producto 
+            WHERE 
+                producto.ID_Producto = %s;
+            """, (cantidad, producto))
+        mysql.connection.commit()
+        deudaInicial = cur.fetchone()[0]
+        # Crear el apartado
+        cur.execute(
+            "INSERT INTO apartados (Cantidad_Abonada, Deuda_Inicial, ID_Status, Fecha_Apartado,Fecha_Limite ) VALUES (%s, %s, 1, %s,%s)",
+            (abonoInicial, deudaInicial, fecha_actual, fecha_limite))
+        mysql.connection.commit()
+        # Obtener el último ID insertado en la tabla 'apartados'
+        cur.execute("SELECT MAX( apartados.ID_Apartados ) FROM apartados;")
+        id_apartado = cur.fetchone()[0]
+        # Insertar en la tabla 'relacion_c_p_a_e'
+        cur.execute(
+            "INSERT INTO relacion_c_p_a_e (ID_Cliente, ID_Producto, ID_Apartado) VALUES (%s, %s, %s)",
+            (cliente, producto, id_apartado)
+        )
+        mysql.connection.commit()
+
+        cur.close()
+        return redirect(url_for('apartados'))
 
 
 @app.route('/editar_envio/<int:id>', methods=['POST'])  # Enviar

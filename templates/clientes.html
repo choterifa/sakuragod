@@ -43,9 +43,9 @@
                 <td>{{ indice[2] }} {{ indice[3] }}</td>
                 <td>
 
-                        {{ '-' if indice[4] is none else indice[4]}}
+                    {{ '-' if indice[4] is none else indice[4]}}
                 </td>
-                <td>{{  '-' if indice[5] is none else indice[5] }}</td> 
+                <td>{{ '-' if indice[5] is none else indice[5] }}</td>
 
                 <td>{{ indice[6] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
@@ -73,6 +73,7 @@
 
                 </td>
             </tr>
+
             {% endfor %}
         </tbody>
     </table>
@@ -98,22 +99,22 @@
                         <label for="nombre">Nombre:</label>
                         <input type="text" onpaste="return false;" class="form-control" id="nombre" name="nombre"
                             pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" maxlength="40" required>
-                            <small>solo letras</small>
+                        <small>solo letras</small>
                     </div>
                     <div class="">
                         <label for="apellido_p">Apellido Paterno:</label>
                         <input type="text" onpaste="return false;" class="form-control" id="apellido_p"
-                            name="apellido_p" pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$"  maxlength="20" required>
+                            name="apellido_p" pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" maxlength="20" required>
                     </div>
                     <div class="">
                         <label for="apellido_m">Apellido Materno:</label>
                         <input type="text" onpaste="return false;" class="form-control" id="apellido_m"
-                            name="apellido_m" pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$"  maxlength="20" required>
+                            name="apellido_m" pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" maxlength="20" required>
                     </div>
                     <div class="">
                         <label for="telefono">Teléfono:</label>
-                        <input type="tel" class="form-control" onpaste="return false;" id="telefono" name="telefono" minlength="10"
-                            maxlength="10" pattern="[0-9]{10}" placeholder="1234567890" required>
+                        <input type="tel" class="form-control" onpaste="return false;" id="telefono" name="telefono"
+                            minlength="10" maxlength="10" pattern="[0-9]{10}" placeholder="1234567890" required>
                     </div>
                     <!-- <div class="">
                         <label for="telefono">Telefono:</label>
@@ -179,13 +180,14 @@
         <div class="modal-content">
 
             <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Eliminar Producto</h5> <!--id-->
+                <h5 class="modal-title">Eliminar Cliente</h5> <!--id-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
 
             <div class="modal-body"> <!--Formulario-->
-                <h3>¿Deseas eliminarlo?</h3>
+                <h3>¿Deseas eliminar al cliente?</h3>
+
             </div>
             <div class="modal-footer">
                 <form action="/eliminar_cliente" method="POST" id="eliminarp">
