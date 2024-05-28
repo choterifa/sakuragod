@@ -18,9 +18,18 @@
         {% endfor %}
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
-
     {% endif %}
     {% endwith %}
+
+
+    {% if actualizado%}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Se actualizó el perfil!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif%}
+
 
     <div class="container__perfil">
         <h1 class="titulo__perfil">Editar Perfil</h1>
@@ -50,13 +59,14 @@
             <h2 class="data__perfil">{{login[4]}} </h2>
         </div>
 
-        <button type="submit" class="btn  bg-body-secondary bg-black m-2  " data-bs-toggle="offcanvas" href="#perfi_lateral">Editar</button>
+        <button type="submit" class="btn  bg-body-secondary bg-black m-2  " data-bs-toggle="offcanvas"
+            href="#perfi_lateral">Editar</button>
     </div>
 
 
 
 
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="perfi_lateral" ">
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="perfi_lateral">
         <div class=" offcanvas-header">
         <h5 class="offcanvas-title">Editar Perfil</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>

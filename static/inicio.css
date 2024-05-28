@@ -207,8 +207,8 @@ html {
     height: 645px;
     box-shadow: 2px 4px 12px -2px #3c3a3c4e;
     border-radius: 7px;
-    pointer-events: none;
-    transition: all .5s ease;
+    /* pointer-events: none; */
+    /* transition: all .5s ease; */
     background-color: white;
     object-fit: cover;
 
@@ -216,7 +216,7 @@ html {
 }
 
 .iframe__container:hover>img {
-    transform: scale(1.008);
+    /* transform: scale(1.008); */
 }
 
 .Ubicacion__Titulo {
@@ -323,13 +323,13 @@ span {
 }
 
 .imagen__contacto:hover {
-    transform: scale(1.022) rotate(3deg);
+    transform: scale(1.022);
     cursor: pointer;
 }
 
-.imagen__contacto:active {
+/* .imagen__contacto:active {
     transform: scale(1.25);
-}
+} */
 
 .contacto__parche__container {
     position: absolute;

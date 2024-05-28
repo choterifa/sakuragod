@@ -29,12 +29,12 @@
 }
 
 .resumen__titulo {
-    margin: 30px 0px 0px 30px;
+    margin: 20px 0px 10px 40px;
 }
 
 .resumen__enlaces {
     text-decoration: none;
-    color: #80f0ba;
+    color: #0b0b0bbe ;
 }
 
 .resumen__cards {
@@ -43,7 +43,6 @@
     width: 100%;
     justify-content: space-around;
     padding: 18px;
-    margin: 10px 0 20px 0px;
     /* background-color: red; */
 }
 
@@ -53,7 +52,7 @@
     height: 120px;
     background-color: #f3f3f3c6;
     border-radius: 10px;
-    box-shadow: 0px 0px 5px 0px rgba(73, 71, 71, 0.194);
+    box-shadow: 0px 2px 5px 0px rgba(73, 71, 71, 0.194);
 }
 
 .resumen__card__item:hover,
@@ -61,7 +60,7 @@
     /*tarjetas*/
     transform: scale(1.04);
     cursor: pointer;
-    color: #187347;
+    color: #0a4e2d;
     background-color: #80f0ba;
 }
 
@@ -140,11 +139,18 @@
     background-color: #f3f3f3a4;
     border-radius: 10px;
     box-shadow: 0px 0px 5px 0px rgba(73, 71, 71, 0.401);
+    transition: all .4s ease;
 }
+
+.resumen__card__item2:hover{
+    transform: scale(1.01);
+    background-color: rgba(128, 128, 128, 0.119);
+}
+
 
 .resumen__card__titulo2 {
     /*titulos widgets*/
-    margin: 5px 0 20px 25px;
+    margin: 10px 0 10px 25px;
 }
 
 .resumen__card__items__vendidos {
@@ -189,13 +195,14 @@
 .resumen__card__item2--reebolso {
     /*los 2 de abajo*/
     width: 21%;
-    height: 140px;
-    min-height: 10px;
+    height: 135px;
+    min-height: 100px;
+    transition: all .4s ease;
 }
 
 .resumen__card__item2--reebolso:hover {
-    transform: scale(1.04);
-    background-color: rgba(251, 58, 58, 0.649);
+    transform: scale(1.02);
+    background-color: rgba(240, 51, 51, 0.306);
 }
 
 
@@ -268,5 +275,11 @@ body.dark-mode .terminos__link {
     font-size: 1.02rem;
 
 }
+.custom-transparent-table {
+    background-color: transparent !important;
+}
 
-/*  */
+.custom-transparent-table th,
+.custom-transparent-table td {
+    background-color: transparent !important;
+}

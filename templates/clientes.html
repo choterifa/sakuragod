@@ -20,20 +20,20 @@
 
     <h1 class="inventario__titulo text-center">Clientes</h1>
 
-    <button type="button" class="btn_agregar btn btn-dark my-2" data-bs-toggle="modal"
+    <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal"
         data-bs-target="#abrirModalCliente" data-taskid="0">Agregar un Cliente
     </button>
 
     <!--Nueva tabla-->
-    <table class="table  table-hover table-striped align-middle">
+    <table class="table  table-hover table-striped align-middle mt-3">
         <thead>
             <tr>
                 <th scope="col">Nombre</th> <!--Columna Encabezados-->
                 <th scope="col">Apellidos</th>
-                <th scope="col"><a href="/caja">Total adeudo</a></th>
+                <th scope="col"><a href="/caja" style="text-decoration: none;">Total adeudo</a></th>
                 <th scope="col">Celular</th>
-                <th scope="col"><a href="/apartados">Apartados</a></th>
-                <th scope="col">Editar</th>
+                <th scope="col"><a href="/apartados" style="text-decoration: none;">Apartados</a></th>
+                <th scope="col" style="width: 140px;">Editar</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -41,12 +41,8 @@
             <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
                 <td>{{ indice[2] }} {{ indice[3] }}</td>
-                <td>
-
-                    {{ '-' if indice[4] is none else indice[4]}}
-                </td>
+                <td>{{ '-' if indice[4] is none else indice[4]}}</td>
                 <td>{{ '-' if indice[5] is none else indice[5] }}</td>
-
                 <td>{{ indice[6] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
@@ -58,8 +54,8 @@
                                 class=" fas fa-edit "></i>
                         </button>
 
-                        <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
-                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar<i
+                        <button onclick="setProductId('{{ indice[0] }}', '{{ indice[1] }}')" data-bs-toggle="modal"
+                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar <i
                                 class="fas fa-trash-alt"></i>
                         </button>
 
@@ -186,7 +182,7 @@
             </div>
 
             <div class="modal-body"> <!--Formulario-->
-                <h3>¿Deseas eliminar al cliente?</h3>
+                <h3>¿Deseas eliminar al cliente <br><strong id="cliente_nombre" class="mt-3" style="display: inline-block;"></strong>? </h3>
 
             </div>
             <div class="modal-footer">
@@ -195,7 +191,7 @@
                     <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
                     </button>
                 </form>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salir
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir
                 </button>
             </div>
         </div>
@@ -248,8 +244,9 @@
 
 <!--Para obtener el id y mandarlo al modal-->
 <script>
-    function setProductId(productId) {
+    function setProductId(productId, clienteNombre) {
         document.getElementById('indice_id').value = productId;
+        document.getElementById('cliente_nombre').textContent = clienteNombre;
     }
 </script>
 

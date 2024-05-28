@@ -1,5 +1,6 @@
 from flask import (
     Flask,
+    get_flashed_messages,
     render_template,
     request,
     redirect,
@@ -61,15 +62,18 @@ def productos():
 
 @app.route("/editar_perfil")
 def editar_perfil():
+    actualizado = request.args.get('actualizado')
+
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM login WHERE Correo = %s", (session["email"],))
     login = cur.fetchone()
 
-    return render_template("editar_perfil.html", login=login)
+    return render_template("editar_perfil.html", login=login, actualizado=actualizado)
 
 
 @app.route('/editar_login', methods=['POST'])
 def editar_login():
+
     cur = mysql.connection.cursor()
     if request.method == 'POST':
         id = request.form['indice_id']
@@ -105,9 +109,9 @@ def editar_login():
             )
             mysql.connection.commit()
             cur.close()
-
             # Actualizar la sesión
             session["email"] = correo
+            return redirect(url_for('editar_perfil', actualizado=True))
 
     return redirect(url_for('editar_perfil'))
 
@@ -195,45 +199,50 @@ def tablero():
         """)
         total_clientes = cur.fetchone()
         cur.execute("""
-            SELECT
-            clientes.ID_Cliente,
+        SELECT 
             clientes.Nombres,
-            clientes.Apellido_P,
-            apartados.*,
-            status_apartados.Status_Apartado,
-            producto.ID_Producto,
-            producto.Nombre
-        FROM
-            clientes,
+            clientes.Apellido_P ,
+            clientes.Apellido_M,
+            apartados.Deuda_Pendiente 
+        FROM 
             apartados,
-            relacion_c_p_a_e,
-            status_apartados,
-            producto
-        WHERE
-            relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
-            AND relacion_c_p_a_e.ID_Apartado  = apartados.ID_Apartados
-            AND relacion_c_p_a_e.ID_Producto = producto.ID_Producto
-            AND apartados.ID_Status = status_apartados.ID_Status
-            AND status_apartados.ID_Status = 1;
+            clientes,
+            relacion_c_p_a_e 
+        WHERE 
+            apartados.ID_Apartados = relacion_c_p_a_e.ID_Apartado 
+            AND clientes.ID_Cliente = relacion_c_p_a_e.ID_Cliente 
+        ORDER BY 
+            Deuda_Pendiente DESC ;
         """)
         deudores = cur.fetchall()
         cur.execute("""
-        SELECT
-            producto.Nombre,
-            producto_venta.ID_Producto,
-            COUNT(*) AS cantidad
-        FROM
-            producto_venta
-        JOIN
-            producto ON producto_venta.ID_Producto = producto.ID_Producto
-        GROUP BY
-            producto_venta.ID_Producto, producto.Nombre
-        ORDER BY
-            cantidad DESC
-        LIMIT 5;
+        SELECT 
+            SUM(Deuda_Pendiente) AS Total_Deuda_Pendiente
+        FROM 
+            apartados,
+            clientes,
+            relacion_c_p_a_e 
+        WHERE relacion_c_p_a_e.ID_Apartado = apartados.ID_Apartados 
+        AND relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente;
+        """)
+        dineroEnApartados = cur.fetchall()
+        cur.execute("""
+        SELECT 
+                producto_venta.ID_Producto,
+                producto.Nombre,
+                SUM(producto_venta.Cantidad_Vendida) AS cantidad
+            FROM 
+                producto_venta
+            JOIN 
+                producto ON producto_venta.ID_Producto = producto.ID_Producto
+            GROUP BY  
+                producto_venta.ID_Producto, producto.Nombre
+            ORDER BY 
+                cantidad DESC 
+            LIMIT 6;
         """)
         mas_vendidos = cur.fetchall()
-        return render_template("tablero.html", email=session["email"], clientes=clientes, reeinvertir=reeinvertir, ingresos_del_corte=ingresos_del_corte, ganancias=ganancias,
+        return render_template("tablero.html", email=session["email"], dineroEnApartados=dineroEnApartados, clientes=clientes, reeinvertir=reeinvertir, ingresos_del_corte=ingresos_del_corte, ganancias=ganancias,
                                envios=envios, mas_vendidos=mas_vendidos, apartados=apartados, deudores=deudores, total_producto=total_producto, total_ventas=total_ventas, total_clientes=total_clientes)
     else:
         return render_template("inicio/iniciar_sesion.html")
@@ -274,11 +283,19 @@ def inventario():
             producto.ID_Producto DESC;
         """)
         Productos = cur.fetchall()
+        cur.execute("""
+        SELECT 
+            producto.ID_Producto,
+            producto.Nombre,
+            producto.Existencias_Deseadas - producto.Existencias AS 'productos faltantes'
+        FROM producto;
+        """)
+        rellenar_a_deseado = cur.fetchall()
         # Avisos de escasos productos
         cur.execute("""
         SELECT
             producto.Nombre,
-            producto.Existencias 
+            producto.Existencias
             FROM
             producto
             WHERE producto.Existencias <=5;
@@ -286,8 +303,8 @@ def inventario():
         producto_escaso = cur.fetchall()
         # Actualizar ganancia del producto
         cur.execute("""
-        UPDATE 
-            producto 
+        UPDATE
+            producto
         SET producto.Ganancia_Producto = Precio_Venta - Precio_Compra;
         """)
         mysql.connection.commit()
@@ -299,7 +316,7 @@ def inventario():
         Categorias = cur.fetchall()
         cur.close()
 
-        return render_template('inventario.html', update=update, eliminado=eliminado, Productos=Productos, Proveedor=Proveedor, Categorias=Categorias, producto_escaso=producto_escaso)
+        return render_template('inventario.html', update=update, eliminado=eliminado, rellenar_a_deseado=rellenar_a_deseado, Productos=Productos, Proveedor=Proveedor, Categorias=Categorias, producto_escaso=producto_escaso)
     else:
         return render_template("inicio/iniciar_sesion.html")
 
@@ -391,7 +408,10 @@ def ventas():
 @app.route('/envios', methods=['GET'])
 def envios():
     if "email" in session:
+        no_tiene_apartado = request.args.get('no_tiene_apartado')
+
         cur = mysql.connection.cursor()
+        # Tabla general
         cur.execute("""
         SELECT
             clientes.ID_Cliente,
@@ -426,6 +446,7 @@ def envios():
             INNER JOIN destino ON envios.ID_Destino = destino.ID_Destino
             INNER JOIN status_envio ON envios.ID_StatusE = status_envio.ID_StatusE
             INNER JOIN producto ON relacion_c_p_a_e.ID_Producto = producto.ID_Producto
+            INNER JOIN apartados ON relacion_c_p_a_e.ID_Apartado = apartados.ID_Apartados 
             INNER JOIN dia_envio ON envios.ID_DE = dia_envio.ID_DE
             INNER JOIN mes_envio ON envios.ID_ME = mes_envio.ID_ME
             INNER JOIN anio_envio ON envios.ID_AE = anio_envio.ID_AE
@@ -445,6 +466,33 @@ def envios():
             clientes;
             """)
         clientes = cur.fetchall()
+        cur.execute("""
+        SELECT 
+                clientes.ID_Cliente,
+                clientes.Nombres,    
+                clientes.Apellido_P,
+                envios.Dias_Para_El_Envio,
+                destino.Destino,
+                producto.Nombre,
+                envios.ID_Envios 
+                FROM 
+                clientes
+                INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
+                INNER JOIN envios ON relacion_c_p_a_e.ID_Envio = envios.ID_Envios
+                INNER JOIN destino ON envios.ID_Destino = destino.ID_Destino
+                INNER JOIN status_envio ON envios.ID_StatusE = status_envio.ID_StatusE
+                INNER JOIN producto ON relacion_c_p_a_e.ID_Producto = producto.ID_Producto
+                INNER JOIN apartados ON relacion_c_p_a_e.ID_Apartado = apartados.ID_Apartados 
+                INNER JOIN dia_envio ON envios.ID_DE = dia_envio.ID_DE
+                INNER JOIN mes_envio ON envios.ID_ME = mes_envio.ID_ME
+                INNER JOIN anio_envio ON envios.ID_AE = anio_envio.ID_AE
+            WHERE 
+                envios.ID_StatusE = 03
+            ORDER BY 
+                envios.ID_Envios 
+                LIMIT 4;
+            """)
+        proximosEnvios = cur.fetchall()
         # Obtener destino para form
         cur.execute("""
         SELECT
@@ -644,7 +692,7 @@ def envios():
         """)
         pocos_dias = cur.fetchall()
         cur.close()
-        return render_template("envios.html", envios_cancelados=envios_cancelados, pocos_dias=pocos_dias, envios=envios, envios_enviados=envios_enviados, envios_entregados=envios_entregados, productos=productos, clientes=clientes, destino=destino, status=status, colonia=colonia)
+        return render_template("envios.html", proximosEnvios=proximosEnvios, no_tiene_apartado=no_tiene_apartado, envios_cancelados=envios_cancelados, pocos_dias=pocos_dias, envios=envios, envios_enviados=envios_enviados, envios_entregados=envios_entregados, productos=productos, clientes=clientes, destino=destino, status=status, colonia=colonia)
     else:
         return render_template("inicio/iniciar_sesion.html")
 
@@ -652,12 +700,13 @@ def envios():
 @app.route('/apartados', methods=['GET'])
 def apartados():
     if "email" in session:
+
         cur = mysql.connection.cursor()
         # tabla principal
         cur.execute("""
-        SELECT 
+        SELECT
             clientes.ID_Cliente,
-            clientes.Nombres,    
+            clientes.Nombres,
             clientes.Apellido_P,
             clientes.Apellido_M,
             apartados.ID_Apartados,
@@ -666,43 +715,112 @@ def apartados():
             apartados.Dias_Restantes,
             apartados.Fecha_Apartado,
             apartados.Fecha_Limite,
-            apartados.Fecha_UltimoPago,    
+            apartados.Fecha_UltimoPago,
             apartados.ID_Status,
             status_apartados.Status_Apartado,
             producto.ID_Producto,
             producto.Nombre
-        FROM 
+        FROM
             clientes
             INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
             INNER JOIN apartados ON relacion_c_p_a_e.ID_Apartado = apartados.ID_Apartados
             INNER JOIN status_apartados ON apartados.ID_Status = status_apartados.ID_Status
             INNER JOIN producto ON relacion_c_p_a_e.ID_Producto = producto.ID_Producto
-            WHERE 
+            WHERE
             status_apartados.ID_Status = 1
-        ORDER BY 
+        ORDER BY
             apartados.ID_Apartados ASC;
             """)
         apartados = cur.fetchall()
+        cur.execute("""
+        SELECT
+            clientes.ID_Cliente,
+            clientes.Nombres,
+            clientes.Apellido_P,
+            clientes.Apellido_M,
+            apartados.ID_Apartados,
+            apartados.Cantidad_Abonada,
+            apartados.Deuda_Inicial,
+            # apartados.Dias_Restantes,
+            apartados.Fecha_Apartado,
+            apartados.Fecha_Limite,
+            apartados.Fecha_UltimoPago,
+            apartados.Fecha_Pagada,  
+            apartados.ID_Status,
+            status_apartados.Status_Apartado,
+            producto.ID_Producto,
+            producto.Nombre
+        FROM
+            clientes
+            INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
+            INNER JOIN apartados ON relacion_c_p_a_e.ID_Apartado = apartados.ID_Apartados
+            INNER JOIN status_apartados ON apartados.ID_Status = status_apartados.ID_Status
+            INNER JOIN producto ON relacion_c_p_a_e.ID_Producto = producto.ID_Producto
+            WHERE
+            status_apartados.ID_Status = 2
+        ORDER BY
+            apartados.ID_Apartados ASC;
+            """)
+        apartadosPagados = cur.fetchall()
+        cur.execute("""
+        SELECT
+            clientes.ID_Cliente,
+            clientes.Nombres,
+            clientes.Apellido_P,
+            clientes.Apellido_M,
+            apartados.ID_Apartados,
+            apartados.Fecha_Cancelada,  
+            apartados.ID_Status,
+            status_apartados.Status_Apartado,
+            producto.ID_Producto,
+            producto.Nombre
+        FROM
+            clientes
+            INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
+            INNER JOIN apartados ON relacion_c_p_a_e.ID_Apartado = apartados.ID_Apartados
+            INNER JOIN status_apartados ON apartados.ID_Status = status_apartados.ID_Status
+            INNER JOIN producto ON relacion_c_p_a_e.ID_Producto = producto.ID_Producto
+            WHERE
+            status_apartados.ID_Status = 3
+        ORDER BY
+            apartados.ID_Apartados ASC;
+            """)
+        apartadosCancelados = cur.fetchall()
         cur = mysql.connection.cursor()
         # clientes form
         cur.execute("""
-        SELECT 
+        SELECT
                 clientes.ID_Cliente,
                 clientes.Nombres,
                 clientes.Apellido_P
-            FROM 
+            FROM
                 clientes;
             """)
         clientes = cur.fetchall()
         # productos form
         cur.execute("""
-        SELECT 
+        SELECT
             producto.ID_Producto,
-            producto.Nombre  
-        FROM 
+            producto.Nombre
+        FROM
             producto;
             """)
         productos = cur.fetchall()
+        cur.execute("""
+        SELECT 
+            clientes.Nombres,
+            clientes.Apellido_P,
+            apartados.Dias_Restantes 
+        FROM 
+            clientes,
+            apartados,
+            relacion_c_p_a_e 
+        WHERE 
+            clientes.ID_Cliente = relacion_c_p_a_e.ID_Cliente 
+            AND apartados.ID_Apartados = relacion_c_p_a_e.ID_Apartado 
+            AND apartados.Dias_Restantes <=2;
+            """)
+        pocosDiasApartado = cur.fetchall()
         # dias restantes
         cur.execute(
             """
@@ -713,16 +831,88 @@ def apartados():
         # deuda pendiente
         cur.execute(
             """
-            UPDATE 
-                apartados 
-            SET 
+            UPDATE
+                apartados
+            SET
                 apartados.Deuda_Pendiente   = Deuda_Inicial  - Cantidad_Abonada;
             """, )
         mysql.connection.commit()
         cur.close()
-        return render_template("apartados.html", productos=productos, clientes=clientes, apartados=apartados)
+        abono_vista = get_flashed_messages(category_filter=['abono'])
+        abono_exitoso = get_flashed_messages(category_filter=['abono_exitoso'])
+
+        return render_template("apartados.html", abono_exitoso=abono_exitoso, abono_vista=abono_vista, apartadosCancelados=apartadosCancelados, apartadosPagados=apartadosPagados, pocosDiasApartado=pocosDiasApartado, productos=productos, clientes=clientes, apartados=apartados)
     else:
         return render_template("inicio/iniciar_sesion.html")
+
+
+@app.route('/ver_abonos', methods=['POST'])
+def ver_abonos():
+    cur = mysql.connection.cursor()
+    id_apartado = request.form['id_apartado']
+    cur.execute("""
+        SELECT abonos.ID_Abono,abonos.Fecha, abonos.Cantidad_Abonada 
+        FROM abonos 
+        WHERE abonos.ID_Apartado = %s;
+    """, (id_apartado,))
+    abonos = cur.fetchall()
+
+    if abonos:
+        # Formatear la fecha en Python antes de pasarla a la plantilla
+        abonos_formateados = [{'fecha': abono[1].strftime(
+        "%d/%m/%Y"), 'cantidad': abono[2]} for abono in abonos]
+
+        # Guardar cada abono formateado en un mensaje flash con una categoría 'abono'
+        for abono in abonos_formateados:
+            flash(abono, 'abono')
+        cur.close()
+    else:
+        flash('No hay abonos para este apartado.', 'abono')
+
+    return redirect(url_for('apartados'))
+
+
+@app.route('/abonar_apartado', methods=['POST'])
+def abonar_apartado():
+    if "email" in session:
+        id_apartado = request.form['indice_id']
+        cantidad_abono = float(
+            request.form['cantidad_abono'])  # Convertir a float
+
+        cur = mysql.connection.cursor()
+        cur.execute("""
+        SELECT 
+            apartados.Deuda_Pendiente 
+        FROM apartados 
+        WHERE ID_Apartados  = %s;
+        """, (id_apartado,))
+        limiteAbono = cur.fetchone(
+        )[0]  # Extraer el primer elemento de la tupla
+
+        if cantidad_abono <= limiteAbono:
+            # Actualizar abono
+            cur.execute(""" 
+            UPDATE apartados
+            SET Cantidad_Abonada = COALESCE(Cantidad_Abonada, 0) + %s,
+            Deuda_Pendiente = Deuda_Pendiente - %s
+            WHERE ID_Apartados = %s;
+            """, (cantidad_abono, cantidad_abono, id_apartado))
+            mysql.connection.commit()
+
+            # Marcar como completado si el adeudo es 0
+            cur.execute(""" 
+            UPDATE apartados 
+            SET ID_Status = 2, Fecha_Pagada = CURDATE()
+            WHERE Deuda_Pendiente = 0 AND ID_Apartados = %s;
+            """, (id_apartado,))
+            mysql.connection.commit()
+            flash('Abono realizado con éxito.', 'abono_exitoso')
+        else:
+            flash('La cantidad de abono no puede exceder el límite.''abono_exitoso')
+
+        cur.close()
+
+    return redirect(url_for('apartados'))
 
 
 @app.route('/categorias', methods=['GET', 'POST'])
@@ -758,10 +948,31 @@ def categorias():
 def proveedor():
     if "email" in session:
         cur = mysql.connection.cursor()
-        cur.execute("SELECT Empresa FROM proveedor")
+        # Tabla general
+        cur.execute("""
+        SELECT 
+            proveedor.ID_Proveedor,
+            proveedor.Empresa,
+            proveedor.ID_RE1 as reparto1,
+            reparto1.Dia_Reparto as Dia_Reparto1,
+            proveedor.ID_RE2 as reparto2,
+            reparto2.Dia_Reparto as Dia_Reparto2
+        FROM 
+            proveedor
+        LEFT JOIN 
+            reparto AS reparto1 ON proveedor.ID_RE1 = reparto1.ID_REP
+        LEFT JOIN 
+            reparto AS reparto2 ON proveedor.ID_RE2 = reparto2.ID_REP;            
+                    
+        """)
         proveedor = cur.fetchall()
+        # Dia reparto form
+        cur.execute("""
+        SELECT * FROM  reparto ;
+        """)
+        reparto = cur.fetchall()
         cur.close()
-        return render_template('proveedor.html', proveedor=proveedor)
+        return render_template("proveedor.html", reparto=reparto, proveedor=proveedor)
     else:
         return render_template("inventario.html")
 
@@ -851,7 +1062,7 @@ def agregar_producto():
         nombre = request.form['nombre']
         precio_compra = request.form['precio_compra']
         precio_venta = request.form['precio_venta']
-        ganancia = request.form['ganancia']
+        # ganancia = request.form['ganancia']
         existencias = request.form['existencias']
         existencias_deseadas = request.form['existencias_deseadas']
         proveedor = request.form['proveedor']
@@ -863,8 +1074,8 @@ def agregar_producto():
         cur = mysql.connection.cursor()
         # Obtener la fecha y hora actual
         # fecha_actual = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        cur.execute("INSERT INTO Producto (Nombre, Precio_Compra, Precio_Venta, Ganancia_Producto, Existencias, Existencias_Deseadas, ID_Provedor, ID_C) VALUES (%s, %s, %s, %s,%s,%s,%s,%s)",
-                    (nombre, precio_compra, precio_venta, ganancia, existencias, existencias_deseadas, proveedor, categoria))
+        cur.execute("INSERT INTO Producto (Nombre, Precio_Compra, Precio_Venta,  Existencias, Existencias_Deseadas, ID_Provedor, ID_C) VALUES (%s, %s, %s,%s,%s,%s,%s)",
+                    (nombre, precio_compra, precio_venta, existencias, existencias_deseadas, proveedor, categoria))
         mysql.connection.commit()
         cur.close()
         return redirect(url_for('inventario'))
@@ -877,7 +1088,6 @@ def editar_producto(id):
         nombre = request.form['nombre']
         precio_compra = request.form['precio_compra']
         precio_venta = request.form['precio_venta']
-        ganancia = request.form['ganancia']
         existencias = request.form['existencias']
         existencias_deseadas = request.form['existencias_deseadas']
         proveedor = request.form['proveedor']
@@ -886,11 +1096,10 @@ def editar_producto(id):
         if existencias_deseadas == '':
             existencias_deseadas = None
 
-        # Saber si
         try:
             cur.execute(
-                "UPDATE producto SET Nombre = %s, Precio_Compra = %s, Precio_Venta = %s, Ganancia_Producto = %s, Existencias = %s, Existencias_Deseadas = %s, ID_Provedor = %s, ID_C= %s WHERE ID_Producto = %s",
-                (nombre, precio_compra, precio_venta, ganancia, existencias,
+                "UPDATE producto SET Nombre = %s, Precio_Compra = %s, Precio_Venta = %s, Existencias = %s, Existencias_Deseadas = %s, ID_Provedor = %s, ID_C= %s WHERE ID_Producto = %s",
+                (nombre, precio_compra, precio_venta, existencias,
                  existencias_deseadas, proveedor, categoria, id)
             )
             mysql.connection.commit()
@@ -901,6 +1110,38 @@ def editar_producto(id):
         finally:
             cur.close()
         return redirect(url_for('inventario', update=update))
+
+
+# @app.route('/reabastecer/<int:id>', methods=['POST'])
+# def reabastecer(id):
+#     cur = mysql.connection.cursor()
+#     if request.method == 'POST':
+#         resurtirCantidad = request.form['resurtirCantidad']
+#         cur.execute(
+#             "UPDATE producto SET  Existencias = %s WHERE ID_Producto = %s",
+#             (resurtirCantidad, id)
+#         )
+#         mysql.connection.commit()
+#         cur.close()
+#     return redirect(url_for('inventario'))
+
+
+# 3
+@app.route('/reabastecer', methods=['POST'])
+def reabastecer():
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        product_ids = request.form.getlist('product_id')
+        resurtirCantidades = request.form.getlist('resurtirCantidad')
+
+        for product_id, resurtirCantidad in zip(product_ids, resurtirCantidades):
+            cur.execute(
+                "UPDATE producto SET Existencias = %s WHERE ID_Producto = %s",
+                (resurtirCantidad, product_id)
+            )
+        mysql.connection.commit()
+        cur.close()
+    return redirect(url_for('inventario'))
 
 
 @app.route('/eliminar_producto', methods=['POST'])
@@ -927,6 +1168,23 @@ def agregar_categoria():
         cur.close()
         return redirect(url_for('categorias'))
 
+# Agregar Categoria
+
+
+@app.route('/agregar_proveedor', methods=['POST'])  # insertar datos
+def agregar_proveedor():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        reparto1 = request.form['reparto1']
+        reparto2 = request.form['reparto2']
+
+        cur = mysql.connection.cursor()
+        cur.execute(
+            "INSERT INTO proveedor (Empresa,ID_RE1, ID_RE2) VALUES (%s,%s,%s)", (nombre, reparto1, reparto2))
+        mysql.connection.commit()
+        cur.close()
+        return redirect(url_for('proveedor'))
+
 
 @app.route('/editar_categoria/<int:id>', methods=['POST'])  # Enviar
 def editar_categoria(id):
@@ -940,6 +1198,20 @@ def editar_categoria(id):
     return redirect(url_for('categorias'))
 
 
+@app.route('/editar_proveedor/<int:id>', methods=['POST'])  # Enviar
+def editar_proveedor(id):
+    cur = mysql.connection.cursor()
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        reparto1 = request.form['reparto1']
+        reparto2 = request.form['reparto2']
+        cur.execute(
+            "UPDATE proveedor SET Empresa = %s, ID_RE1 = %s, ID_RE2 = %s WHERE ID_Proveedor = %s", (nombre, reparto1, reparto2, id))
+        mysql.connection.commit()
+        cur.close()
+    return redirect(url_for('proveedor'))
+
+
 @app.route('/eliminar_categoria', methods=['POST'])
 def eliminar_categoria():
     cur = mysql.connection.cursor()
@@ -949,6 +1221,17 @@ def eliminar_categoria():
     mysql.connection.commit()
     cur.close()
     return redirect(url_for('categorias'))
+
+
+@app.route('/eliminar_proveedor', methods=['POST'])
+def eliminar_proveedor():
+    cur = mysql.connection.cursor()
+    id = request.form['indice_id']
+    cur.execute("DELETE FROM proveedor WHERE ID_Proveedor = %s",
+                (id,))  # ID_Productos cambia
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('proveedor'))
 
 # Agregar Categoria
 
@@ -1014,7 +1297,7 @@ def eliminar_cliente():
 def agregar_envio():
     if request.method == 'POST':
         cliente = request.form['cliente']
-        producto = request.form['producto']
+        # producto = request.form['producto']
         # Foraneas para 'relacion_c_p_a_e'
         calle = request.form['calle']
         cruzamiento_1 = request.form['cruzamiento_1']
@@ -1027,22 +1310,50 @@ def agregar_envio():
         destino = request.form['destino']
         # status = request.form['status']
         colonia = request.form['colonia']
+
         cur = mysql.connection.cursor()
-        cur.execute(
-            "INSERT INTO envios (Calle, Cruzamiento_1, Cruzamiento_2, ID_DE, ID_ME, ID_AE, ID_Destino, ID_StatusE, ID_C) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
-            (calle, cruzamiento_1, cruzamiento_2, id_dia, id_mes, id_año, destino, 3, colonia))
-        mysql.connection.commit()
-        # Obtener el último ID insertado en la tabla 'envios'
-        cur.execute("SELECT MAX( envios.ID_Envios) FROM envios ;")
-        id_envio = cur.fetchone()[0]
-        # Insertar en la tabla 'relacion_c_p_a_e'
-        cur.execute(
-            "INSERT INTO relacion_c_p_a_e (ID_Cliente, ID_Producto, ID_Envio) VALUES (%s, %s, %s)",
-            (cliente, producto, id_envio)
-        )
-        mysql.connection.commit()
-        cur.close()
-        return redirect(url_for('envios'))
+
+        cur.execute("""
+            SELECT 
+                CASE 
+                    WHEN ID_Apartado IS NOT NULL THEN 'Tiene apartado'
+                    ELSE 'No tiene apartado'
+                END AS Estado_Apartado
+            FROM 
+                relacion_c_p_a_e
+            WHERE 
+                ID_Cliente = %s
+            ORDER BY
+                ID_Apartado ASC 
+            LIMIT 1;
+        """, (cliente,))
+        tieneApartado = cur.fetchone()[0]
+
+        if tieneApartado == 'Tiene apartado':
+            print("El cliente tiene un apartado.")
+            cur.execute(
+                "INSERT INTO envios (Calle, Cruzamiento_1, Cruzamiento_2, ID_DE, ID_ME, ID_AE, ID_Destino, ID_StatusE, ID_C) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)",
+                (calle, cruzamiento_1, cruzamiento_2, id_dia, id_mes, id_año, destino, 3, colonia))
+            mysql.connection.commit()
+            # Obtener el último ID insertado en la tabla 'envios'
+            cur.execute("SELECT MAX( envios.ID_Envios) FROM envios ;")
+            id_envio = cur.fetchone()[0]
+            # Insertar en la tabla 'relacion_c_p_a_e'
+            cur.execute(
+                """
+                UPDATE 
+                    relacion_c_p_a_e
+                SET 
+                    relacion_c_p_a_e.ID_Envio = %s 
+                WHERE 
+                    relacion_c_p_a_e.ID_Cliente = %s;
+                """, (id_envio, cliente))
+            mysql.connection.commit()
+            cur.close()
+        else:
+            print("El cliente no tiene un apartado, crealo antes.")
+            return redirect(url_for('envios', no_tiene_apartado=True))
+    return redirect(url_for('envios'))
 
 
 @app.route('/agregar_apartado', methods=['POST'])  # insertar datos
@@ -1110,14 +1421,13 @@ def editar_envio(id):
         id_mes = fecha.month
         id_año = fecha.year - 2023
         destino = request.form['destino']
-        # como obtener el valor del form si esta deshabiliado
-        status = request.form['status']
+        # status = request.form['status']
         colonia = request.form['colonia']
         cur = mysql.connection.cursor()
 
     cur.execute(
-        "UPDATE envios SET Calle = %s,  Cruzamiento_1 = %s,  Cruzamiento_2 = %s, ID_DE = %s, ID_ME = %s,ID_AE = %s ,ID_Destino = %s ,ID_StatusE = %s,ID_C = %s   WHERE ID_Envios = %s",
-        (calle, cruzamiento_1, cruzamiento_2, id_dia, id_mes, id_año, destino, status, colonia, id))
+        "UPDATE envios SET Calle = %s,  Cruzamiento_1 = %s,  Cruzamiento_2 = %s, ID_DE = %s, ID_ME = %s,ID_AE = %s ,ID_Destino = %s,ID_C = %s   WHERE ID_Envios = %s",
+        (calle, cruzamiento_1, cruzamiento_2, id_dia, id_mes, id_año, destino, colonia, id))
     mysql.connection.commit()
     cur.close()
     return redirect(url_for('envios'))
@@ -1191,6 +1501,32 @@ def marcar_cancelado():
     mysql.connection.commit()
     cur.close()
     return redirect(url_for('envios'))
+
+
+@app.route('/cancelar_apartado', methods=['POST'])
+def cancelar_apartado():
+    cur = mysql.connection.cursor()
+    id = request.form['indice_id']
+    cur.execute("""
+        UPDATE 
+            apartados 
+        set 
+            apartados.ID_Status = 3
+        WHERE 
+            apartados.ID_Apartados =%s;
+    """, (id,))
+    mysql.connection.commit()
+    cur.execute("""
+        UPDATE 
+            apartados 
+        set 
+            apartados.Fecha_Cancelada  = CURDATE()
+        WHERE 
+            apartados.ID_Apartados =%s;
+    """, (id,))
+    mysql.connection.commit()
+    cur.close()
+    return redirect(url_for('apartados'))
 
 
 @app.route('/ver_productos_categoria', methods=['POST'])

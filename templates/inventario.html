@@ -37,12 +37,20 @@
     {% endif %}
 
 
-    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
-        data-taskid="0">Agregar Producto
+    <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
+        data-taskid="0">Nuevo Producto
+    </button>
+
+    <button type="button" class="btn btn-secondary my-2" data-bs-toggle="modal" data-bs-target="#rellenarDeseados"
+        data-taskid="0">Ver Faltantes
+    </button>
+
+    <button type="button" class="btn btn-secondary my-2" data-bs-toggle="offcanvas" data-bs-target="#Reabastecer2"
+        data-taskid="0">Reabastecer
     </button>
 
     <!--Nueva tabla-->
-    <table class="table  table-hover table-striped align-middle">
+    <table class="table  table-hover table-striped align-middle mt-3">
         <thead>
             <tr>
                 <th scope="col">Nombre</th> <!--Columna Encabezados-->
@@ -66,7 +74,7 @@
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
-                        <button type="button" id="editar_btn" class=" btn btn-primary btn-sm btn__editar"
+                        <button type="button" id="editar_btn" class="d-none btn btn-primary btn-sm btn__editar"
                             data-bs-toggle="modal" data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}"
                             data-bs-nombre="{{indice[1]}}" data-bs-compra="{{indice[2]}}" data-bs-venta="{{indice[3]}}"
                             data-bs-ganancia="{{indice[4]}}" data-bs-existencias="{{indice[5]}}"
@@ -79,9 +87,9 @@
                             <input type="hidden" name="indice_id" value="{{indice[0]}}">Form oculto para el id  -->
                         <!-- </form> -->
 
-                        <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
-                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar<i
-                                class="fas fa-trash-alt"></i>
+                        <button onclick="setProductId('{{ indice[0] }}', '{{ indice[1] }}')" data-bs-toggle="modal"
+                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar
+                            <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
                 </td>
@@ -93,6 +101,82 @@
     </table>
 </section>
 
+<!-- Modal para rellenar a deseados -->
+<div class="modal fade" id="rellenarDeseados" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header"><!--Header-->
+                <h5 class="modal-title"> (Existencias deseadas) </h5> <!--id-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body"> <!--Formulario-->
+                <table class="table  table-hover table-striped align-middle">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Faltantes</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        {% for indice in rellenar_a_deseado %}
+                        <tr class="doble_click" style="cursor: pointer;">
+                            <td>{{ '-' if indice[1] is none else indice[1]}}</td>
+                            <td>
+                                {% if indice[2] is not none and indice[2] < 0 %} Se excede por {{ -indice[2] }} <!--
+                                    Quitar el negativo usando el signo menos -->
+                                    {% elif indice[2] is none or indice[2] == "" %}
+                                    No establecido
+                                    {% else %}
+                                    Faltan
+                                    {{ indice[2] }}
+                                    {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="Reabastecer2">
+    <div class="offcanvas-body">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" style="font-size: 30px;">Reabastecimiento</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form id="taskForm" method="POST" action="{{ url_for('reabastecer') }}">
+                <table class="table table-hover table-bordered table-striped-columns align-middle mt-3">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        {% for indice in Productos %}
+                        <tr class="doble_click " style="cursor: pointer;">
+                            <td>{{ indice[1] }}</td>
+                            <td style="width: 160px;">
+                                <input type="hidden" name="product_id" value="{{ indice[0] }}">
+                                <input type="number" onpaste="return false;" class="form-control"
+                                    name="resurtirCantidad" min="0" max="1000" value="{{indice[5]}}" required>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary my-2" style="width: 100%;">Enviar</button>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 
@@ -121,6 +205,41 @@
         {% endfor %}
     </div>
 
+
+
+
+
+    <!-- 
+<div class="offcanvas offcanvas-end" data-bs-backdrop="static" data-bs-scroll="true" tabindex="-1" id="Reabastecer">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" style="font-size: 30px;">Reabastecimiento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form id="taskForm" method="POST" action="{{ url_for('reabastecer') }}">
+            <table class="table table-hover table-striped align-middle mt-3">
+                <thead>
+                    <tr>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                    {% for indice in Productos %} 
+                    <tr class="doble_click" style="cursor: pointer;">
+                        <td>{{ indice[1] }}</td>
+                        <td style="width: 160px;">
+                            <input type="hidden" name="product_id" value="{{ indice[0] }}">
+                            <input type="number" onpaste="return false;" class="form-control" name="resurtirCantidad" min="0" max="1000" value="{{indice[5]}}" required>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="btn btn-secondary my-2">Enviar</button>
+        </form>
+    </div>
+</div> -->
 
 
     <!--Pocas existencias-->
@@ -156,17 +275,12 @@
                         <div class="">
                             <label for="precio_compra">Precio Compra:</label>
                             <input type="number" onpaste="return false;" class="form-control" id="precio_compra"
-                                step="0.1" name="precio_compra" min="0" max="1000"   required>
+                                step="0.1" name="precio_compra" min="0" max="1000" required>
                         </div>
                         <div class="">
                             <label for="precio_venta">Precio Venta:</label>
                             <input type="number" onpaste="return false;" class="form-control" id="precio_venta"
                                 step="0.1" name="precio_venta" min="0" max="1000" required>
-                        </div>
-                        <div class="">
-                            <label for="ganancia">Ganancia:</label>
-                            <input type="number" onpaste="return false;" class="form-control" id="ganancia" step="0.1"
-                                name="ganancia" min="0" max="1000" required>
                         </div>
                         <div class="">
                             <label for="existencias" onpaste="return false;">Existencias:</label>
@@ -197,12 +311,12 @@
                                 {% endfor %}
                             </select>
                         </div>
+                        <script src="../static/Js/validar_form.js"></script><!--Validar forms-->
 
                         <div class="text-center mt-2">
                             <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
                             <button type="submit" class="btn btn-primary">Guardar</button>
                         </div>
-                        <script src="../static/Js/validar_form.js"></script><!--Validar forms-->
                     </form>
 
                 </div>
@@ -223,7 +337,8 @@
                 </div>
 
                 <div class="modal-body"> <!--Formulario-->
-                    <h3>¿Deseas eliminarlo?</h3>
+                    <h3>¿Deseas eliminar el producto  <br><strong id="producto_nombre" class="mt-3"
+                            style="display: inline-block;"></strong>?</h3>
 
                 </div>
                 <div class="modal-footer">
@@ -232,7 +347,7 @@
                         <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
                         </button>
                     </form>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salir
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir
                     </button>
                 </div>
             </div>
@@ -252,7 +367,7 @@
                 const name = button.getAttribute('data-bs-nombre')
                 const compra = button.getAttribute('data-bs-compra')
                 const venta = button.getAttribute('data-bs-venta')
-                const ganancia = button.getAttribute('data-bs-ganancia')
+                // const ganancia = button.getAttribute('data-bs-ganancia')
                 const existencias = button.getAttribute('data-bs-existencias')
                 const existencias_deseadas = button.getAttribute('data-bs-existencias-deseadas')
                 const proveedor = button.getAttribute('data-bs-proveedor')
@@ -262,7 +377,7 @@
                 const modalNombre = abrirModal.querySelector('#nombre')
                 const modalCompra = abrirModal.querySelector('#precio_compra')
                 const modalVenta = abrirModal.querySelector('#precio_venta')
-                const modalGanancia = abrirModal.querySelector('#ganancia')
+                // const modalGanancia = abrirModal.querySelector('#ganancia')
                 const modalExistencias = abrirModal.querySelector('#existencias')
                 const modalExistencias_deseadas = abrirModal.querySelector('#existencias_deseadas')
                 const modalProveedor = abrirModal.querySelector('#proveedor')
@@ -272,7 +387,7 @@
                 modalNombre.value = name
                 modalCompra.value = compra
                 modalVenta.value = venta
-                modalGanancia.value = ganancia
+                // modalGanancia.value = ganancia
                 modalExistencias.value = existencias
                 modalExistencias_deseadas.value = existencias_deseadas
                 modalProveedor.value = proveedor
@@ -293,8 +408,10 @@
 
     <!--Para obtener el id y mandarlo al modal-->
     <script>
-        function setProductId(productId) {
+        function setProductId(productId, productName) {
             document.getElementById('indice_id').value = productId;
+            document.getElementById('producto_nombre').textContent = productName;
+
         }
     </script>
 

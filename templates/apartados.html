@@ -17,14 +17,51 @@
     </nav>
 
 
+    <!-- Mostrar otros mensajes flash -->
+    {% if abono_exitoso %}
+    <div class="container mt-3">
+        {% for message in abono_exitoso %}
+        <div class="alert alert-success" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+
     <h1 class="inventario__titulo text-center">Clientes con apartos</h1>
 
-    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal"
-        data-bs-target="#apartarProducto" data-taskid="0">Apartar producto
+    <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#apartarProducto"
+        data-taskid="0">Apartar producto
     </button>
 
+    <!-- 
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#tablaCancelados">
+        Ver Cancelados
+    </button> -->
+
+    <div class="dropdown " style="width: 100px; display: inline-block; margin-left: 77%; ">
+        <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            Vistas
+        </button>
+        <ul class="dropdown-menu  dropdown-menu-start dropdown-menu-dark">
+            <li>
+                <h6 class="dropdown-header">Seleccione</h6>
+            </li>
+            <li>
+                <a class="dropdown-item " data-bs-toggle="collapse" onclick="toggleCollapse('tablaPagados')"
+                    href="#tablaPagados">Completados</a>
+            </li>
+            <li>
+                <a class="dropdown-item " data-bs-toggle="collapse" onclick="toggleCollapse('tablaCancelados')"
+                    href="#tablaCancelados">Cancelados</a>
+            </li>
+        </ul>
+    </div>
+
+
     <!--Nueva tabla-->
-    <table class="table  table-hover table-striped align-middle">
+    <table class="table  table-hover table-striped align-middle mt-3">
         <thead>
             <tr>
                 <th scope="col">Nombres</th> <!--Columna Encabezados-->
@@ -38,7 +75,7 @@
         </thead>
         <tbody class="table-group-divider">
             {% for indice in apartados %}
-            <tr class="doble_click" style="cursor: pointer;">
+            <tr class="dobles_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
                 <td>{{ indice[2] }} {{ indice[3]}}</td>
                 <td>{{ indice[5] }}</td>
@@ -48,20 +85,58 @@
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
-                        <button type="button" id="editar_btn" class="btn btn-primary btn-sm btn__editar"
-                            data-bs-toggle="modal" data-bs-target="#apartarProducto" data-bs-cliente="{{indice[0]}}"
-                            data-bs-producto="{{indice[13]}}" data-bs-abonado="{{indice[5]}}"
-                            data-bs-pendiente="{{indice[6]}}">Editar <i class="fas fa-edit "></i>
+
+                        <button onclick="setProductId('{{ indice[4] }}', '{{ indice[6] }}')" data-bs-toggle="modal"
+                            data-bs-target="#abonar" type="button" id="abonar__btn" class="btn btn-dark">Abonar
                         </button>
-
-                        <!-- <form action="/eliminar_producto" method="POST" id="eliminarp">
-                            <input type="hidden" name="indice_id" value="{{indice[0]}}">Form oculto para el id  -->
-                        <!-- </form> -->
-
-                        <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
-                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar<i
+                        <!-- <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
+                            data-bs-target="#abonar" type="button" id="delete__btn" class="btn btn-dark">Ver abonos <i
                                 class="fas fa-trash-alt"></i>
+                        </button> -->
+
+                        <!--El que abre el modal-->
+                        <button data-bs-toggle="modal" data-bs-target="#verAbonos" type="button" id="ver__btn"
+                            class="d-none btn btn-dark">Ver abonos
                         </button>
+
+                        <!--El que envia el formulario para ver abonos-->
+                        <form action="/ver_abonos" method="POST" id="categoriaForm" onsubmit="setFormSubmitted()">
+                            <input type="hidden" name="id_apartado" id="id_apartado" value="{{ indice[4] }}">
+                            <button type="submit" class="btn btn-secondary"> Ver abonos <i
+                                    class="bi bi-eye"></i></button>
+                        </form>
+
+                        <!--El que abre el modal al enviar el form-->
+                        <script>
+                            function setFormSubmitted() {
+                                localStorage.setItem('formSubmitted', 'true');
+                            }
+
+                            document.addEventListener('DOMContentLoaded', function () {
+                                if (localStorage.getItem('formSubmitted') === 'true') {
+                                    setTimeout(function () {
+                                        var verBtn = document.getElementById('ver__btn');
+                                        verBtn.click();
+                                        localStorage.removeItem('formSubmitted');
+                                    }, 100);
+                                }
+                            });
+                        </script>
+
+
+                        <form action="/cancelar_apartado" method="POST" id="eliminarp">
+                            <input type="hidden" name="indice_id" value="{{indice[4]}}">
+                            <button type="submit" class="btn border-secondary cancelar">Cancelar</button>
+                        </form>
+
+                        <style>
+                            .cancelar:hover {
+                                background-color: rgba(233, 31, 31, 0.892);
+                                color: white !important;
+                                border-color: rgba(255, 0, 0, 0) !important;
+                            }
+                        </style>
+
                     </div>
                 </td>
             </tr>
@@ -70,7 +145,103 @@
 
         </tbody>
     </table>
-</section>
+
+
+
+    <div class="collapse" id="tablaPagados">
+        <h2 class="inventario__titulo text-center">Apartados pagados</h2>
+
+        <table class="table  table-hover table-striped align-middle mt-3">
+            <thead>
+                <tr>
+                    <th scope="col">Nombres</th> <!--Columna Encabezados-->
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Abono final</th>
+                    <th scope="col">Deuda Inicial</th>
+                    <th scope="col">Fecha Pagada</th>
+                    <th scope="col">Producto Comprado</th>
+                    <th scope="col">Editar</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for indice in apartadosPagados %}
+                <tr class="dobles_click" style="cursor: pointer;">
+                    <td>{{ indice[1] }}</td>
+                    <td>{{ indice[2] }} {{ indice[3]}}</td>
+                    <td>{{ indice[5] }}</td>
+                    <td>{{ indice[6] }}</td>
+                    <td>{{ indice[10] }}</td>
+                    <td>{{ indice[14] }}</td>
+                    <!--Seccion de edicion (Editar/Eliminar)-->
+                    <td style="width: 160px;">
+                        <!--El que abre el modal-->
+                        <button data-bs-toggle="modal" data-bs-target="#verAbonos" type="button" id="ver__btn"
+                            class="d-none btn btn-dark">Ver
+                            abonos
+                        </button>
+
+                        <!--El que envia el formulario para ver abonos-->
+                        <form action="/ver_abonos" method="POST" id="categoriaForm" onsubmit="setFormSubmitted()">
+                            <input type="hidden" name="id_apartado" id="id_apartado" value="{{ indice[4] }}">
+                            <button type="submit" class="btn btn-dark"> Ver abonos <i class="bi bi-eye"></i></button>
+                        </form>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="collapse" id="tablaCancelados">
+        <h2 class="inventario__titulo text-center">Apartados Cancelados</h2>
+
+        <table class="table  table-hover table-striped align-middle mt-3">
+            <thead>
+                <tr>
+                    <th scope="col">Nombres</th> <!--Columna Encabezados-->
+                    <th scope="col">Apellidos</th>
+                    <th scope="col">Fecha Cancelada</th>
+                    <th scope="col">Producto Cancelado</th>
+                    <th scope="col">Editar</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for indice in apartadosCancelados %}
+                <tr class="dobles_click" style="cursor: pointer;">
+                    <td>{{ indice[1] }}</td>
+                    <td>{{ indice[2] }} {{ indice[3]}}</td>
+                    <td>{{ indice[5] }}</td>
+                    <td>{{ indice[9] }}</td>
+                    <!--Seccion de edicion (Editar/Eliminar)-->
+                    <td style="width: 160px;">
+                        <!--El que abre el modal-->
+                        <button data-bs-toggle="modal" data-bs-target="#verAbonos" type="button" id="ver__btn"
+                            class="d-none btn btn-dark">Ver
+                            abonos
+                        </button>
+
+                        <!--El que envia el formulario para ver abonos-->
+                        <form action="/ver_abonos" method="POST" id="categoriaForm" onsubmit="setFormSubmitted()">
+                            <input type="hidden" name="id_apartado" id="id_apartado" value="{{ indice[4] }}">
+                            <button type="submit" class="btn btn-dark"> Ver abonos <i class="bi bi-eye"></i></button>
+                        </form>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+
+
+
+
+
+</section><!--Fin de la pagina-->
 
 
 <!-- Modal para Apartar prodcuto -->
@@ -119,7 +290,7 @@
                             placeholder="2" required>
                     </div>
                     <div class="">
-                        <label for="abono">Abono Incial</label>
+                        <label for="abono">Abono Inicial</label>
                         <input type="number" class="form-control" id="abono" name="abono" min="0" max="2000"
                             placeholder="500" required>
                     </div>
@@ -137,11 +308,138 @@
 </div>
 
 
+<!-- Modal para ver abonos -->
+<div class="modal fade" id="verAbonos" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                {% with abono_vista = get_flashed_messages(category_filter=["abono"]) %}
+                {% if abono_vista %}
+                <div class="container mt-3">
+                    {% for abono in abono_vista %}
+                    <div class="alert alert-success" role="alert">
+                        Fecha: <strong>{{ abono['fecha'] }}</strong> <br>
+                        Cantidad Abonada: <strong>${{ abono['cantidad'] }}</strong>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-info" role="alert">
+                    No hay abonos para mostrar.
+                </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para Apartar abonar -->
+<div class="modal fade modal-sm" id="abonar" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <div class="modal-header"><!--Header-->
+                <h5 class="modal-title">Abono de cliente</h5> <!--id-->
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form id="apartar_producto" method="POST" action="{{ url_for('abonar_apartado')}}">
+                    <div class="">
+                        <label for="cantidad">Cantidad a abonar</label>
+                        <input type="number" onpaste="return false;" class="form-control" id="cantidad_abono"
+                            name="cantidad_abono" min="1" max="2000" placeholder="" required>
+                    </div>
+                    <input type="hidden" name="indice_id" id="indice_id" value="">
+                    <!--Botones-->
+                    <button type="button" class="btn btn-secondary mt-2" onclick="completarAbono()">Completar</button>
+                    <button type="submit" class="btn btn-dark mt-2">Abonar
+                    </button>
+
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!--Banner de alerta apartado proximo-->
+{% if pocosDiasApartado %}
+<div class="toast-container position-fixed bottom-0 end-0 p-4">
+    {% for producto in pocosDiasApartado %}
+    <div class="toast text-bg-warning" data-bs-theme="dark">
+        <div class="toast-header">
+            <strong class="me-auto">Alerta</strong>
+            <small class="text-body-secondary">Justo ahora</small>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            <p>El cliente <strong>{{producto[0]}} {{producto[1]}}</strong> le quedan <strong>{{producto[2]}}</strong>
+                dias antes de <u>cancelar su apartado</u> </p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<!--Activar toaster-->
+<script src="../static/Js/activar_toast.js"></script>
+
 <!--Para obtener el id y mandarlo al modal-->
 <script>
-    function setProductId(productId) {
+    function setProductId(productId, cantidadPendiente) {
+        console.log("Producto ID:", productId); // Log para depuración
         document.getElementById('indice_id').value = productId;
+        document.getElementById('cantidad_abono').dataset.pendiente = cantidadPendiente; // Almacena el pendiente en un atributo de datos
     }
+
+    function completarAbono() {
+        const cantidadPendiente = document.getElementById('cantidad_abono').dataset.pendiente;
+        document.getElementById('cantidad_abono').value = cantidadPendiente;
+    }
+</script>
+
+
+<!--Para guardar las vistas-->
+<script>
+    // Function to toggle collapse state in localStorage
+    function toggleCollapse(collapseId) {
+        const state = localStorage.getItem(collapseId);
+        if (state === "shown") {
+            localStorage.setItem(collapseId, "hidden");
+        } else {
+            localStorage.setItem(collapseId, "shown");
+        }
+    }
+
+    // Function to restore collapse state from localStorage
+    function restoreCollapseState() {
+        const collapses = ["tablaPagados", "tablaCancelados"];
+        collapses.forEach(collapseId => {
+            const state = localStorage.getItem(collapseId);
+            const collapseElement = document.getElementById(collapseId);
+            if (state === "shown") {
+                collapseElement.classList.add("show");
+            } else {
+                collapseElement.classList.remove("show");
+            }
+        });
+    }
+
+    // Restore collapse state on page load
+    document.addEventListener("DOMContentLoaded", restoreCollapseState);
 </script>
 
 {%endblock%}

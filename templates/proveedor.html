@@ -1,0 +1,189 @@
+{%extends 'base.html'%}
+
+{%block title%} Envios{%endblock%}
+
+{%block contenido%}
+
+<section class="inventario">
+    <!--Breadcrumb-->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-chevron p-3 bg-body-tertiary rounded-3">
+            <li class="breadcrumb-item">
+                <a class="link-body-emphasis fw-semibold text-decoration-none" href="#">Tablero</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                Proveedor
+            </li>
+        </ol>
+    </nav>
+
+
+
+    <h2 class="inventario__titulo text-center mt-4">Proveedores</h2>
+
+    <button type="button" class="btn_agregar btn btn-dark my-2" data-bs-toggle="modal"
+        data-bs-target="#abrirModalreparto" data-taskid="0">Agregar Proveedor
+    </button>
+    <!--Tabla para los marcados en enviado-->
+    <table class="table  table-hover table-striped align-middle mt-4">
+        <thead>
+            <tr>
+                <th scope="col">#</th> <!--Columna Encabezados-->
+                <th scope="col">Empresa</th> <!--Columna Encabezados-->
+                <th scope="col">Dia de reparto 1</th>
+                <th scope="col">Dia de reparto 2</th>
+                <th scope="col">Ediciones</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for indice in proveedor%}
+            <tr class="doble_click" style="cursor: pointer;">
+                <td>{{ indice[0] }}</td>
+                <td>{{ indice[1] }}</td>
+                <td>{{ '-' if indice[3] is none else indice[3]}}</td>
+                <td>{{ '-' if indice[5] is none else indice[5]}}</td>
+                <!--Seccion de edicion (Editar/Eliminar)-->
+                <td style="width: 130px; ">
+                    <div class="editar__botones">
+                        <button type="button" class="btn btn-primary btn-sm d-none btn__editar" data-bs-toggle="modal"
+                            data-bs-target="#abrirModalreparto" data-bs-id-prove="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
+                            data-bs-reparto1="{{indice[2]}}" data-bs-reparto2="{{indice[4]}}">Editar <i
+                                class="fas fa-edit"></i>
+                        </button>
+
+                        <button onclick="setProductId('{{ indice[0] }}', '{{ indice[1] }}')" data-bs-toggle="modal"
+                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+
+
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Modal para crear/editar categoria -->
+    <div class="modal fade" id="abrirModalreparto" tabindex="-1">
+
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+
+                <div class="modal-header"><!--Header-->
+                    <h5 class="modal-title">Agregar Proveedores</h5> <!--id-->
+                    <button type="button" class="btn-close" data-bs-dismiss="modal">
+                    </button>
+                </div>
+
+                <div class="modal-body"> <!--Formulario-->
+                    <form id="enviarProve" method="POST" action="{{ url_for('agregar_proveedor')}}">
+                        <div class="">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" pattern="^[A-Za-z\s]+$"
+                                required>
+                        </div>
+                        <div class="">
+                            <label for="reparto1">Reparto 1:</label>
+                            <select class="form-control" id="reparto1" name="reparto1" required>
+                                <!-- Opción por defecto -->
+                                <option selected disabled value="">Selecciona una opción</option>
+                                {% for reparto in reparto %}
+                                <option value="{{ reparto[0] }}">{{ reparto[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="">
+                            <label for="reparto2">Reparto 2:</label>
+                            <select class="form-control" id="reparto2" name="reparto2" required>
+                                <!-- Opción por defecto -->
+                                <option selected disabled value="">Selecciona una opción</option>
+                                {% for reparto in reparto %}
+                                <option value="{{ reparto[0] }}">{{ reparto[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="text-center mt-2">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal para eliminar -->
+    <div class="modal fade" data-bs-backdrop="static" id="Eliminar" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Eliminar Proveedor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <h3>¿Deseas eliminar el proveedor <br><strong id="provee_nombre" class="mt-3"
+                            style="display: inline-block;"></strong>?</h3>
+                </div>
+                <div class="modal-footer">
+                    <form action="/eliminar_proveedor" method="POST" id="eliminarp">
+                        <input type="hidden" name="indice_id" id="indice_id" value="">
+                        <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar</button>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Actualizar modal-->
+    <script>
+        //< !--Codigo para obtner los datos del fomr segun si id(Editar)-- >
+        const abrirModal = document.getElementById('abrirModalreparto')
+        if (abrirModal) {
+            abrirModal.addEventListener('show.bs.modal', event => {
+                // Button that triggered the modal
+                const button = event.relatedTarget
+                //Obtneer los datos del boton con los id
+                const id = button.getAttribute('data-bs-id-prove')
+                const name = button.getAttribute('data-bs-nombre')
+                const reparto1 = button.getAttribute('data-bs-reparto1')
+                const reparto2 = button.getAttribute('data-bs-reparto2')
+
+                // Seleccionar los id para actulizarlos en el modal
+                const modalNombre = abrirModal.querySelector('#nombre')
+                const modalReparto1 = abrirModal.querySelector('#reparto1')
+                const modalReparto2 = abrirModal.querySelector('#reparto2')
+
+                // Acutualizar el modal con los datos de los atributos.
+                modalNombre.value = name
+                modalReparto1.value = reparto1
+                modalReparto2.value = reparto2
+
+                //Titulo segun la funcion
+                if (id) {
+                    abrirModal.querySelector('.modal-title').textContent = 'Editar Proveedor';
+                    console.log(id)
+                    abrirModal.querySelector('#enviarProve').setAttribute('action', '{{ url_for("editar_proveedor", id=0) }}'.replace('0', id));
+                    //Enviar a editar
+                }
+            })
+        }
+    </script>
+
+    <!--Para obtener el id y mandarlo al modal-->
+    <script>
+        function setProductId(productId, productName) {
+            document.getElementById('indice_id').value = productId;
+            document.getElementById('provee_nombre').textContent = productName;
+        }
+    </script>
+
+
+
+
+
+</section>
+
+{%endblock%}

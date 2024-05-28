@@ -22,57 +22,69 @@
 
     <h1 class="inventario__titulo text-center">Categorias</h1>
 
-    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal"
-        data-bs-target="#abrirModalCategoria" data-taskid="0">Agregar Categoria
+    <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#abrirModalCategoria"
+        data-taskid="0">Agregar Categoria
     </button>
 
     <!--Nueva tabla-->
-    <table class="table  table-hover table-striped align-middle">
+    <table class="table  table-hover table-striped align-middle mt-3">
         <thead>
             <tr>
+                <th scope="col">#</th>
                 <th scope="col">Categorias</th>
                 <th scope="col">Productos en la categoria</th>
-                <th scope="col">Edición</th>
+                <th scope="col" style="width: 290px;">Edición</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
             {% for indice in categorias %} <!--Nombre cualquiera + el que recibe de la variable-->
             <tr class="doble_click" style="cursor: pointer;">
+                <td>{{ indice[0] }}</td>
                 <td>{{ indice[1] }}</td>
                 <td>{{ indice[2] }}</td>
 
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
-                        <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
+                        <button type="button" class="d-none btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
                             data-bs-target="#abrirModalCategoria" data-bs-id="{{indice[0]}}"
                             data-bs-nombre="{{indice[1]}}">Editar <i class="fas fa-edit "></i>
                             <!--Cambia el orden del modal js-->
                         </button>
 
-                        <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
-                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar<i
-                                class="fas fa-trash-alt"></i>
+                        <button onclick="setProductId('{{ indice[0] }}', '{{ indice[1] }}')" data-bs-toggle="modal"
+                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar
+                            <i class="fas fa-trash-alt"></i>
                         </button>
 
-                        
-                        <!-- <button data-bs-toggle="modal" data-bs-target="#verProductos" type="button" id="ver__btn"
-                            class="btn btn-secondary">Ver
+                        <!--El que abre el modal-->
+                        <button data-bs-toggle="modal" data-bs-target="#verProductos" type="button" id="ver__btn"
+                            class="d-none btn btn-secondary">Ver
                             productos<i class="fas fa-trash-alt"></i></button>
 
-                        <form action="/categorias" method="POST" id="categoriaForm" onsubmit="abrirVer(event)">
+                        <!--El que envia el formulario para la consulta con el id-->
+                        <form action="/categorias" method="POST" id="categoriaForm" onsubmit="setFormSubmitted()">
                             <input type="hidden" name="idcategoria" id="idcategoria" value="{{ indice[0] }}">
-                            <button type="submit" id="enviarID" class="btn btn-danger">Enviar ID</button>
+                            <button type="submit" id="enviarID" class="btn btn-dark"> Ver productos <i
+                                    class="bi bi-eye"></i></button>
                         </form>
 
+                        <!--El que abre el modal al enviar el form-->
                         <script>
+                            function setFormSubmitted() {
+                                localStorage.setItem('formSubmitted', 'true');
+                            }
 
-                            // Después de 1 segundo, abrir el modal
-                            setTimeout(function () {
-                                var verBtn = document.getElementById('ver__btn');
-                                verBtn.click();
-                            }, 1000);
-                        </script> -->
+                            document.addEventListener('DOMContentLoaded', function () {
+                                if (localStorage.getItem('formSubmitted') === 'true') {
+                                    setTimeout(function () {
+                                        var verBtn = document.getElementById('ver__btn');
+                                        verBtn.click();
+                                        localStorage.removeItem('formSubmitted');
+                                    }, 100);
+                                }
+                            });
+                        </script>
 
 
 
@@ -116,35 +128,31 @@
 
 <!-- Modal para eliminar -->
 <div class="modal fade" data-bs-backdrop="static" id="Eliminar" tabindex="-1">
-
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
-            <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Eliminar Producto</h5> <!--id-->
-                <button type="button" class="btn-close" data-bs-dismiss="modal">
-                </button>
+            <div class="modal-header">
+                <h5 class="modal-title">Eliminar Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
-            <div class="modal-body"> <!--Formulario-->
-                <h3>¿Deseas eliminarlo?</h3>
-
+            <div class="modal-body">
+                <h3>¿Deseas eliminar la categoria <br><strong id="producto_nombre" class="mt-3"
+                        style="display: inline-block;"></strong>?</h3>
             </div>
             <div class="modal-footer">
                 <form action="/eliminar_categoria" method="POST" id="eliminarp">
                     <input type="hidden" name="indice_id" id="indice_id" value="">
-                    <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
-                    </button>
+                    <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar</button>
                 </form>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salir
-                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Salir</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Modal para ver prodcutos -->
-<div class="modal fade" data-bs-backdrop="static" id="verProductos" tabindex="-1">
+<div class="modal fade " data-bs-backdrop="static" id="verProductos" tabindex="-1">
 
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -164,23 +172,14 @@
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
-                        {% for indice in verProductos %} <!--Nombre cualquiera + el que recibe de la variable-->
+                        {% for indice in verProductos %}
                         <tr class="doble_click" style="cursor: pointer;">
-                            <td>{{ indice[3] }}</td>
-                            <td>{{ indice[4] }}</td>
+                            <td>{{ 'No hay en la categoria' if indice[3] is none else indice[3]}}</td>
+                            <td>{{ '-' if indice[4] is none else indice[4]}}</td>
                         </tr>
                         {% endfor %}
                     </tbody>
                 </table>
-            </div>
-
-            <div class="modal-footer">
-                <!-- <form action="/categorias" method="POST" id="categoriaForm">
-                    <input type="hidden" name="idcategoria" id="idcategoria" value="">
-                    <button type="submit" id="submitButton" class="btn btn-danger">Refrescar</button>
-                </form> -->
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salir</button>
-
             </div>
         </div>
     </div>
@@ -224,10 +223,12 @@
 
 <!--Para obtener el id y mandarlo al modal-->
 <script>
-    function setProductId(productId) {
+    function setProductId(productId, productName) {
+        //Elementos donde pondra los valores
         document.getElementById('indice_id').value = productId;
-        document.getElementById('idcategoria').value = productId;
+        document.getElementById('producto_nombre').textContent = productName;
     }
+
 </script>
 
 
