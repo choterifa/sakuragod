@@ -21,13 +21,13 @@
     <h1 class="inventario__titulo text-center">Clientes con envios</h1>
 
     <!--Alerta de actualizados y eliminados-->
-    {% if no_tiene_apartado %}
+    <!-- {% if no_tiene_apartado %}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <i class="bi bi-check"></i> El cliente no tiene un apartado!
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
-    {% endif %}
+    {% endif %} -->
 
 
     <button type="button" class="btn_agregar btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
@@ -281,17 +281,17 @@
                     <div class="">
                         <label for="calle">Calle</label>
                         <input type="number" onpaste="return false;" class="form-control" id="calle" name="calle"
-                            min="0" max="1000" placeholder="57" required>
+                            min="0" max="1000" placeholder="" required>
                     </div>
                     <div class="">
                         <label for="cruzamiento_1">Cruzamiento 1</label>
                         <input type="number" onpaste="return false;" class="form-control" id="cruzamiento_1"
-                            name="cruzamiento_1" min="0" max="1000" placeholder="100" required>
+                            name="cruzamiento_1" min="0" max="1000" placeholder="" required>
                     </div>
                     <div class="">
                         <label for="cruzamiento_2">Cruzamiento 2</label>
                         <input type="number" onpaste="return false;" class="form-control" id="cruzamiento_2"
-                            name="cruzamiento_2" min="0" max="1000" placeholder="102" required>
+                            name="cruzamiento_2" min="0" max="1000" placeholder="" required>
                     </div>
                     <div class="">
                         <label for="fecha">Fecha:</label>
@@ -299,7 +299,7 @@
                     </div>
                     <div class="">
                         <label for="destino">Destino:</label>
-                        <select class="form-control" id="destino" name="destino" required>
+                        <select class="form-select" id="destino" name="destino" required>
                             <!-- Opción por defecto -->
                             <option selected disabled value="">Selecciona una opción</option>
                             {% for destin in destino %}
@@ -329,22 +329,31 @@
     </div>
 </div>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="proximosEnvios">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="proximosEnvios" style="z-index: 2000;">
     <div class=" offcanvas-header">
         <h5 class="offcanvas-title" style="font-size: 30px;">Proximos Envios</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>  
+    </div>
     <div class="offcanvas-body">
         <!--cards-->
         {% for indice in proximosEnvios %}
-        <div class="card"
-            style="width:100%; margin-bottom:25px; border: 2px solid rgba(74, 74, 74, 0.471); background-color:rgba(127, 255, 212, 0.72);">
+
+        <div class="card" {% if indice[3] < 0 %}
+            style="width:100%; margin-bottom:25px; border: 2px solid rgba(74, 74, 74, 0.471); background-color:rgba(197, 255, 127, 0.72);">
+            {% else %}
+            style="width:100%; margin-bottom:25px; border: 2px solid rgba(74, 74, 74, 0.471); background-color:rgba(127,
+            255, 212, 0.72);">
+            {% endif %}
             <div class="card-body">
                 <h5 class="card-title" style="font-weight: 600;">{{indice[1]}} {{indice[2]}} </h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">#{{indice[6]}}</h6>
                 <p class="card-text">Producto: <strong>{{indice[5]}}</strong></p>
                 <p class="card-text">Destino: <strong>{{indice[4]}}</strong></p>
-                <p class="card-text">Fecha de entrega: <strong>En {{indice[3]}} dias </strong> </p>
+                <p class="card-text">Fecha de entrega:
+                    <strong>
+                        {% if indice[3] < 0 %} Está atrasado por {{ -indice[3] }} días {% else %} En {{ indice[3] }}
+                            días {% endif %} </strong>
+                </p>
             </div>
         </div>
         {%endfor%}
@@ -459,7 +468,7 @@
 
     {% if producto[0] < 0 %} <div class="toast text-bg-danger"> <!--Cambiar color del toast-->
         {% else %}
-        <div class="toast text-bg-warning">
+        <div class="toast text-bg-warning" >
             {% endif %}
             <div class="toast-header">
                 {% if producto[0] < 0 %} <strong class="me-auto">Envios atrasados</strong>

@@ -258,6 +258,18 @@ def tablero():
             AND ID_Devuelto = 2;
         """)
         ventas_dia = cur.fetchone()[0]
+        cur.execute("""
+        SELECT SUM(ventas.Ingresos_Total) as totalvendido
+        FROM ventas 
+        WHERE CURDATE() = Fecha_Venta ;
+        """)
+        ventas_dia_cantidad = cur.fetchone()[0]
+        cur.execute("""
+        SELECT SUM(ventas.Ganancia_Total ) as Ganancia_Total 
+        FROM ventas 
+        WHERE CURDATE() = Fecha_Venta ;
+        """)
+        Ganancia_Total = cur.fetchone()[0]
         # Objetivo del dai
         cur.execute(
             "SELECT COALESCE(Objetivo, 0) FROM objetivo_ventas WHERE Fecha = CURDATE()"
@@ -267,6 +279,7 @@ def tablero():
         # Calcular el porcentaje
         if objetivo_hoy > 0:
             porcentaje = (ventas_dia / objetivo_hoy) * 100
+            porcentaje = round(porcentaje)  # Redondear al número entero más próximo
             restante = 100 - porcentaje
             if restante < 0:
                 restante = 0  # Que no sea negativo
@@ -276,7 +289,7 @@ def tablero():
         print(porcentaje, restante)
 
         cur.close()
-        return render_template("tablero.html", restante=restante, porcentaje=porcentaje, email=session["email"], ventas_dia=ventas_dia, dineroEnApartados=dineroEnApartados, clientes=clientes, reeinvertir=reeinvertir, ingresos_del_corte=ingresos_del_corte, ganancias=ganancias,
+        return render_template("tablero.html",Ganancia_Total=Ganancia_Total,ventas_dia_cantidad=ventas_dia_cantidad, restante=restante, porcentaje=porcentaje, email=session["email"], ventas_dia=ventas_dia, dineroEnApartados=dineroEnApartados, clientes=clientes, reeinvertir=reeinvertir, ingresos_del_corte=ingresos_del_corte, ganancias=ganancias,
                                envios=envios, mas_vendidos=mas_vendidos, apartados=apartados, deudores=deudores, total_producto=total_producto, total_clientes=total_clientes)
     else:
         return render_template("inicio/iniciar_sesion.html")
@@ -1235,7 +1248,7 @@ def categorias():
     if "email" in session:
         # verProductos = request.args.get('verProductos')
         idCategoria = request.form.get('idcategoria')
-        print("la categora es:", idCategoria)
+        # print("la categora es:", idCategoria)
 
         cur = mysql.connection.cursor()
         cur.execute("""
@@ -1243,7 +1256,7 @@ def categorias():
         FROM categorias
         LEFT JOIN producto ON producto.ID_C = categorias.ID_C
         WHERE categorias.ID_C = %s
-    """, (idCategoria,))
+        """, (idCategoria,))
         verProductos = cur.fetchall()
 
         cur.execute("""
@@ -1254,7 +1267,12 @@ def categorias():
         """)
         categorias = cur.fetchall()
         cur.close()
-        return render_template('categorias.html', categorias=categorias, verProductos=verProductos)
+        #Mensajes flash
+        agregar_categoria = get_flashed_messages(category_filter=['agregar_categoria'])
+        categoria_editada = get_flashed_messages(category_filter=['categoria_editada'])
+        categoria_eliminada = get_flashed_messages(category_filter=['categoria_eliminada'])
+        return render_template('categorias.html',categoria_eliminada=categoria_eliminada,categoria_editada=categoria_editada, categorias=categorias, verProductos=verProductos, agregar_categoria=agregar_categoria)
+
     else:
         return render_template("inicio/iniciar_sesion.html")
 
@@ -1440,7 +1458,7 @@ def editar_producto(id):
         nombre = request.form['nombre']
         precio_compra = request.form['precio_compra']
         precio_venta = request.form['precio_venta']
-        existencias = request.form['existencias']
+        # existencias = request.form['existencias']
         existencias_deseadas = request.form['existencias_deseadas']
         proveedor = request.form['proveedor']
         categoria = request.form['categoria']
@@ -1450,8 +1468,8 @@ def editar_producto(id):
 
         try:
             cur.execute(
-                "UPDATE producto SET Nombre = %s, Precio_Compra = %s, Precio_Venta = %s, Existencias = %s, Existencias_Deseadas = %s, ID_Provedor = %s, ID_C= %s WHERE ID_Producto = %s",
-                (nombre, precio_compra, precio_venta, existencias,
+                "UPDATE producto SET Nombre = %s, Precio_Compra = %s, Precio_Venta = %s,  Existencias_Deseadas = %s, ID_Provedor = %s, ID_C= %s WHERE ID_Producto = %s",
+                (nombre, precio_compra, precio_venta,
                  existencias_deseadas, proveedor, categoria, id)
             )
             mysql.connection.commit()
@@ -1545,10 +1563,10 @@ def agregar_categoria():
         cur = mysql.connection.cursor()
         cur.execute("INSERT INTO categorias (Categoria) VALUES (%s)", (nombre,))
         mysql.connection.commit()
+        flash("La categoria se agrego", "agregar_categoria")
         cur.close()
         return redirect(url_for('categorias'))
 
-# Agregar Categoria
 
 
 @app.route('/agregar_proveedor', methods=['POST'])  # insertar datos
@@ -1562,6 +1580,7 @@ def agregar_proveedor():
         cur.execute(
             "INSERT INTO proveedor (Empresa,ID_RE1, ID_RE2) VALUES (%s,%s,%s)", (nombre, reparto1, reparto2))
         mysql.connection.commit()
+        flash("Agregado", "proveedor_agregado")
         cur.close()
         return redirect(url_for('proveedor'))
 
@@ -1574,6 +1593,8 @@ def editar_categoria(id):
     cur.execute(
         "UPDATE categorias SET Categoria = %s WHERE ID_C = %s", (nombre, id))
     mysql.connection.commit()
+    flash("La categoria fue editada cone exito :)", "categoria_editada")
+    
     cur.close()
     return redirect(url_for('categorias'))
 
@@ -1588,6 +1609,7 @@ def editar_proveedor(id):
         cur.execute(
             "UPDATE proveedor SET Empresa = %s, ID_RE1 = %s, ID_RE2 = %s WHERE ID_Proveedor = %s", (nombre, reparto1, reparto2, id))
         mysql.connection.commit()
+        flash("Editado", "proveedor_editada")
         cur.close()
     return redirect(url_for('proveedor'))
 
@@ -1596,10 +1618,28 @@ def editar_proveedor(id):
 def eliminar_categoria():
     cur = mysql.connection.cursor()
     id = request.form['indice_id']
+    
+    #Tomar el nombre de la categoria
+    cur.execute("""
+    SELECT categorias.Categoria 
+    FROM categorias  
+    WHERE ID_C = %s;
+    """,(id,))  # ID_Productos cambia
+    categoria_eliminada = cur.fetchone()
+    
+    #Mandar a tabla eliminada
+    cur.execute("""
+    INSERT INTO categorias_eliminadas (Nombre) VALUE (%s);
+    """,(categoria_eliminada))  # ID_Productos cambia
+    mysql.connection.commit()
+    
+    #Borrar de verdad
     cur.execute("DELETE FROM categorias WHERE ID_C = %s",
                 (id,))  # ID_Productos cambia
     mysql.connection.commit()
+    
     cur.close()
+    flash("La categoria fue eliminada :()", "categoria_eliminada") 
     return redirect(url_for('categorias'))
 
 
@@ -1955,6 +1995,14 @@ def marcar_devuelto():
         """, (id_venta, id_producto))
         mysql.connection.commit()
         
+        cur.execute("""
+        UPDATE producto_venta 
+        SET Hora_Devuelto = NOW(), Fecha_Devuelto = CURDATE()
+        WHERE ID_Venta = %s AND ID_Producto = %s;
+        """, (id_venta, id_producto))
+        mysql.connection.commit()
+            
+            
         # Update ventas con suma de todos los porudcot en esa venta
         cur.execute("""
         UPDATE ventas

@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Evento clic en el botón "Generar"
     generatePasswordBtn.addEventListener("click", function () {
-        const newPassword = generatePassword(15); // Cambiar el número 12 por la longitud deseada de la contraseña
+        const newPassword = generatePassword(10); // Cambiar el número 12 por la longitud deseada de la contraseña
         passwordInput.value = newPassword;
     });
 });

@@ -75,6 +75,7 @@
 
 .resumen__card__titulo {
     font-size: 36px;
+    color: #51e89f;
 }
 
 
@@ -224,7 +225,7 @@
 .resumen__card__invertir {
     /*titulo*/
     font-size: 2.2rem;
-    color: var(--color-rojo);
+    color: rgb(249, 73, 73);
 }
 
 

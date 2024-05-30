@@ -26,6 +26,36 @@
     {% endif %}
 
 
+    {% with proveedor_agregado = get_flashed_messages(category_filter=["proveedor_agregado"]) %}
+    {% if proveedor_agregado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El proveedor fue agregado con exito
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with proveedor_editada = get_flashed_messages(category_filter=["proveedor_editada"]) %}
+    {% if proveedor_editada %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El proveedor fue editado con exito
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    <!-- {% with proveedor_editada = get_flashed_messages(category_filter=["proveedor_e"]) %}
+    {% if proveedor_editada %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El proveedor fue editado con exito
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %} -->
+
 
 
 

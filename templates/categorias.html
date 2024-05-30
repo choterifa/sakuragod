@@ -17,6 +17,41 @@
         </ol>
     </nav>
 
+    <!-- Mensajes Flash -->
+    {% if agregar_categoria %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> La categoria fue agregada!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+
+    <!-- {% if categoria_editada %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> La categoria fue editada!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %} -->
+
+    {% if categoria_eliminada %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> La categoria fue eliminada!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+
+    {% with categoria_editada = get_flashed_messages(category_filter=["categoria_editada"]) %}
+    {% if categoria_editada %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> La categoria fue editada!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
 
 
 
@@ -63,7 +98,7 @@
                             productos<i class="fas fa-trash-alt"></i></button>
 
                         <!--El que envia el formulario para la consulta con el id-->
-                        <form action="/reset_proveedor" method="POST" id="categoriaForm" onsubmit="setFormSubmitted()">
+                        <form action="/categorias" method="POST" id="categoriaForm" onsubmit="setFormSubmitted()">
                             <input type="hidden" name="idcategoria" id="idcategoria" value="{{ indice[0] }}">
                             <button type="submit" id="enviarID" class="btn btn-dark"> Ver productos <i
                                     class="bi bi-eye"></i></button>
@@ -85,10 +120,6 @@
                                 }
                             });
                         </script>
-
-
-
-
                     </div>
                 </td>
             </tr>
@@ -113,12 +144,12 @@
             <div class="modal-body"> <!--Formulario-->
                 <form id="enviarCategoria" method="POST" action="{{ url_for('agregar_categoria')}}">
                     <div class="">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" pattern="^[A-Za-z\s]+$"
-                            required>
+                        <label for="nombre">Nombre</label>
+                        <input type="text" onpaste="return false;" class="form-control my-2" id="nombre" name="nombre"
+                            pattern="^[A-Za-z\s]+$" minlength="3" maxlength="15" required>
                     </div>
-                    <div class="text-center mt-2">
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    <div class="text-center mt-3 ">
+                        <button type="submit" class="btn btn-primary w-100">Guardar</button>
                     </div>
                 </form>
             </div>

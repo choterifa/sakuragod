@@ -37,8 +37,8 @@ html {
 
 .Inicio__Nav__Logo {
     display: block;
-    width: 50px;
-    height: 50px;
+    width: 49px;
+    height: 49px;
     object-fit: cover;
 }
 
@@ -87,7 +87,7 @@ html {
 }
 
 .Inicio__Hero__Imagen {
-    width: 80px;
+    width: 84px;
 }
 
 .Inicio__titulo {
@@ -141,6 +141,8 @@ html {
     background-color: #181818;
     color: #f3f3f3;
     letter-spacing: 0.5px;
+
+    box-shadow: 0 4px 9px -1.4px rgba(0, 0, 0, 0.383);
 }
 
 .Inicio__Btn--logo {
@@ -220,7 +222,7 @@ html {
 }
 
 .Ubicacion__Titulo {
-    font-size: 44px;
+    font-size: 42px;
     font-weight: 600;
     margin: 110px;
     margin-top: 125px;
@@ -303,6 +305,7 @@ span {
     background-color: black;
     border-radius: 10px;
     color: white;
+    box-shadow: 0 5px 12px -1.2px rgba(0, 0, 0, 0.575);
 }
 
 .btn__contactar:hover {
@@ -433,6 +436,7 @@ span {
     margin-bottom: 48px;
     width: 65%;
     line-height: 2;
+    color: #383d3f;
 }
 
 .Inicio__descripcion__demostrativos--alineado {

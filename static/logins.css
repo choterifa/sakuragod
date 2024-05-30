@@ -25,6 +25,7 @@ body {
     background-image: url(../static/imagenes/fondoArc.jpeg);
     background-size: cover;
     background-repeat: no-repeat;
+    animation: breathe 7s infinite;
 }
 
 .container__sigin__titulos {
@@ -74,9 +75,34 @@ body {
 }
 
 .btn__form:hover {
-    background-image: linear-gradient(to right, #b18ae7, #aa8cf6, #b6cef4ad);
+    background-image: linear-gradient(to right, #b18ae7, #aa8cf6, #eeebebcd);
+    
     background-size: 200% 200%;
     animation: moverGradiente 4s infinite;
+}
+
+.toggle-password{
+    position: absolute;
+    top: 467px; /*480 sin toolbar, 467 con tool*/
+    right: 534px;
+    font-size: 20px;
+    opacity: 0;
+    transition: all 3s ease;
+
+}
+
+.toggle-password i{
+    color: #757575cd;
+    font-size: 17px;
+}
+
+
+#password:hover + .toggle-password {
+    opacity: .7;
+}
+
+.toggle-password:hover{
+    opacity: 1;
 }
 
 @keyframes moverGradiente {
@@ -98,11 +124,15 @@ body {
 
 /*informacion*/
 .informacion__mensaje {
-    margin-top: 3px;
+    margin-top: 4px;
     font-size: 1rem;
     text-decoration: none;
     text-align: center;
     color: #3038f0;
+}
+
+.informacion__mensaje:hover{
+    color: #3214b4;
 }
 
 /*seccion del registro*/
@@ -114,7 +144,24 @@ body {
     background-image: url(../static/imagenes/fondoArc.jpeg);
     background-size: cover;
     background-repeat: no-repeat;
+    animation: breathe 7s infinite;
 }
+
+@keyframes breathe {
+    0% {
+        background-size: 100% 100%;
+    }
+
+    50% {
+        background-size: 110% 110%; 
+
+    }
+
+    100% {
+        background-size: 100% 100%;
+    }
+}
+
 
 .container__singup__titulos {
     width: 31%;
@@ -135,7 +182,7 @@ body {
 
 label {
     /*Sus etiquetas*/
-    color: #757575 ;
+    color: #757575;
 }
 
 /*Salirse alv*/
@@ -233,15 +280,16 @@ label {
 
 #generatePasswordBtn {
     position: absolute;
-    top: 50px;
-    right: 15;
-    color: rgba(113, 111, 111, 0.794);
+    top: 51px;
+    right: 14;
+    color: rgba(113, 111, 111, 0.706);
     opacity: 0;
+    font-size: 14.6px;
 }
 
 
 #generatePasswordBtn:hover,
-.singup__password:hover + #generatePasswordBtn {
+.singup__password:hover+#generatePasswordBtn {
     opacity: 1;
 }
 
