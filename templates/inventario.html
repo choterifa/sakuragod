@@ -18,7 +18,7 @@
     </nav>
 
 
-    <h1 class="inventario__titulo text-center">Inventario de productos</h1>
+    <h1 class="inventario__titulo text-center mx-2">Inventario de productos</h1>
 
     <!--Alerta de actualizados y eliminados-->
     {% if update %}
@@ -37,7 +37,7 @@
     {% endif %}
 
 
-    <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#abrirModal"
+    <button type="button" class="btn btn-dark my-2 " data-bs-toggle="modal" data-bs-target="#abrirModal"
         data-taskid="0">Nuevo Producto
     </button>
 
@@ -45,7 +45,7 @@
         data-taskid="0">Ver Faltantes
     </button>
 
-    <button type="button" class="btn btn-secondary my-2" data-bs-toggle="offcanvas" data-bs-target="#Reabastecer2"
+    <button type="button" class="btn btn-secondary my-2 " data-bs-toggle="offcanvas" data-bs-target="#Reabastecer2"
         data-taskid="0">Reabastecer
     </button>
 
@@ -255,46 +255,48 @@
     {% endif %}
 
     <!-- Modal para crear/editar tarea -->
-    <div class="modal fade " data-bs-backdrop="static" id="abrirModal" tabindex="-1">
-        <div class="modal-dialog modal-dialog-centered ">
+    <div class="modal fade " id="abrirModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered " style="width: 475px;">
             <div class="modal-content">
 
                 <div class="modal-header"><!--Header-->
-                    <h5 class="modal-title ">Agregar Producto</h5> <!--id-->
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <h4 class="modal-title m-auto">Agregar Producto</h4> <!--id-->
+                    <button type="button" class="btn-close d-none" data-bs-dismiss="modal" aria-label="Close">
                     </button>
                 </div>
 
                 <div class="modal-body"> <!--Formulario-->
                     <form id="taskForm" method="POST" action="{{ url_for('agregar_producto')}}"> <!--Añadir producto-->
                         <div class="">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" onpaste="return false;" class="form-control" id="nombre" name="nombre"
-                                pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" minlength="3" maxlength="40" required>
+                            <label for="nombre">Nombre</label>
+                            <input data-bs-toggle="tooltip" data-bs-title="Ingresa solo letras y números sin espacios."
+                                data-bs-custom-class="custom-tooltip" data-bs-placement="top" type="text"
+                                onpaste="return false;" class="form-control mb-2" id="nombre" name="nombre"
+                                pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" minlength="3" maxlength="25" required>
                         </div>
                         <div class="">
-                            <label for="precio_compra">Precio Compra:</label>
-                            <input type="number" onpaste="return false;" class="form-control" id="precio_compra"
+                            <label for="precio_compra">Precio Compra</label>
+                            <input type="number" onpaste="return false;" class="form-control mb-2" id="precio_compra"
                                 step="0.1" name="precio_compra" min="0" max="1000" required>
                         </div>
                         <div class="">
-                            <label for="precio_venta">Precio Venta:</label>
-                            <input type="number" onpaste="return false;" class="form-control" id="precio_venta"
+                            <label for="precio_venta">Precio Venta</label>
+                            <input type="number" onpaste="return false;" class="form-control mb-2" id="precio_venta"
                                 step="0.1" name="precio_venta" min="0" max="1000" required>
                         </div>
                         <div class="">
-                            <label for="existencias" onpaste="return false;">Existencias:</label>
-                            <input type="number" class="form-control" id="existencias" name="existencias" min="0"
+                            <label for="existencias" onpaste="return false;">Existencias</label>
+                            <input type="number" class="form-control mb-2" id="existencias" name="existencias" min="0"
                                 max="500" autocomplete="off" required>
                         </div>
                         <div class="">
-                            <label for="existencias_deseadas" onpaste="return false;">Existencias deseadas:</label>
-                            <input type="number" class="form-control" id="existencias_deseadas"
+                            <label for="existencias_deseadas" onpaste="return false;">Existencias deseadas</label>
+                            <input type="number" class="form-control mb-2" id="existencias_deseadas"
                                 name="existencias_deseadas" min="0" max="500" placeholder="Opcional" autocomplete="off">
                         </div>
                         <div class="">
                             <label for="proveedor">Proveedor:</label>
-                            <select class="form-control" id="proveedor" name="proveedor" required>
+                            <select class="form-select mb-2" id="proveedor" name="proveedor" required>
                                 <!-- Opción por defecto -->
                                 <option selected disabled value="">Selecciona una opción</option>
                                 {% for proveedor in Proveedor %}
@@ -304,7 +306,7 @@
                         </div>
                         <div class="">
                             <label for="categoria">Categoria:</label>
-                            <select class="form-control" id="categoria" name="categoria" required>
+                            <select class="form-select mb-3" id="categoria" name="categoria" required>
                                 <option selected disabled value="">Selecciona una opción</option>
                                 {% for Categorias in Categorias %}
                                 <option value="{{ Categorias[0] }}">{{ Categorias[1] }}</option>
@@ -315,7 +317,7 @@
 
                         <div class="text-center mt-2">
                             <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
-                            <button type="submit" class="btn btn-primary">Guardar</button>
+                            <button type="submit" class="btn btn-dark ">Guardar</button>
                         </div>
                     </form>
 
@@ -337,7 +339,7 @@
                 </div>
 
                 <div class="modal-body"> <!--Formulario-->
-                    <h3>¿Deseas eliminar el producto  <br><strong id="producto_nombre" class="mt-3"
+                    <h3>¿Deseas eliminar el producto <br><strong id="producto_nombre" class="mt-3"
                             style="display: inline-block;"></strong>?</h3>
 
                 </div>
@@ -395,12 +397,17 @@
 
                 //Titulo segun la funcion
                 if (id) {
+                    const clienteSelect = abrirModal.querySelector('#existencias');
+                    clienteSelect.disabled = true;
+
                     abrirModal.querySelector('.modal-title').textContent = 'Editar Producto';
                     console.log(id)
                     abrirModal.querySelector('#taskForm').setAttribute('action', '{{ url_for("editar_producto", id=0) }}'.replace('0', id));
                     //Enviar a editar
                 } else {
                     abrirModal.querySelector('.modal-title').textContent = 'Agregar Producto';
+                    const clienteSelect = abrirModal.querySelector('#existencias');
+                    clienteSelect.disabled = false;
                 }
             })
         }

@@ -75,7 +75,7 @@
         </thead>
         <tbody class="table-group-divider">
             {% for indice in apartados %}
-            <tr class="dobles_click" style="cursor: pointer;">
+            <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
                 <td>{{ indice[2] }} {{ indice[3]}}</td>
                 <td>{{ indice[5] }}</td>
@@ -87,8 +87,9 @@
                     <div class="editar__botones">
 
                         <button onclick="setProductId('{{ indice[4] }}', '{{ indice[6] }}')" data-bs-toggle="modal"
-                            data-bs-target="#abonar" type="button" id="abonar__btn" class="btn btn-dark">Abonar
+                            data-bs-target="#abonar" type="button" class="btn btn-dark btn__editar">Abonar
                         </button>
+
                         <!-- <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
                             data-bs-target="#abonar" type="button" id="delete__btn" class="btn btn-dark">Ver abonos <i
                                 class="fas fa-trash-alt"></i>
@@ -102,7 +103,7 @@
                         <!--El que envia el formulario para ver abonos-->
                         <form action="/ver_abonos" method="POST" id="categoriaForm" onsubmit="setFormSubmitted()">
                             <input type="hidden" name="id_apartado" id="id_apartado" value="{{ indice[4] }}">
-                            <button type="submit" class="btn btn-secondary"> Ver abonos <i
+                            <button type="submit" class="btn btn-success"> Ver abonos <i
                                     class="bi bi-eye"></i></button>
                         </form>
 
@@ -136,7 +137,6 @@
                                 border-color: rgba(255, 0, 0, 0) !important;
                             }
                         </style>
-
                     </div>
                 </td>
             </tr>
@@ -149,7 +149,7 @@
 
 
     <div class="collapse" id="tablaPagados">
-        <h2 class="inventario__titulo text-center">Apartados pagados</h2>
+        <h2 class="mt-4"> Completados</h2>
 
         <table class="table  table-hover table-striped align-middle mt-3">
             <thead>
@@ -183,7 +183,7 @@
                         <!--El que envia el formulario para ver abonos-->
                         <form action="/ver_abonos" method="POST" id="categoriaForm" onsubmit="setFormSubmitted()">
                             <input type="hidden" name="id_apartado" id="id_apartado" value="{{ indice[4] }}">
-                            <button type="submit" class="btn btn-dark"> Ver abonos <i class="bi bi-eye"></i></button>
+                            <button type="submit" class="btn btn-secondary"> Ver abonos <i class="bi bi-eye"></i></button>
                         </form>
                     </td>
                 </tr>
@@ -195,7 +195,7 @@
     </div>
 
     <div class="collapse" id="tablaCancelados">
-        <h2 class="inventario__titulo text-center">Apartados Cancelados</h2>
+        <h2 class="mt-5"> Cancelados</h2>
 
         <table class="table  table-hover table-striped align-middle mt-3">
             <thead>
@@ -279,19 +279,19 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="">
+                    <!-- <div class="">
                         <label for="id_apartado">Nº Apartado</label>
                         <input type="number" class="form-control" id="id_apartado" name="id_apartado" min="1" max="1000"
                             value="0" placeholder="Opcional" disabled required>
-                    </div>
+                    </div> -->
                     <div class="">
                         <label for="cantidad">Cantidad</label>
-                        <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" max="100"
-                            placeholder="2" required>
+                        <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" max="5"
+                            placeholder="Max. 5" required>
                     </div>
                     <div class="">
                         <label for="abono">Abono Inicial</label>
-                        <input type="number" class="form-control" id="abono" name="abono" min="0" max="2000"
+                        <input type="number" class="form-control" id="abono" name="abono" min="0" max="3000"
                             placeholder="500" required>
                     </div>
 
@@ -345,10 +345,10 @@
 
 
 <!-- Modal para Apartar abonar -->
-<div class="modal fade modal-sm" id="abonar" tabindex="-1">
+<div class="modal fade modal-sm " id="abonar" tabindex="-1">
 
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
+        <div class="modal-content p-1">
 
             <div class="modal-header"><!--Header-->
                 <h5 class="modal-title">Abono de cliente</h5> <!--id-->
@@ -361,13 +361,14 @@
                     <div class="">
                         <label for="cantidad">Cantidad a abonar</label>
                         <input type="number" onpaste="return false;" class="form-control" id="cantidad_abono"
-                            name="cantidad_abono" min="1" max="2000" placeholder="" required>
+                            name="cantidad_abono" min="1" max="4000" required>
                     </div>
                     <input type="hidden" name="indice_id" id="indice_id" value="">
                     <!--Botones-->
-                    <button type="button" class="btn btn-secondary mt-2" onclick="completarAbono()">Completar</button>
-                    <button type="submit" class="btn btn-dark mt-2">Abonar
-                    </button>
+                    <button type="button" class="btn btn-secondary mt-3 w-100"
+                        onclick="completarAbono()">Completar</button>
+                    <button type="submit" class="btn btn-dark mt-2 w-100 ">Abonar</button>
+
 
                 </form>
             </div>

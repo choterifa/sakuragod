@@ -9,7 +9,7 @@
     <h1 class="resumen__titulo">Movimientos</h1>
     <div class="resumen__cards">
 
-        <div class="resumen__card__item " >
+        <div class="resumen__card__item ">
             <a href="/ventas" class="resumen__enlaces ">
 
                 <div class="resumen__card__textos ">
@@ -67,8 +67,8 @@
             <div class="resumen__card__item  resumen__card__item--bandera">
                 <a href="/ventas" class="resumen__card__enlace">
                     <div class="resumen__card__textos resumen__card__textos--modify">
-                        <p class="resumen__paragraph__bandera">Ventas del dia</p>
-                        <h3 class="resumen__card__titulo__bandera">{{total_ventas[0]}}</h3>
+                        <p class="resumen__paragraph__bandera">Ventas del día</p>
+                        <h3 class="resumen__card__titulo__bandera">{{ventas_dia}}</h3>
                     </div>
                 </a>
             </div>
@@ -107,7 +107,7 @@
                         </tr>
                         {% endfor %}
                     </tbody>
-                </table>            
+                </table>
             </a>
         </div>
 
@@ -178,15 +178,24 @@
 
             <h3 class="resumen__card__objetivo">Objetivo del día</h3>
             <div class="experiencia__barras__container">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: 20%">
-                        25%</div>
+                <div class="progress-stacked">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                        style="width: {{ porcentaje }}%">
+                        <div class="progress-bar progress-bar-striped bg-success progress-bar-animated">
+                            {{ porcentaje }}</div>
+                    </div>
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                        style="width: {{ restante }}%">
+                        <div class="progress-bar progress-bar-striped  bg-secondary progress-bar-animated">
+                            {{ restante }}</div>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
 
-   
+
     <!--Musica-->
     <!-- <audio id="audio-fondo" autoplay loop>
         <source src="../../static/Audio/Audio.mp3" type="audio/mpeg">

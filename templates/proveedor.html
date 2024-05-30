@@ -17,6 +17,16 @@
         </ol>
     </nav>
 
+    <!--Alerta de actualizados y eliminados-->
+    {% if reset %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Se reinicio correctamente
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+
+
+
 
 
     <h2 class="inventario__titulo text-center mt-4">Proveedores</h2>
@@ -24,12 +34,23 @@
     <button type="button" class="btn_agregar btn btn-dark my-2" data-bs-toggle="modal"
         data-bs-target="#abrirModalreparto" data-taskid="0">Agregar Proveedor
     </button>
+
+ 
+    <!--El que envia el formulario para la consulta con el id-->
+    <form action="/reset_proveedor" method="POST" style="display: inline-block;">
+        <button type="submit" class="btn btn-warning"> Reset <i class="bi bi-arrow-clockwise"></i></button>
+    </form>
+
+  
+
     <!--Tabla para los marcados en enviado-->
     <table class="table  table-hover table-striped align-middle mt-4">
         <thead>
             <tr>
                 <th scope="col">#</th> <!--Columna Encabezados-->
                 <th scope="col">Empresa</th> <!--Columna Encabezados-->
+                <th scope="col">Monto</th>
+                <th scope="col">Cantidad</th>
                 <th scope="col">Dia de reparto 1</th>
                 <th scope="col">Dia de reparto 2</th>
                 <th scope="col">Ediciones</th>
@@ -40,22 +61,23 @@
             <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[0] }}</td>
                 <td>{{ indice[1] }}</td>
-                <td>{{ '-' if indice[3] is none else indice[3]}}</td>
+                <td>{{ indice[2] }}</td>
+                <td>{{ indice[3] }}</td>
                 <td>{{ '-' if indice[5] is none else indice[5]}}</td>
+                <td>{{ '-' if indice[7] is none else indice[7]}}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td style="width: 130px; ">
                     <div class="editar__botones">
                         <button type="button" class="btn btn-primary btn-sm d-none btn__editar" data-bs-toggle="modal"
-                            data-bs-target="#abrirModalreparto" data-bs-id-prove="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
-                            data-bs-reparto1="{{indice[2]}}" data-bs-reparto2="{{indice[4]}}">Editar <i
-                                class="fas fa-edit"></i>
+                            data-bs-target="#abrirModalreparto" data-bs-id-prove="{{indice[0]}}"
+                            data-bs-nombre="{{indice[1]}}" data-bs-reparto1="{{indice[4]}}"
+                            data-bs-reparto2="{{indice[6]}}">Editar <i class="fas fa-edit"></i>
                         </button>
 
                         <button onclick="setProductId('{{ indice[0] }}', '{{ indice[1] }}')" data-bs-toggle="modal"
                             data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar
                             <i class="fas fa-trash-alt"></i>
                         </button>
-
 
                     </div>
                 </td>
@@ -80,7 +102,7 @@
                     <form id="enviarProve" method="POST" action="{{ url_for('agregar_proveedor')}}">
                         <div class="">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" pattern="^[A-Za-z\s]+$"
+                            <input type="text" onpaste="return false;" class="form-control" id="nombre" maxlength="20" name="nombre" pattern="^[A-Za-z\s]+$"
                                 required>
                         </div>
                         <div class="">
@@ -137,6 +159,7 @@
             </div>
         </div>
     </div>
+    
     <!--Actualizar modal-->
     <script>
         //< !--Codigo para obtner los datos del fomr segun si id(Editar)-- >

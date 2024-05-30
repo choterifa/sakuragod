@@ -17,64 +17,144 @@
         </ol>
     </nav>
 
+    {% if devuelto %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> La venta se marco como devolución
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
 
 
     <h1 class="inventario__titulo text-center">Ventas</h1>
 
-    <button type="button" class="btn_agregar btn btn-primary my-2" data-bs-toggle="modal"
-        data-bs-target="#abrirModalVenta" data-taskid="0">Vender un producto
+    <button type="button" class="btn_agregar btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#abrirModalVenta"
+        data-taskid="0">Venta directa
     </button>
 
+    <a type="button" href="/apartados" class="btn btn-warning my-2">Apartar producto
+    </a>
+
     <!--Nueva tabla-->
-    <table class="table  table-hover table-striped align-middle">
+    <table class="table  table-hover table-striped align-middle mt-2">
         <thead>
             <tr>
-                <th scope="col">ID</th> <!--Columna Encabezados-->
-                <th scope="col">Ingreso Total</th>
-                <th scope="col">Ganancia M</th>
-                <th scope="col">Reinversion</th>
-                <th scope="col">Cantidad Vendida</th>
+                <th scope="col">ID</th> <!--ID venta el de producto es [1]-->
+                <th scope="col">Producto Vendido</th>
+                <th scope="col">Cantidad</th>
                 <th scope="col">Hora</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Monto</th>
+                <!-- <th scope="col">Ganancia</th> -->
+                <!-- <th scope="col">Reinversion</th> -->
                 <th scope="col">Forma de pago</th>
+                <th scope="col">Forma de venta</th><!--10 elementos-->
                 <th scope="col">Editar</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
-            {% for indice in ventas %} <!--Nombre cualquiera + el que recibe de la variable-->
-            <tr>
+
+            {% for indice in ventas %}
+            {% if indice[5] == fecha_actual %}
+            <tr class="doble_click table-danger" style="cursor: pointer;">
+                {% else %}
+            <tr class="doble_click" style="cursor: pointer;">
+                {% endif %}
+
                 <td>{{ indice[0] }}</td>
-                <td>{{ indice[1] }}</td>
                 <td>{{ indice[2] }}</td>
                 <td>{{ indice[3] }}</td>
-                <td>{{ indice[4] }}</td>
+                <td>{{ indice[4] }}</td><!--Hora en 12-->
                 <td>{{ indice[5] }}</td>
-                <td>{{ indice[9] }}</td>
+                <td>{{ indice[6] }}</td>
+                <!-- <td>{{ indice[7] }}</td> -->
+                <!-- <td>{{ indice[8] }}</td> -->
+                <td>{{ indice[10] }}</td>
+                <td>{{ indice[12] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
-                <td>
+                <td style="width: 200px;">
                     <div class="editar__botones">
-                        <button type="button" class="btn btn-primary btn-sm btn__editar" data-bs-toggle="modal"
-                            data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}" data-bs-nombre="{{indice[1]}}"
-                            data-bs-compra="{{indice[2]}}" data-bs-venta="{{indice[3]}}"
-                            data-bs-ganancia="{{indice[4]}}" data-bs-existencias="{{indice[5]}}"
-                            data-bs-existencias-deseadas="{{indice[6]}}" data-bs-proveedor="{{indice[7]}}"
-                            data-bs-categoria="{{indice[8]}}">Editar <i class="fas fa-edit "></i>
-                            <!--Cambia el orden del modal js-->
-                        </button>
+
 
                         <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
-                            data-bs-target="#Eliminar" type="button" id="delete__btn" class="btn btn-danger">Eliminar<i
-                                class="fas fa-trash-alt"></i>
+                            data-bs-target="#agregarMas" type="button" id="ver__btn"
+                            class="btn border-secondary mas  btn__editar ">Agregar
+                            más</button>
+
+
+                        <!--pasar idventa, proudcto cantidad-->
+                        <button onclick="setProductId2('{{ indice[0] }}', '{{ indice[1] }}', '{{ indice[3] }}')"
+                            data-bs-toggle="modal" data-bs-target="#cantidadDevuelta" type="button"
+                            class="btn border-secondary btn__editar devolver"><i
+                                class="bi bi-arrow-counterclockwise"></i>
                         </button>
-                        
-                        <!-- <form action="/eliminar_producto" method="POST" id="eliminarp">
-                            <input type="hidden" name="indice_id" value="{{indice[0]}}">
-                            <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar<i
-                                    class="fas fa-trash-alt"></i>
-                            </button>
+
+
+
+                        <!--El que abre el modal-->
+                        <!-- <form action="/marcar_devuelto" method="POST" id="eliminarp">
+                            <input type="hidden" name="id_venta" value="{{indice[0]}} ">
+                            <input type="hidden" name="id_producto" value="{{indice[1]}} ">
+                            <button type="submit" class="btn border-secondary devolver cancelar"><i
+                                    class="bi bi-arrow-counterclockwise"></i></button>
                         </form> -->
+
+                        <style>
+                            .devolver:hover {
+                                background-color: #f6c344;
+                                color: white !important;
+                                border-color: rgba(255, 0, 0, 0) !important;
+                            }
+
+                            .mas:hover {
+                                background-color: #34cc2a;
+                                color: white !important;
+                                border-color: rgba(255, 0, 0, 0) !important;
+                            }
+                        </style>
                     </div>
 
                 </td>
+            </tr>
+            {% set prev_id_venta = indice[0] %}
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!--Nueva tabla-->
+    <h2 class="inventario__titulo mt-5 ">Devueltos</h2>
+
+    <table class="table  table-hover table-striped align-middle mt-2">
+        <thead>
+            <tr>
+                <th scope="col">ID</th> <!--ID venta el de producto es [1]-->
+                <th scope="col">Producto Regresado</th>
+                <th scope="col">Cantidad</th>
+                <th scope="col">Hora Devuelta</th>
+                <th scope="col">Fecha Devuelta</th>
+                <th scope="col">Monto</th>
+                <!-- <th scope="col">Ganancia</th> -->
+                <!-- <th scope="col">Reinversion</th> -->
+                <!-- <th scope="col">Forma de pago</th> -->
+                <!-- <th scope="col">Forma de venta</th> -->
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% for indice in ventasDevueltas %} <!--Nombre cualquiera + el que recibe de la variable-->
+            <tr class="doble_click" style="cursor: pointer;">
+                <td>{{ indice[0] }}</td>
+                <td>{{ indice[2] }}</td>
+                <td>{{ indice[15] }}</td>
+                <td>{{ indice[4] }}</td><!--Hora en 12-->
+                <td>{{ indice[5] }}</td>
+                <td>{{ indice[16] }}</td>
+                <!-- <td>{{ indice[7] }}</td> -->
+                <!-- <td>{{ indice[8] }}</td> -->
+                <!-- <td>{{ indice[10] }}</td> -->
+                <!-- <td>{{ indice[12] }}</td> -->
+                <!--Seccion de edicion (Editar/Eliminar)-->
+
             </tr>
             {% endfor %}
         </tbody>
@@ -82,56 +162,47 @@
 </section>
 
 
-<!-- Modal para crear/editar venta -->
-<div class="modal fade" id="abrirModalVenta" tabindex="-1">
 
-    <div class="modal-dialog">
-        <div class="modal-content">
+<!-- Modal para crear/editar venta -->
+<div class="modal fade modal-sm" id="abrirModalVenta" tabindex="-1">
+
+    <div class="modal-dialog  modal-dialog-centered">
+        <div class="modal-content ">
 
             <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Agregar Una venta</h5> <!--id-->
+                <h5 class="modal-title">Generar Venta</h5> <!--id-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
 
             <div class="modal-body"> <!--Formulario-->
-                <form id="taskForm" method="POST" action="{{ url_for('agregar_producto')}}"> <!--Añadir producto o-->
+                <form id="taskForm" method="POST" action="{{ url_for('agregar_venta')}}"> <!--Añadir producto o-->
                     <div class="">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                        <label for="cliente">Producto:</label>
+                        <select class="form-control " id="producto" name="producto" required>
+                            <option selected disabled value="">Selecciona una opción</option>
+                            {% for producto in productos %}
+                            <option value="{{ producto[0] }}">{{ producto[1] }} </option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="">
-                        <label for="precio_compra">Precio Compra:</label>
-                        <input type="text" class="form-control" id="precio_compra" name="precio_compra" required>
+                        <label for="forma_pago">Forma de pago:</label>
+                        <select class="form-control " id="forma_pago" name="forma_pago" required>
+                            <option selected disabled value="">Selecciona una opción</option>
+                            {% for forma in forma_pago %}
+                            <option value="{{ forma[0] }}">{{ forma[1] }} </option>
+                            {% endfor %}
+                        </select>
                     </div>
                     <div class="">
-                        <label for="precio_venta">Precio Venta:</label>
-                        <input type="text" class="form-control" id="precio_venta" name="precio_venta" required>
+                        <label for="cantidad">Cantidad:</label>
+                        <input type="number" onpaste="return false;" class="form-control" id="cantidad" name="cantidad"
+                            min="0" max="5" placeholder="Max 5" required>
                     </div>
-                    <div class="">
-                        <label for="ganancia">Ganancia:</label>
-                        <input type="text" class="form-control" id="ganancia" name="ganancia" required>
-                    </div>
-                    <div class="">
-                        <label for="existencias">Existencias:</label>
-                        <input type="text" class="form-control" id="existencias" name="existencias" required>
-                    </div>
-                    <div class="">
-                        <label for="existencias_deseadas">Existencias deseadas:</label>
-                        <input type="text" class="form-control" id="existencias_deseadas" name="existencias_deseadas"
-                            placeholder="Opcional">
-                    </div>
-                    <div class="">
-                        <label for="proovedor">Proveedor:</label>
-                        <input type="" class="form-control" id="proveedor" name="proveedor" required>
-                    </div>
-                    <div class="">
-                        <label for="categoria">Categoria:</label>
-                        <input type="" class="form-control" id="categoria" name="categoria" required>
-                    </div>
-
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="reset" class="btn btn-secondary">Resetear</button>
                     </div>
                 </form>
             </div>
@@ -140,91 +211,92 @@
     </div>
 </div>
 
-<!-- Modal para eliminar -->
-<div class="modal fade" id="Eliminar" tabindex="-1">
+<div class="modal fade modal-sm" id="agregarMas" tabindex="-1">
 
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
 
-            <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Eliminar Producto</h5> <!--id-->
+            <div class="modal-header">
+                <h5 class="modal-title">Añadir Productos</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
 
             <div class="modal-body"> <!--Formulario-->
-                <h3>¿Deseas eliminarlo?</h3>
+                <form method="POST" action="{{ url_for('editar_venta')}}" onsubmit="setFormSubmitted()">
+                    <!--Añadir producto o-->
+                    <div class="">
+                        <label for="cliente">Producto:</label>
+                        <select class="form-control " id="producto" name="producto" required>
+                            <option selected disabled value="">Selecciona una opción</option>
+                            {% for producto in productos %}
+                            <option value="{{ producto[0] }}">{{ producto[1] }} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="">
+                        <label for="cantidad">Cantidad:</label>
+                        <input type="number" onpaste="return false;" class="form-control" id="cantidad" name="cantidad"
+                            min="0" max="5" placeholder="Max 5" required>
+                    </div>
+                    <div class="text-center mt-2">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="reset" class="btn btn-secondary">Resetear</button>
+                    </div>
+                    <!--Oculto-->
+                    <input type="hidden" name="id_venta" id="id_venta" value="">
 
-            </div>
-            <div class="modal-footer">
-                <form action="/eliminar_producto" method="POST" id="eliminarp">
-                    <input type="hidden" name="indice_id" id="indice_id" value="">
-                    <button type="submit" id="delete__btn" class="btn btn-danger">Eliminar
-                    </button>
+
                 </form>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Salir
-                </button>
             </div>
         </div>
     </div>
 </div>
 
-<!-- <script src="../static/Js/ModalEditar.js"></script> -->
-<script>
-    //< !--Codigo para obtner los datos del fomr segun si id(Editar)-- >
-    const abrirModal = document.getElementById('abrirModal')
-    if (abrirModal) {
-        abrirModal.addEventListener('show.bs.modal', event => {
-            // Button that triggered the modal
-            const button = event.relatedTarget
-            //Obtneer los datos del boton con los id
-            const id = button.getAttribute('data-bs-id')
-            const name = button.getAttribute('data-bs-nombre')
-            const compra = button.getAttribute('data-bs-compra')
-            const venta = button.getAttribute('data-bs-venta')
-            const ganancia = button.getAttribute('data-bs-ganancia')
-            const existencias = button.getAttribute('data-bs-existencias')
-            const existencias_deseadas = button.getAttribute('data-bs-existencias-deseadas')
-            const proveedor = button.getAttribute('data-bs-proveedor')
-            const categoria = button.getAttribute('data-bs-categoria')
+<!--Cantidad a devolver para prodctos de mas de 2 -->
 
-            // Seleccionar los id para actulizarlos en el modal
-            const modalNombre = abrirModal.querySelector('#nombre')
-            const modalCompra = abrirModal.querySelector('#precio_compra')
-            const modalVenta = abrirModal.querySelector('#precio_venta')
-            const modalGanancia = abrirModal.querySelector('#ganancia')
-            const modalExistencias = abrirModal.querySelector('#existencias')
-            const modalExistencias_deseadas = abrirModal.querySelector('#existencias_deseadas')
-            const modalProveedor = abrirModal.querySelector('#proveedor')
-            const modalCategoria = abrirModal.querySelector('#categoria')
+<div class="modal fade modal-sm" id="cantidadDevuelta" tabindex="-1">
 
-            // Acutualizar el modal con los datos de los atributos.
-            modalNombre.value = name
-            modalCompra.value = compra
-            modalVenta.value = venta
-            modalGanancia.value = ganancia
-            modalExistencias.value = existencias
-            modalExistencias_deseadas.value = existencias_deseadas
-            modalProveedor.value = proveedor
-            modalCategoria.value = categoria
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
 
-            //Titulo segun la funcion
-            if (id) {
-                abrirModal.querySelector('.modal-title').textContent = 'Editar Producto';
-                console.log(id)
-                abrirModal.querySelector('#taskForm').setAttribute('action', '{{ url_for("editar_producto", id=0) }}'.replace('0', id));
-                //Enviar a editar
-            } else {
-                abrirModal.querySelector('.modal-title').textContent = 'Agregar Producto';
-            }
-        })
-    }
-</script>
+            <div class="modal-header">
+                <h5 class="modal-title">Cantidad a devolver</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body"> <!--Formulario-->
+                <form action="/marcar_devuelto" method="POST" id="eliminarp">
+                    <label for="cantidadMax">Ingresa un número:</label>
+                    <input type="number" class="form-control" id="cantidadMax" name="cantidadMax" min="0" max=""
+                        placeholder="">
+
+                    <input type="hidden" name="id_venta2" id="id_venta2" value="">
+                    <input type="hidden" name="id_producto" id="id_producto" value="">
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <!--Para obtener el id y mandarlo al modal-->
 <script>
-    function setProductId(productId) {
-        document.getElementById('indice_id').value = productId;
+    function setProductId(productId,) {
+        document.getElementById('id_venta').value = productId;
+    }
+</script>
+<script>
+    function setProductId2(idVenta, idProducto, cantidadMax) {
+        document.getElementById('id_venta2').value = idVenta;
+        document.getElementById('id_producto').value = idProducto;
+
+        var cantidadInput = document.getElementById('cantidadMax');
+        cantidadInput.max = cantidadMax;
+        cantidadInput.placeholder = 'Max. ' + cantidadMax;
     }
 </script>
 

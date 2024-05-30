@@ -51,12 +51,12 @@
                             {% endif %}
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="/">Ir a inicio</a></li>
-                                <li><a class="dropdown-item" href="/terminosycondiciones">Términos y
-                                        Condiciones</a></li>
+                                <li><a class="dropdown-item" href="/terminosycondiciones">Términos</a></li>
                                 <li><a class="dropdown-item" href="/promocional">Demostración</a></li>
-                                <li><a class="dropdown-item disabled" href="/promocional">Establecer objetivo</a></li>
+                                <li><a class="dropdown-item" data-bs-toggle="modal"
+                                        data-bs-target="#establecerObjetivo">Establecer Objetivo</a></li>
                                 <li><a class="dropdown-item" href="/editar_perfil">Editar Perfil</a></li>
-                                <li><a class="dropdown-item" href="" id="activar_modo">Modo oscuro</a></li>
+                                <li><a class="dropdown-item" href="" id="activar_modo">Modo Oscuro</a></li>
                                 <li><a class="dropdown-item disabled" href="#">Editar Accesos</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
@@ -75,7 +75,8 @@
                         <li><a href="/envios" class="item__nav"><i class="bi bi-truck"></i> Envios</a></li>
                         <li><a href="/apartados" class="item__nav"><i class="bi bi-archive"></i> Apartados</a></li>
                         <li><a href="/clientes" class="item__nav"><i class="bi bi-people"></i> Clientes</a></li>
-                        <li><a href="/proveedor" class="item__nav"><i class="bi bi-file-person"></i> Proveedores</a></li>
+                        <li><a href="/proveedor" class="item__nav"><i class="bi bi-file-person"></i> Proveedores</a>
+                        </li>
                         <li><a href="/categorias" class="item__nav"><i class="bi bi-tags"></i> Categorias</a></li>
                         <li><a class="item__nav" href="/cerrar_sesion"><i class="bi bi-door-closed"></i> Cerrar
                                 Sesion</a></li>
@@ -87,8 +88,33 @@
         </div>
     </div>
 
+
+
+    <!--Modal para establcer objetivo-->
+    <div class="modal fade" id="establecerObjetivo" tabindex="">
+
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title text-center m-auto">Ventas deseadas</h5>
+                </div>
+
+                <div class="modal-body" > <!--Formulario-->
+                    <form action="{{ url_for('establecer_objetivo') }}" method="POST">
+                        <input type="number" name="objetivo" step="1" min="0" max="50" onpaste="return false;"
+                            class="form-control" required>
+                        <button type="submit" class="btn btn-warning mt-4 w-100" >Establecer</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- doble click -->
     <script src="../static/Js/doble_click.js"></script>
+    
 
     <!-- Bootstrap JS and dependencies -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>

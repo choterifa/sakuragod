@@ -34,7 +34,7 @@
         data-taskid="0">Agregar envio
     </button>
 
-    <button type="button" class="btn_agregar btn btn-secondary my-2" data-bs-toggle="offcanvas"
+    <button type="button" class="btn_agregar btn btn-warning my-2" data-bs-toggle="offcanvas"
         data-bs-target="#proximosEnvios" data-taskid="0">Ver proximos
     </button>
 
@@ -280,18 +280,18 @@
                     </div>
                     <div class="">
                         <label for="calle">Calle</label>
-                        <input type="number" class="form-control" id="calle" name="calle" min="0" max="1000"
-                            placeholder="57" required>
+                        <input type="number" onpaste="return false;" class="form-control" id="calle" name="calle"
+                            min="0" max="1000" placeholder="57" required>
                     </div>
                     <div class="">
                         <label for="cruzamiento_1">Cruzamiento 1</label>
-                        <input type="number" class="form-control" id="cruzamiento_1" name="cruzamiento_1" min="0"
-                            max="1000" placeholder="100" required>
+                        <input type="number" onpaste="return false;" class="form-control" id="cruzamiento_1"
+                            name="cruzamiento_1" min="0" max="1000" placeholder="100" required>
                     </div>
                     <div class="">
                         <label for="cruzamiento_2">Cruzamiento 2</label>
-                        <input type="number" class="form-control" id="cruzamiento_2" name="cruzamiento_2" min="0"
-                            max="1000" placeholder="102" required>
+                        <input type="number" onpaste="return false;" class="form-control" id="cruzamiento_2"
+                            name="cruzamiento_2" min="0" max="1000" placeholder="102" required>
                     </div>
                     <div class="">
                         <label for="fecha">Fecha:</label>
@@ -316,6 +316,7 @@
                             {% endfor %}
                         </select>
                     </div>
+                    <script src="../static/Js/validar_form2.js"></script><!--Validar forms-->
 
                     <div class="text-center mt-2">
                         <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
@@ -332,13 +333,14 @@
     <div class=" offcanvas-header">
         <h5 class="offcanvas-title" style="font-size: 30px;">Proximos Envios</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
+    </div>  
     <div class="offcanvas-body">
         <!--cards-->
         {% for indice in proximosEnvios %}
-        <div class="card" style="width:100%; margin-bottom:25px;">
+        <div class="card"
+            style="width:100%; margin-bottom:25px; border: 2px solid rgba(74, 74, 74, 0.471); background-color:rgba(127, 255, 212, 0.72);">
             <div class="card-body">
-                <h5 class="card-title">{{indice[1]}} {{indice[2]}} </h5>
+                <h5 class="card-title" style="font-weight: 600;">{{indice[1]}} {{indice[2]}} </h5>
                 <h6 class="card-subtitle mb-2 text-body-secondary">#{{indice[6]}}</h6>
                 <p class="card-text">Producto: <strong>{{indice[5]}}</strong></p>
                 <p class="card-text">Destino: <strong>{{indice[4]}}</strong></p>
