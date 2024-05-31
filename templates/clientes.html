@@ -18,7 +18,52 @@
         </ol>
     </nav>
 
-    <h1 class="inventario__titulo text-center">Clientes</h1>
+    {% with cliente_agregado = get_flashed_messages(category_filter=["cliente_agregado"]) %}
+    {% if cliente_agregado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Un cliente fue agregado con éxito!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with cliente_eliminado = get_flashed_messages(category_filter=["cliente_eliminado"]) %}
+    {% if cliente_eliminado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Un cliente fue eliminado
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    
+    {% with existing_cliente = get_flashed_messages(category_filter=["existing_cliente"]) %}
+    {% if existing_cliente %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Ya existe un cliente con los mismos nombres y apellidos
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+
+
+    {% with cliente_editado = get_flashed_messages(category_filter=["cliente_editado"]) %}
+    {% if cliente_editado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El cliente fue editado :)
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    
+
+    <h1 class="text-center mt-5">Clientes</h1>
 
     <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal"
         data-bs-target="#abrirModalCliente" data-taskid="0">Agregar un Cliente
@@ -30,7 +75,7 @@
             <tr>
                 <th scope="col">Nombre</th> <!--Columna Encabezados-->
                 <th scope="col">Apellidos</th>
-                <th scope="col"><a href="/apartados" style="text-decoration: none;">Total adeudo</a></th>
+                <th scope="col"><a href="/apartados" style="text-decoration: none;">Deuda total</a></th>
                 <th scope="col">Celular</th>
                 <th scope="col"><a href="/apartados" style="text-decoration: none;">Apartados</a></th>
                 <th scope="col" style="width: 140px;">Editar</th>
@@ -79,7 +124,7 @@
 <!-- Modal para crear/editar tarea -->
 <div class="modal fade " data-bs-backdrop="static" id="abrirModalCliente" tabindex="-1">
 
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered " style="width: 400px;">
         <div class="modal-content">
 
             <div class="modal-header"><!--Header-->
@@ -92,26 +137,31 @@
                 <form id="agregar_cliente" method="POST" action="{{ url_for('agregar_cliente')}}">
                     <!--Añadir producto-->
                     <div class="">
-                        <label for="nombre">Nombre:</label>
+                        <label for="nombre">Nombre</label>
                         <input type="text" onpaste="return false;" class="form-control" id="nombre" name="nombre"
-                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" maxlength="40" required>
-                        <small>solo letras</small>
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" maxlength="20" required>
                     </div>
                     <div class="">
-                        <label for="apellido_p">Apellido Paterno:</label>
+                        <label for="apellido_p">Apellido Paterno</label>
                         <input type="text" onpaste="return false;" class="form-control" id="apellido_p"
                             name="apellido_p" pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" maxlength="20" required>
                     </div>
                     <div class="">
-                        <label for="apellido_m">Apellido Materno:</label>
+                        <label for="apellido_m">Apellido Materno</label>
                         <input type="text" onpaste="return false;" class="form-control" id="apellido_m"
                             name="apellido_m" pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" maxlength="20" required>
                     </div>
                     <div class="">
-                        <label for="telefono">Teléfono:</label>
+                        <label for="telefono">Teléfono</label>
                         <input type="tel" class="form-control" onpaste="return false;" id="telefono" name="telefono"
-                            minlength="10" maxlength="10" pattern="[0-9]{10}" placeholder="1234567890" required>
+                            minlength="10" maxlength="10" pattern="[0-9]{10}" placeholder="10 digitos" required>
                     </div>
+
+                    <style>
+                        .form-control{
+                            margin-bottom: 10px;
+                        }
+                    </style>
                     <!-- <div class="">
                         <label for="telefono">Telefono:</label>
                         <select class="form-select" id="telefono" name="telefono" required>

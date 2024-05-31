@@ -6,29 +6,27 @@
 {%block contenido%}
 <section class="inventario">
 
-    <!-- Mensajes Flash -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    <div class="container mt-3">
-        {% for category, message in messages %}
-        <div class="alert alert-{{ category }}  alert-danger  alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
+
+    {% with perfil_editado = get_flashed_messages(category_filter=["perfil_editado"]) %}
+    {% if perfil_editado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El perfil se actualizo correctamente
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+    
+    {% with error_email = get_flashed_messages(category_filter=["error_email"]) %}
+    {% if error_email %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El correo electrónico debe terminar en '.com'
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
     {% endif %}
     {% endwith %}
 
-
-    {% if actualizado%}
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check"></i> Se actualizó el perfil!
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-    <script src="../static/Js/eliminar_alertas.js"></script>
-    {% endif%}
 
 
     <div class="container__perfil">
@@ -68,33 +66,36 @@
 
     <div class="offcanvas offcanvas-end" tabindex="-1" id="perfi_lateral">
         <div class=" offcanvas-header">
-        <h5 class="offcanvas-title">Editar Perfil</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
-    </div>
-    <div class="offcanvas-body">
-        <form action="/editar_login" method="POST" autocomplete="off">
-            <label for="username">Usuario</label>
-            <input type="text" onpaste="return false;" class="login__input " id="username" name="nombre" minlength="4"
-                maxlength="30" pattern="[a-zA-Z1-9_]+" autocomplete="off" value="{{login[1]}}" required>
+            <h4 class="offcanvas-title">Editar Perfil</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
+            <form action="/editar_login" method="POST" autocomplete="off">
+                <label for="username">Usuario</label>
+                <input type="text" onpaste="return false;" class="login__input " id="username" name="nombre"
+                    minlength="4" maxlength="20" pattern="[a-zA-Z1-9_]+" autocomplete="off" value="{{login[1]}}"
+                    required>
 
-            <label for="email">Correo Electrónico</label>
-            <input type="email" onpaste="return false;" class="login__input" id="email" name="correo" maxlength="30"
-                autocomplete="off" required value="{{login[2]}}" />
-
-            <label for="password">Contraseña</label>
-            <input type="password" class="singup__password login__input " id="password" name="contraseña" minlength="3"
-                maxlength="30" value="{{login[3]}}" required />
-            <button type="button" class="btn border-light m-2  generatePasswordBtn generatePasswordBtn--edicion"
-                id="generatePasswordBtn">Generar</button>
-            <script src="../../static/Js/generar_contraseña.js"></script>
-
-            <!--Oculto-->
-            <input type="hidden" class="form-control" name="indice_id" value="{{login[0]}}">
+                <label for="email">Correo Electrónico</label>
+                <input type="email" onpaste="return false;" class="login__input" id="email" name="correo" maxlength="25"
+                    autocomplete="off" required value="{{login[2]}}"
+                    pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[cC][oO][mM]$" />
 
 
-            <button type="submit" class="btn btn-light">Actualizar</button>
-        </form>
-    </div>
+                <label for="password">Contraseña</label>
+                <input type="password" class="singup__password login__input " id="password" name="contraseña"
+                    minlength="3" maxlength="20" value="{{login[3]}}" required />
+                <button type="button" class="btn border-light m-2  generatePasswordBtn generatePasswordBtn--edicion"
+                    id="generatePasswordBtn">Generar</button>
+                <script src="../../static/Js/generar_contraseña.js"></script>
+               
+                <!--Oculto-->
+                <input type="hidden" class="form-control" name="indice_id" value="{{login[0]}}">
+
+
+                <button type="submit" class="btn btn-light">Actualizar</button>
+            </form>
+        </div>
     </div>
 
 

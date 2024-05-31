@@ -18,6 +18,17 @@
     </nav>
 
 
+
+    {% with envio_editado = get_flashed_messages(category_filter=["envio_editado"]) %}
+    {% if envio_editado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El envio fue editado con éxito!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
     <h1 class="inventario__titulo text-center">Clientes con envios</h1>
 
     <!--Alerta de actualizados y eliminados-->
@@ -65,12 +76,12 @@
 
 
     <!--Nueva tabla-->
-    <table class="table  table-hover table-striped align-middle mt-3">
+    <table class="table  table-hover table-striped align-middle mt-4">
         <thead>
             <tr>
                 <th scope="col" style="width: 180px;">Nombres</th> <!--Columna Encabezados-->
                 <th scope="col">Apellidos</th>
-                <th scope="col">Dias restantes</th>
+                <th scope="col">Días restantes</th>
                 <th scope="col">Destino</th>
                 <th scope="col">Producto a enviar</th>
                 <th scope="col">Ediciones</th>
@@ -81,7 +92,8 @@
             <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[1] }}</td>
                 <td>{{ indice[2] }} {{ indice[19] }}</td>
-                <td>{{ indice[7] }}</td> <!--derivar en bd-->
+                <td> {{ indice[7] }}
+                </td> <!--derivar en bd-->
                 <td>{{ indice[15] }}</td>
                 <td>{{ indice[17] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
@@ -101,14 +113,14 @@
                         <!--Toma el id del envio-->
                         <form action="/marcar_enviado" method="POST" id="eliminarp">
                             <input type="hidden" name="indice_id" value="{{indice[3]}}">
-                            <button type="submit" class="btn border-secondary enviar">Enviar</button>
+                            <button type="submit" class="btn btn-dark enviar">Enviar</button>
                         </form>
 
                         <form action="/marcar_cancelado" method="POST" id="eliminarp">
                             <input type="hidden" name="indice_id" value="{{indice[3]}}">
-                            <button type="submit" class="btn border-secondary cancelar">Cancelar</button>
+                            <button type="submit" class="btn  btn-danger cancelar">Cancelar</button>
                         </form>
-                        <style>
+                        <!-- <style>
                             .cancelar:hover {
                                 background-color: rgba(233, 31, 31, 0.892);
                                 color: white !important;
@@ -126,7 +138,7 @@
                                 color: white !important;
                                 border-color: rgba(255, 0, 0, 0) !important;
                             }
-                        </style>
+                        </style> -->
 
                     </div>
                 </td>
@@ -137,11 +149,11 @@
 
 
     <br></br>
-
+    <br>
     <div class="collapse" id="tablaEnviados">
-        <h2 class="inventario__titulo">Enviados</h2>
+        <h2 class="inventario__titulo text-center">Enviados</h2>
         <!--Tabla para los marcados en enviado-->
-        <table class="table  table-hover table-striped align-middle mt-4">
+        <table class="table  table-hover table-striped align-middle mt-3">
             <thead>
                 <tr>
                     <th scope="col">Nombres</th> <!--Columna Encabezados-->
@@ -161,7 +173,7 @@
                     <td>{{ indice[15] }}</td>
                     <td>{{ indice[17] }}</td>
                     <!--Seccion de edicion (Editar/Eliminar)-->
-                    <td style="width: 280px;">
+                    <td style="width: 210px;">
                         <div class="editar__botones">
                             <button type="button" class="btn btn-primary btn-sm d-none btn__editar"
                                 data-bs-toggle="modal" data-bs-target="#abrirModal" data-bs-id-envio="{{indice[3]}}"
@@ -175,12 +187,12 @@
 
                             <form action="/regresar_envio" method="POST" id="eliminarp">
                                 <input type="hidden" name="indice_id" value="{{indice[3]}}">
-                                <button type="submit" class="btn  border-secondary enviar">Regresar</button>
+                                <button type="submit" class="btn  btn-dark enviar">Regresar</button>
                             </form>
 
                             <form action="/marcar_entregado" method="POST" id="eliminarp">
                                 <input type="hidden" name="indice_id" value="{{indice[3]}}">
-                                <button type="submit" class="btn  border-success entregar">Marcar entregado</button>
+                                <button type="submit" class="btn  btn-success entregar">Recibido</button>
                             </form>
                         </div>
                     </td>
@@ -194,17 +206,19 @@
 
     <br>
     <br>
+    <br>
+    <br>
     <div class="collapse" id="tablaEntregados">
-        <h2 class="inventario__titulo ">Entregados</h2>
+        <h2 class="inventario__titulo text-center">Entregados</h2>
         <!--Tabla para los marcados en entregados-->
-        <table class="table  table-hover table-striped align-middle mt-4">
+        <table class="table  table-hover table-striped align-middle mt-3">
             <thead>
                 <tr>
                     <th scope="col">Nombres</th> <!--Columna Encabezados-->
                     <th scope="col">Apellidos</th>
                     <th scope="col">Fecha de entregado</th>
                     <th scope="col">Destino</th>
-                    <th scope="col" style="width: 280px;">Producto recibido</th>
+                    <th scope="col" style="width: 280px;">Producto Recibido</th>
                 </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -224,10 +238,12 @@
 
     <br>
     <br>
+    <br>
+    <br>
     <div class="collapse" id="tablaCancelados">
-        <h2 class="inventario__titulo ">Cancelados</h2>
+        <h2 class="inventario__titulo text-center">Cancelados</h2>
         <!--Tabla para los marcados en entregados-->
-        <table class="table  table-hover table-striped align-middle mt-4">
+        <table class="table  table-hover table-striped align-middle mt-3">
             <thead>
                 <tr>
                     <th scope="col">Nombres</th> <!--Columna Encabezados-->
@@ -257,11 +273,11 @@
 <!-- Modal para crear/editar envio -->
 <div class="modal fade" id="abrirModal" tabindex="-1">
 
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered " style="width: 470px;">
         <div class="modal-content">
 
             <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Agregar Envio</h5> <!--id-->
+                <h4 class="modal-title">Agregar Envio</h4> <!--id-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
@@ -316,30 +332,35 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <script src="../static/Js/validar_form2.js"></script><!--Validar forms-->
+                    <script src="../static/Js/validar_forms_envios.js"></script><!--Validar forms-->
 
                     <div class="text-center mt-2">
                         <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="submit" class="btn btn-dark">Guardar</button>
                     </div>
                 </form>
+                <style>
+                    .form-select, .form-control{
+                        margin-bottom: 5px;
+                    }
+                </style>
             </div>
 
         </div>
     </div>
 </div>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="proximosEnvios" style="z-index: 2000;">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="proximosEnvios"  style="z-index: 2000;">
     <div class=" offcanvas-header">
-        <h5 class="offcanvas-title" style="font-size: 30px;">Proximos Envios</h5>
+        <h5 class="offcanvas-title mt-3 ms-3" style="font-size: 30px;">Próximos envíos</h5>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
-    <div class="offcanvas-body">
+    <div class="offcanvas-body p-4">
         <!--cards-->
         {% for indice in proximosEnvios %}
 
         <div class="card" {% if indice[3] < 0 %}
-            style="width:100%; margin-bottom:25px; border: 2px solid rgba(74, 74, 74, 0.471); background-color:rgba(197, 255, 127, 0.72);">
+            style="width:100%; margin-bottom:25px; border: 2px solid rgba(74, 74, 74, 0.471); background-color:#f6c344;">
             {% else %}
             style="width:100%; margin-bottom:25px; border: 2px solid rgba(74, 74, 74, 0.471); background-color:rgba(127,
             255, 212, 0.72);">
@@ -351,7 +372,9 @@
                 <p class="card-text">Destino: <strong>{{indice[4]}}</strong></p>
                 <p class="card-text">Fecha de entrega:
                     <strong>
-                        {% if indice[3] < 0 %} Está atrasado por {{ -indice[3] }} días {% else %} En {{ indice[3] }}
+                        {% if indice[3] == 0 %}
+                        Se entrega Hoy
+                        {% elif indice[3] < 0 %} Está atrasado por {{ -indice[3] }} días {% else %} En {{ indice[3] }}
                             días {% endif %} </strong>
                 </p>
             </div>
@@ -468,22 +491,22 @@
 
     {% if producto[0] < 0 %} <div class="toast text-bg-danger"> <!--Cambiar color del toast-->
         {% else %}
-        <div class="toast text-bg-warning" >
+        <div class="toast text-bg-warning">
             {% endif %}
             <div class="toast-header">
                 {% if producto[0] < 0 %} <strong class="me-auto">Envios atrasados</strong>
                     {% else %}
-                    <strong class="me-auto">Envios proximos</strong>
+                    <strong class="me-auto">Envios próximos</strong>
                     {% endif %}
                     <small class="text-body-secondary">Justo ahora</small>
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             {% if producto[0] < 0 %} <div class="toast-body ">
-                Hay un envio con ({{ producto[0] }} dias) atrasado
+                Hay un envio con ({{ producto[0] }} días) atrasado
         </div>
         {% else %}
         <div class="toast-body">
-            Hay un envio con ({{ producto[0] }} dias) para su envio
+            Hay un envio con ({{ producto[0] }} días) para su envio
         </div>
         {% endif %}
 </div>

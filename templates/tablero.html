@@ -13,7 +13,8 @@
             <a href="/ventas" class="resumen__enlaces ">
 
                 <div class="resumen__card__textos ">
-                    <h3 class="resumen__card__titulo">{{ventas_dia_cantidad}}</h3>
+                    <h3 class="resumen__card__titulo">{{ 0 if ventas_dia_cantidad is none else ventas_dia_cantidad }}
+                    </h3>
                     <div class="resumen__card__paragraph">
                         <i class="bi bi-receipt resumen__card__icon"></i>
                         <p class="resumen__paragraph">Vendido</p>
@@ -26,7 +27,8 @@
         <div class="resumen__card__item">
             <a href="/ventas" class="resumen__enlaces">
                 <div class="resumen__card__textos">
-                    <h3 class="resumen__card__titulo">{{Ganancia_Total}}</h3>
+                    <h3 class="resumen__card__titulo">{{ 0 if Ganancia_Total is none else Ganancia_Total }}
+                    </h3>
                     <div class="resumen__card__paragraph">
                         <!-- <i class="bi bi-receipt "></i> -->
                         <i class="bi bi-cash-stack resumen__card__icon"></i>
@@ -184,12 +186,11 @@
                         <div class="progress-bar progress-bar-striped bg-success progress-bar-animated">
                             {{ porcentaje }}</div>
                     </div>
-                    <div class="progress-bar progress-bar-striped progress-bar-animated"
-                        style="width: {{ restante }}%">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated" style="width: {{ restante }}%">
                         <div class="progress-bar progress-bar-striped  bg-secondary progress-bar-animated">
                             {{ restante }}</div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

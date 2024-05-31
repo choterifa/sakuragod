@@ -36,10 +36,50 @@
     {% endif %}
     {% endwith %}
 
-    {% with proveedor_editada = get_flashed_messages(category_filter=["proveedor_editada"]) %}
-    {% if proveedor_editada %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    {% with proveedor_restaurado = get_flashed_messages(category_filter=["proveedor_restaurado"]) %}
+    {% if proveedor_restaurado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El proveedor fue restaurado
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with proveedor_editado = get_flashed_messages(category_filter=["proveedor_editado"]) %}
+    {% if proveedor_editado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="bi bi-check"></i> El proveedor fue editado con exito
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with proveedor_eliminado = get_flashed_messages(category_filter=["proveedor_eliminado"]) %}
+    {% if proveedor_eliminado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El proveedor fue eliminado con exito
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with existing_proveedor = get_flashed_messages(category_filter=["existing_proveedor"]) %}
+    {% if existing_proveedor %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Ya existe un proveedor con el mismo nombre
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with tiene_productos = get_flashed_messages(category_filter=["tiene_productos"]) %}
+    {% if tiene_productos %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> No se puede eliminar el proveedor, porque hay productos que lo utilizan.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
@@ -59,7 +99,7 @@
 
 
 
-    <h2 class="inventario__titulo text-center mt-4">Proveedores</h2>
+    <h1 class=" text-center mt-4">Proveedores</h1>
 
     <button type="button" class="btn_agregar btn btn-dark my-2" data-bs-toggle="modal"
         data-bs-target="#abrirModalreparto" data-taskid="0">Agregar Proveedor
@@ -67,9 +107,9 @@
 
  
     <!--El que envia el formulario para la consulta con el id-->
-    <form action="/reset_proveedor" method="POST" style="display: inline-block;">
+    <!-- <form action="/reset_proveedor" method="POST" style="display: inline-block;">
         <button type="submit" class="btn btn-warning"> Reset <i class="bi bi-arrow-clockwise"></i></button>
-    </form>
+    </form> -->
 
   
 
@@ -79,8 +119,8 @@
             <tr>
                 <th scope="col">#</th> <!--Columna Encabezados-->
                 <th scope="col">Empresa</th> <!--Columna Encabezados-->
-                <th scope="col">Monto</th>
-                <th scope="col">Cantidad</th>
+                <!-- <th scope="col">Monto</th> -->
+                <!-- <th scope="col">Cantidad</th> -->
                 <th scope="col">Dia de reparto 1</th>
                 <th scope="col">Dia de reparto 2</th>
                 <th scope="col">Ediciones</th>
@@ -91,8 +131,8 @@
             <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[0] }}</td>
                 <td>{{ indice[1] }}</td>
-                <td>{{ indice[2] }}</td>
-                <td>{{ indice[3] }}</td>
+                <!-- <td>{{ indice[2] }}</td> -->
+                <!-- <td>{{ indice[3] }}</td> -->
                 <td>{{ '-' if indice[5] is none else indice[5]}}</td>
                 <td>{{ '-' if indice[7] is none else indice[7]}}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
@@ -139,7 +179,7 @@
                             <label for="reparto1">Reparto 1:</label>
                             <select class="form-control" id="reparto1" name="reparto1" required>
                                 <!-- Opción por defecto -->
-                                <option selected disabled value="">Selecciona una opción</option>
+                                <option selected  value="">Selecciona una opción</option>
                                 {% for reparto in reparto %}
                                 <option value="{{ reparto[0] }}">{{ reparto[1] }}</option>
                                 {% endfor %}
@@ -147,9 +187,9 @@
                         </div>
                         <div class="">
                             <label for="reparto2">Reparto 2:</label>
-                            <select class="form-control" id="reparto2" name="reparto2" required>
+                            <select class="form-control" id="reparto2" name="reparto2">
                                 <!-- Opción por defecto -->
-                                <option selected disabled value="">Selecciona una opción</option>
+                                <option selected value="">Selecciona una opción</option>
                                 {% for reparto in reparto %}
                                 <option value="{{ reparto[0] }}">{{ reparto[1] }}</option>
                                 {% endfor %}

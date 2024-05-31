@@ -18,13 +18,13 @@
     </nav>
 
     <!-- Mensajes Flash -->
-    {% if agregar_categoria %}
+    <!-- {% if agregar_categoria %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="bi bi-check"></i> La categoria fue agregada!
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
-    {% endif %}
+    {% endif %} -->
 
     <!-- {% if categoria_editada %}
     <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -33,9 +33,18 @@
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
     {% endif %} -->
+    {% with agregar_categoria = get_flashed_messages(category_filter=["agregar_categoria"]) %}
+    {% if agregar_categoria %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> La categoria fue agregada
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
 
     {% if categoria_eliminada %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="bi bi-check"></i> La categoria fue eliminada!
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
@@ -44,8 +53,29 @@
 
     {% with categoria_editada = get_flashed_messages(category_filter=["categoria_editada"]) %}
     {% if categoria_editada %}
-    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="bi bi-check"></i> La categoria fue editada!
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    
+    {% with existing_categoria = get_flashed_messages(category_filter=["existing_categoria"]) %}
+    {% if existing_categoria %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> La categoria ya existe con ese nombre
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with tiene_productos = get_flashed_messages(category_filter=["tiene_productos"]) %}
+    {% if tiene_productos %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> No se puede eliminar la categoría porque hay productos que la utilizan
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
@@ -55,9 +85,10 @@
 
 
 
-    <h1 class="inventario__titulo text-center">Categorias</h1>
 
-    <button type="button" class="btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#abrirModalCategoria"
+    <h1 class=" text-center mt-4">Categorias</h1>
+
+    <button type="button" class="btn btn-dark my-1" data-bs-toggle="modal" data-bs-target="#abrirModalCategoria"
         data-taskid="0">Agregar Categoria
     </button>
 
@@ -75,8 +106,8 @@
             {% for indice in categorias %} <!--Nombre cualquiera + el que recibe de la variable-->
             <tr class="doble_click" style="cursor: pointer;">
                 <td>{{ indice[0] }}</td>
-                <td>{{ indice[1] }}</td>
-                <td>{{ indice[2] }}</td>
+                <td >{{ indice[1] }}</td>
+                <td >{{ indice[2] }}</td>
 
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
@@ -146,7 +177,7 @@
                     <div class="">
                         <label for="nombre">Nombre</label>
                         <input type="text" onpaste="return false;" class="form-control my-2" id="nombre" name="nombre"
-                            pattern="^[A-Za-z\s]+$" minlength="3" maxlength="15" required>
+                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" minlength="3" maxlength="24" required>
                     </div>
                     <div class="text-center mt-3 ">
                         <button type="submit" class="btn btn-primary w-100">Guardar</button>
@@ -185,7 +216,7 @@
 <!-- Modal para ver prodcutos -->
 <div class="modal fade " data-bs-backdrop="static" id="verProductos" tabindex="-1">
 
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" style="width: 410px;">
         <div class="modal-content">
 
             <div class="modal-header"><!--Header-->

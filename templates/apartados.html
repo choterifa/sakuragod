@@ -18,15 +18,45 @@
 
 
     <!-- Mostrar otros mensajes flash -->
+    {% with abono_exitoso = get_flashed_messages(category_filter=["abono_exitoso"]) %}
     {% if abono_exitoso %}
-    <div class="container mt-3">
-        {% for message in abono_exitoso %}
-        <div class="alert alert-success" role="alert">
-            {{ message }}
-        </div>
-        {% endfor %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Abono realizado con éxito
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
     {% endif %}
+    {% endwith %}
+
+    {% with abono_fallido = get_flashed_messages(category_filter=["abono_fallido"]) %}
+    {% if abono_fallido %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> La cantidad de abono no puede exceder el límite
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with apartado_creado = get_flashed_messages(category_filter=["apartado_creado"]) %}
+    {% if apartado_creado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Se ha creado un apartado 
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with abono_excedido = get_flashed_messages(category_filter=["abono_excedido"]) %}
+    {% if abono_excedido %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El abono inicial no puede exceder o igualar la deuda, no es necesario crear un apartado
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
 
 
     <h1 class="inventario__titulo text-center">Clientes con apartos</h1>
@@ -60,15 +90,16 @@
     </div>
 
 
+
     <!--Nueva tabla-->
     <table class="table  table-hover table-striped align-middle mt-3">
         <thead>
             <tr>
                 <th scope="col">Nombres</th> <!--Columna Encabezados-->
                 <th scope="col">Apellidos</th>
-                <th scope="col">Abonado</th>
+                <th scope="col">Pagado</th>
                 <th scope="col">Pendiente</th>
-                <th scope="col">Dias restantes</th>
+                <th scope="col">Días restantes</th>
                 <th scope="col">Producto apartado</th>
                 <th scope="col">Editar</th>
             </tr>
@@ -80,10 +111,10 @@
                 <td>{{ indice[2] }} {{ indice[3]}}</td>
                 <td>{{ indice[5] }}</td>
                 <td>{{ indice[6] }}</td>
-                <td>{{ indice[7] }}</td>
+                <td style="text-align: center;">{{ indice[7] }}</td>
                 <td>{{ indice[14] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
-                <td>
+                <td  >
                     <div class="editar__botones">
 
                         <button onclick="setProductId('{{ indice[4] }}', '{{ indice[6] }}')" data-bs-toggle="modal"
@@ -103,8 +134,7 @@
                         <!--El que envia el formulario para ver abonos-->
                         <form action="/ver_abonos" method="POST" id="categoriaForm" onsubmit="setFormSubmitted()">
                             <input type="hidden" name="id_apartado" id="id_apartado" value="{{ indice[4] }}">
-                            <button type="submit" class="btn btn-success"> Ver abonos <i
-                                    class="bi bi-eye"></i></button>
+                            <button type="submit" class="btn btn-success"> Ver abonos <i class="bi bi-eye"></i></button>
                         </form>
 
                         <!--El que abre el modal al enviar el form-->
@@ -127,7 +157,7 @@
 
                         <form action="/cancelar_apartado" method="POST" id="eliminarp">
                             <input type="hidden" name="indice_id" value="{{indice[4]}}">
-                            <button type="submit" class="btn border-secondary cancelar">Cancelar</button>
+                            <button type="submit" class="btn btn-danger cancelar">Cancelar</button>
                         </form>
 
                         <style>
@@ -147,16 +177,17 @@
     </table>
 
 
-
+    <br>
+    <br>
     <div class="collapse" id="tablaPagados">
-        <h2 class="mt-4"> Completados</h2>
+        <h2 class="mt-4 text-center"> Completados</h2>
 
         <table class="table  table-hover table-striped align-middle mt-3">
             <thead>
                 <tr>
                     <th scope="col">Nombres</th> <!--Columna Encabezados-->
                     <th scope="col">Apellidos</th>
-                    <th scope="col">Abono final</th>
+                    <th scope="col">Pagado</th>
                     <th scope="col">Deuda Inicial</th>
                     <th scope="col">Fecha Pagada</th>
                     <th scope="col">Producto Comprado</th>
@@ -183,7 +214,8 @@
                         <!--El que envia el formulario para ver abonos-->
                         <form action="/ver_abonos" method="POST" id="categoriaForm" onsubmit="setFormSubmitted()">
                             <input type="hidden" name="id_apartado" id="id_apartado" value="{{ indice[4] }}">
-                            <button type="submit" class="btn btn-secondary"> Ver abonos <i class="bi bi-eye"></i></button>
+                            <button type="submit" class="btn btn-secondary"> Ver abonos <i
+                                    class="bi bi-eye"></i></button>
                         </form>
                     </td>
                 </tr>
@@ -194,8 +226,11 @@
         </table>
     </div>
 
+    <br>
+    <br>
+    <br>
     <div class="collapse" id="tablaCancelados">
-        <h2 class="mt-5"> Cancelados</h2>
+        <h2 class="mt-5 text-center"> Cancelados</h2>
 
         <table class="table  table-hover table-striped align-middle mt-3">
             <thead>
@@ -247,11 +282,11 @@
 <!-- Modal para Apartar prodcuto -->
 <div class="modal fade" id="apartarProducto" tabindex="-1">
 
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog modal-dialog-centered" style="width: 420px;">
         <div class="modal-content">
 
             <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Apartar producto</h5> <!--id-->
+                <h4 class="modal-title">Apartar producto</h4> <!--id-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
@@ -259,7 +294,7 @@
             <div class="modal-body"> <!--Formulario-->
                 <form id="apartar_producto" method="POST" action="{{ url_for('agregar_apartado')}}">
                     <div class="">
-                        <label for="cliente">Cliente:</label>
+                        <label for="cliente">Cliente</label>
                         <select class="form-select" id="cliente" name="cliente" required>
                             <!-- Opción por defecto -->
                             <option selected value="">Selecciona una opción</option>
@@ -270,7 +305,7 @@
                     </div>
 
                     <div class="">
-                        <label for="producto">Producto a apartar:</label>
+                        <label for="producto">Producto a apartar</label>
                         <select class="form-select" id="producto" name="producto" required>
                             <!-- Opción por defecto -->
                             <option selected value="">Selecciona una opción</option>
@@ -286,20 +321,26 @@
                     </div> -->
                     <div class="">
                         <label for="cantidad">Cantidad</label>
-                        <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" max="5"
-                            placeholder="Max. 5" required>
+                        <input type="number" onpaste="return false;" class="form-control" id="cantidad" name="cantidad" min="1" max="5"
+                            placeholder="Max. 5"  required>
                     </div>
                     <div class="">
                         <label for="abono">Abono Inicial</label>
-                        <input type="number" class="form-control" id="abono" name="abono" min="0" max="3000"
+                        <input type="number" onpaste="return false;" class="form-control" id="abono" name="abono" min="0" max="3000"
                             placeholder="" required>
                     </div>
 
                     <div class="text-center mt-2">
-                        <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
-                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="reset" id="btn_reset" class="btn btn-secondary w-25">Resetear</button>
+                        <button type="submit" class="btn btn-primary w-25">Guardar</button>
                     </div>
 
+                    <style>
+                        .form-control, .form-select{
+                            margin-bottom: 10px;
+
+                        }
+                    </style>
                 </form>
             </div>
 
@@ -315,6 +356,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
+                <h4 class="modal-title ms-2">Abonos del apartado</h4> <!--id-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal">
                 </button>
             </div>
