@@ -21,21 +21,72 @@
     <h1 class="inventario__titulo text-center mx-2">Inventario de productos</h1>
 
     <!--Alerta de actualizados y eliminados-->
-    {% if update %}
+    <!-- {% if update %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="bi bi-check"></i> Se actualizó un producto!
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
-    {% endif %}
-    {% if eliminado %}
+    {% endif %} -->
+
+    <!-- {% if eliminado %}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <i class="bi bi-check"></i> Se eliminó un producto!
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
-    {% endif %}
+    {% endif %} -->
 
+    {% with existing_producto = get_flashed_messages(category_filter=["existing_producto"]) %}
+    {% if existing_producto %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El producto ya existe
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with producto_agregado = get_flashed_messages(category_filter=["producto_agregado"]) %}
+    {% if producto_agregado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El producto se agrego correctamente.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with producto_editado = get_flashed_messages(category_filter=["producto_editado"]) %}
+    {% if producto_editado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El producto se edito correctamente.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+    
+    {% with producto_eliminado = get_flashed_messages(category_filter=["producto_eliminado"]) %}
+    {% if producto_eliminado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El producto se elimino correctamente.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with producto_en_uso = get_flashed_messages(category_filter=["producto_en_uso"]) %}
+    {% if producto_en_uso %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> No se puede eliminar el producto porque está siendo utilizado en la tabla de
+        relaciones
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
 
     <button type="button" class="btn btn-dark my-2 " data-bs-toggle="modal" data-bs-target="#abrirModal"
         data-taskid="0">Nuevo Producto
@@ -74,7 +125,7 @@
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
-                        <button type="button" id="editar_btn" class="d-none btn btn-primary btn-sm btn__editar"
+                        <button type="button" id="editar_btn" class=" btn btn-primary btn-sm btn__editar"
                             data-bs-toggle="modal" data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}"
                             data-bs-nombre="{{indice[1]}}" data-bs-compra="{{indice[2]}}" data-bs-venta="{{indice[3]}}"
                             data-bs-ganancia="{{indice[4]}}" data-bs-existencias="{{indice[5]}}"
@@ -165,11 +216,12 @@
                             <td>{{ indice[1] }}</td>
                             <td style="width: 160px;">
                                 <input type="hidden" name="product_id" value="{{ indice[0] }}">
-                                <input type="number" onpaste="return false;" class="form-control"
-                                    name="resurtirCantidad" min="0" max="1000" value="{{indice[5]}}" required>
+                                <input type="number" onpaste="return false;" class="form-control resurtir-cantidad"
+                                    name="resurtirCantidad" min="0" max="500" value="{{indice[5]}}" required>
                             </td>
                         </tr>
                         {% endfor %}
+                        <script src="../static/Js/validar_reabastecer.js"></script>
                     </tbody>
                 </table>
                 <button type="submit" class="btn btn-primary my-2" style="width: 100%;">Enviar</button>
@@ -277,12 +329,12 @@
                         <div class="">
                             <label for="precio_compra">Precio Compra</label>
                             <input type="number" onpaste="return false;" class="form-control mb-2" id="precio_compra"
-                                step="0.1" name="precio_compra" min="0" max="1000" required>
+                                step="1" name="precio_compra" min="0" max="1000" required>
                         </div>
                         <div class="">
                             <label for="precio_venta">Precio Venta</label>
                             <input type="number" onpaste="return false;" class="form-control mb-2" id="precio_venta"
-                                step="0.1" name="precio_venta" min="0" max="1000" required>
+                                step="1" name="precio_venta" min="0" max="1000" required>
                         </div>
                         <div class="">
                             <label for="existencias" onpaste="return false;">Existencias</label>
@@ -398,7 +450,8 @@
                 //Titulo segun la funcion
                 if (id) {
                     const clienteSelect = abrirModal.querySelector('#existencias');
-                    clienteSelect.disabled = true;
+                    clienteSelect.classList.add('select-disabled');  // Añadir clase para deshabilitar la i
+
 
                     abrirModal.querySelector('.modal-title').textContent = 'Editar Producto';
                     console.log(id)
@@ -407,18 +460,29 @@
                 } else {
                     abrirModal.querySelector('.modal-title').textContent = 'Agregar Producto';
                     const clienteSelect = abrirModal.querySelector('#existencias');
-                    clienteSelect.disabled = false;
+                    clienteSelect.classList.remove('select-disabled');  // Quitar la clase para habilitar la interacción
+                    2
                 }
             })
         }
     </script>
+
+    <style>
+        .select-disabled {
+            pointer-events: none;
+            /* Evita que el usuario pueda interactuar con el select */
+            background-color: #e9ecef;
+            /* Cambia el color de fondo para que parezca deshabilitado */
+            color: #6c757d;
+            /* Cambia el color del texto para parecer deshabilitado */
+        }
+    </style>
 
     <!--Para obtener el id y mandarlo al modal-->
     <script>
         function setProductId(productId, productName) {
             document.getElementById('indice_id').value = productId;
             document.getElementById('producto_nombre').textContent = productName;
-
         }
     </script>
 

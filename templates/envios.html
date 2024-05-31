@@ -29,6 +29,36 @@
     {% endif %}
     {% endwith %}
 
+    {% with no_tiene_apartado = get_flashed_messages(category_filter=["no_tiene_apartado"]) %}
+    {% if no_tiene_apartado %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> El cliente no tiene un apartado, créalo antes
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with envio_creado = get_flashed_messages(category_filter=["envio_creado"]) %}
+    {% if envio_creado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Se ha creado el envio
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    {% with envio_cancelado = get_flashed_messages(category_filter=["envio_cancelado"]) %}
+    {% if envio_cancelado %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Se ha cancelado el envio
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
     <h1 class="inventario__titulo text-center">Clientes con envios</h1>
 
     <!--Alerta de actualizados y eliminados-->
@@ -72,6 +102,7 @@
             </li>
         </ul>
     </div>
+
 
 
 
@@ -286,11 +317,22 @@
                 <form id="agregar_envio" method="POST" action="{{ url_for('agregar_envio')}}">
                     <div class="">
                         <label for="cliente">Cliente:</label>
-                        <select class="form-control " id="cliente" name="cliente" required>
+                        <select class="form-select " id="cliente" name="cliente" required>
                             <!-- Opción por defecto -->
                             <option selected disabled value="">Selecciona una opción</option>
                             {% for client in clientes %}
                             <option value="{{ client[0] }}">{{ client[1] }} {{ client[2] }} </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!--agregado-->
+                    <div class="">
+                        <label for="producto">Prodcuto:</label>
+                        <select class="form-select" id="producto" name="producto" required>
+                            <!-- Opción por defecto -->
+                            <option selected disabled value="">Selecciona una opción</option>
+                            {% for producto in productos %}
+                            <option value="{{ producto[0] }}">{{ producto[1] }}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -332,17 +374,18 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <script src="../static/Js/validar_forms_envios.js"></script><!--Validar forms-->
+                    <!-- <script src="../static/Js/validar_forms_envios.js"></script> -->
 
                     <div class="text-center mt-2">
                         <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
-                        <button type="submit" class="btn btn-dark">Guardar</button>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
                     </div>
                 </form>
                 <style>
                     .form-select, .form-control{
                         margin-bottom: 5px;
                     }
+
                 </style>
             </div>
 
@@ -395,6 +438,7 @@
             console.log("id envio:", id)
 
             const cliente = button.getAttribute('data-bs-cliente')
+            const producto = button.getAttribute('data-bs-producto')
             const calle = button.getAttribute('data-bs-calle')
             const cruzamiento_1 = button.getAttribute('data-bs-cruzamiento_1')
             const cruzamiento_2 = button.getAttribute('data-bs-cruzamiento_2')
@@ -406,6 +450,7 @@
 
             // Seleccionar los campos del formulario
             const modalCliente = abrirModal.querySelector('#cliente')
+            const modalProducto = abrirModal.querySelector('#producto')
             const modalCalle = abrirModal.querySelector('#calle')
             const modalCruzamiento_1 = abrirModal.querySelector('#cruzamiento_1')
             const modalCruzamiento_2 = abrirModal.querySelector('#cruzamiento_2')
@@ -417,6 +462,7 @@
 
             // Acutualizar el formulario con los valores.
             modalCliente.value = cliente
+            modalProducto.value = producto
             modalCalle.value = calle
             modalCruzamiento_1.value = cruzamiento_1
             modalCruzamiento_2.value = cruzamiento_2

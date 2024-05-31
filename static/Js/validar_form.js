@@ -24,17 +24,17 @@ function validateInput(event, maxLength, minValue, maxValue) {
 }
 
 document.getElementById('precio_compra').addEventListener('input', function (e) {
-    validateInput(e, 30, 0, 1000);
+    validateInput(e, 10, 0, 1000);
 });
 
 document.getElementById('precio_venta').addEventListener('input', function (e) {
-    validateInput(e, 30, 0, 1000);
+    validateInput(e, 10, 0, 1000);
 });
 
 document.getElementById('existencias').addEventListener('input', function (e) {
-    validateInput(e, 30, 0, 500);
+    validateInput(e, 10, 0, 500);
 });
 
 document.getElementById('existencias_deseadas').addEventListener('input', function (e) {
-    validateInput(e, 30, 0, 500);
+    validateInput(e, 10, 0, 500);
 });
