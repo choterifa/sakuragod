@@ -177,7 +177,7 @@
                     <div class="">
                         <label for="nombre">Nombre</label>
                         <input type="text" onpaste="return false;" class="form-control my-2" id="nombre" name="nombre"
-                            pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" minlength="3" maxlength="24" required>
+                            pattern="^(?!\s*$)[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" minlength="3" maxlength="24" required>
                     </div>
                     <div class="text-center mt-3 ">
                         <button type="submit" class="btn btn-primary w-100">Guardar</button>

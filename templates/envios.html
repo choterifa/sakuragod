@@ -327,7 +327,7 @@
                     </div>
                     <!--agregado-->
                     <div class="">
-                        <label for="producto">Prodcuto:</label>
+                        <label for="producto">Producto:</label>
                         <select class="form-select" id="producto" name="producto" required>
                             <!-- Opción por defecto -->
                             <option selected disabled value="">Selecciona una opción</option>
@@ -375,6 +375,22 @@
                         </select>
                     </div>
                     <!-- <script src="../static/Js/validar_forms_envios.js"></script> -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Obtener todos los inputs con clase 'form-control'
+                            const inputs = document.querySelectorAll('.form-control');
+
+                            inputs.forEach(input => {
+                                input.addEventListener('input', function () {
+                                    const maxValue = parseInt(input.getAttribute('max'));
+
+                                    if (input.value > maxValue) {
+                                        input.value = maxValue;
+                                    }
+                                });
+                            });
+                        });
+                    </script>
 
                     <div class="text-center mt-2">
                         <button type="reset" id="btn_reset" class="btn btn-secondary">Resetear</button>
@@ -535,7 +551,7 @@
 <div class="toast-container position-fixed bottom-0 end-0 p-4">
     {% for producto in pocos_dias %}
 
-    {% if producto[0] < 0 %} <div class="toast text-bg-danger"> <!--Cambiar color del toast-->
+    {% if producto[0] <= 0 %} <div class="toast text-bg-danger"> <!--Cambiar color del toast-->
         {% else %}
         <div class="toast text-bg-warning">
             {% endif %}

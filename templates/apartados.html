@@ -41,7 +41,7 @@
     {% with apartado_creado = get_flashed_messages(category_filter=["apartado_creado"]) %}
     {% if apartado_creado %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="bi bi-check"></i> Se ha creado un apartado 
+        <i class="bi bi-check"></i> Se ha creado un apartado
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
@@ -51,7 +51,8 @@
     {% with abono_excedido = get_flashed_messages(category_filter=["abono_excedido"]) %}
     {% if abono_excedido %}
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <i class="bi bi-check"></i> El abono inicial no puede exceder o igualar la deuda, no es necesario crear un apartado
+        <i class="bi bi-check"></i> El abono inicial no puede exceder o igualar la deuda, no es necesario crear un
+        apartado
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     <script src="../static/Js/eliminar_alertas.js"></script>
@@ -114,7 +115,7 @@
                 <td style="text-align: center;">{{ indice[7] }}</td>
                 <td>{{ indice[14] }}</td>
                 <!--Seccion de edicion (Editar/Eliminar)-->
-                <td  >
+                <td>
                     <div class="editar__botones">
 
                         <button onclick="setProductId('{{ indice[4] }}', '{{ indice[6] }}')" data-bs-toggle="modal"
@@ -321,22 +322,46 @@
                     </div> -->
                     <div class="">
                         <label for="cantidad">Cantidad</label>
-                        <input type="number" onpaste="return false;" class="form-control" id="cantidad" name="cantidad" min="1" max="5"
-                            placeholder="Max. 5"  required>
+                        <input type="number" onpaste="return false;" class="form-control" id="cantidad" name="cantidad"
+                            min="1" max="5" placeholder="Max. 5" required>
                     </div>
                     <div class="">
                         <label for="abono">Abono Inicial</label>
-                        <input type="number" onpaste="return false;" class="form-control" id="abono" name="abono" min="0" max="3000"
-                            placeholder="" required>
+                        <input type="number" onpaste="return false;" class="form-control" id="abono" name="abono"
+                            min="0" max="3000" placeholder="" required>
                     </div>
 
                     <div class="text-center mt-2">
                         <button type="reset" id="btn_reset" class="btn btn-secondary w-25">Resetear</button>
                         <button type="submit" class="btn btn-primary w-25">Guardar</button>
                     </div>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Validar el campo 'Cantidad'
+                            const cantidadInput = document.getElementById('cantidad');
+                            cantidadInput.addEventListener('input', function () {
+                                const maxValue = parseInt(cantidadInput.getAttribute('max'));
+
+                                if (cantidadInput.value > maxValue) {
+                                    cantidadInput.value = maxValue;
+                                }
+                            });
+
+                            // Validar el campo 'Abono Inicial'
+                            const abonoInput = document.getElementById('abono');
+                            abonoInput.addEventListener('input', function () {
+                                const maxValue = parseInt(abonoInput.getAttribute('max'));
+
+                                if (abonoInput.value > maxValue) {
+                                    abonoInput.value = maxValue;
+                                }
+                            });
+                        });
+                    </script>
 
                     <style>
-                        .form-control, .form-select{
+                        .form-control,
+                        .form-select {
                             margin-bottom: 10px;
 
                         }

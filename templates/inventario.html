@@ -14,11 +14,11 @@
             <li class="breadcrumb-item active" aria-current="page">
                 Productos
             </li>
+
         </ol>
     </nav>
 
 
-    <h1 class="inventario__titulo text-center mx-2">Inventario de productos</h1>
 
     <!--Alerta de actualizados y eliminados-->
     <!-- {% if update %}
@@ -66,7 +66,7 @@
     <script src="../static/Js/eliminar_alertas.js"></script>
     {% endif %}
     {% endwith %}
-    
+
     {% with producto_eliminado = get_flashed_messages(category_filter=["producto_eliminado"]) %}
     {% if producto_eliminado %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -88,6 +88,42 @@
     {% endif %}
     {% endwith %}
 
+    {% with productos_reabastecidos = get_flashed_messages(category_filter=["productos_reabastecidos"]) %}
+    {% if productos_reabastecidos %}
+    <div class="alert alert-primary alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> Felicidades :), productos reabastecidos.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    <!-- {% with productos_noreabastecidos = get_flashed_messages(category_filter=["productos_noreabastecidos"]) %}
+    {% if productos_noreabastecidos %}
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="bi bi-x"></i> La cantidad es menor a lo existente
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %} -->
+
+    {% with precioIncorrecto = get_flashed_messages(category_filter=["precioIncorrecto"]) %}
+    {% if precioIncorrecto %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-check"></i> No puedes agregar un producto con precio de venta menor al de compra
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <script src="../static/Js/eliminar_alertas.js"></script>
+    {% endif %}
+    {% endwith %}
+
+    <h1 class="inventario__titulo text-center mt-5 mb-4">Inventario de productos</h1>
+    <div class="collapse" id="buscador">
+        <input type="search" id="buscarInput" onkeyup="buscarClientes()" placeholder="Buscar clientes..."
+            class="form-control">
+    </div>
+
     <button type="button" class="btn btn-dark my-2 " data-bs-toggle="modal" data-bs-target="#abrirModal"
         data-taskid="0">Nuevo Producto
     </button>
@@ -96,12 +132,18 @@
         data-taskid="0">Ver Faltantes
     </button>
 
-    <button type="button" class="btn btn-secondary my-2 " data-bs-toggle="offcanvas" data-bs-target="#Reabastecer2"
+    <button type="button" class="btn btn-warning my-2 " data-bs-toggle="offcanvas" data-bs-target="#Reabastecer2"
         data-taskid="0">Reabastecer
     </button>
 
+    <button type="button" class="btn btn-primary my-2 " style="display: inline-block; margin-left: 50%; " data-bs-toggle="collapse" data-bs-target="#buscador"
+        data-taskid="0"> <i class="bi bi-search"></i> Buscador
+    </button>
+
+
+
     <!--Nueva tabla-->
-    <table class="table  table-hover table-striped align-middle mt-3">
+    <table id="clientesTabla" class="table  table-hover table-striped align-middle mt-3">
         <thead>
             <tr>
                 <th scope="col">Nombre</th> <!--Columna Encabezados-->
@@ -125,7 +167,7 @@
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td>
                     <div class="editar__botones">
-                        <button type="button" id="editar_btn" class=" btn btn-primary btn-sm btn__editar"
+                        <button type="button" id="editar_btn" class="d-none btn btn-dark btn-sm btn__editar"
                             data-bs-toggle="modal" data-bs-target="#abrirModal" data-bs-id="{{indice[0]}}"
                             data-bs-nombre="{{indice[1]}}" data-bs-compra="{{indice[2]}}" data-bs-venta="{{indice[3]}}"
                             data-bs-ganancia="{{indice[4]}}" data-bs-existencias="{{indice[5]}}"
@@ -165,18 +207,18 @@
             </div>
 
             <div class="modal-body"> <!--Formulario-->
-                <table class="table  table-hover table-striped align-middle">
+                <table class="table  table-hover table-striped-columns align-middle">
                     <thead>
                         <tr>
                             <th scope="col">Nombre</th>
-                            <th scope="col">Faltantes</th>
+                            <th class="bg-warning">Faltantes</th>
                         </tr>
                     </thead>
                     <tbody class="table-group-divider">
                         {% for indice in rellenar_a_deseado %}
                         <tr class="doble_click" style="cursor: pointer;">
                             <td>{{ '-' if indice[1] is none else indice[1]}}</td>
-                            <td>
+                            <td class="bg-warning">
                                 {% if indice[2] is not none and indice[2] < 0 %} Se excede por {{ -indice[2] }} <!--
                                     Quitar el negativo usando el signo menos -->
                                     {% elif indice[2] is none or indice[2] == "" %}
@@ -323,8 +365,8 @@
                             <label for="nombre">Nombre</label>
                             <input data-bs-toggle="tooltip" data-bs-title="Ingresa solo letras y números sin espacios."
                                 data-bs-custom-class="custom-tooltip" data-bs-placement="top" type="text"
-                                onpaste="return false;" class="form-control mb-2" id="nombre" name="nombre"
-                                pattern="^[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" minlength="3" maxlength="25" required>
+                                class="form-control mb-2" id="nombre" name="nombre"
+                                pattern="^(?!\s*$)[a-zA-ZáéíóúÁÉÍÓÚüÜ\s]+$" minlength="3" maxlength="25" required>
                         </div>
                         <div class="">
                             <label for="precio_compra">Precio Compra</label>

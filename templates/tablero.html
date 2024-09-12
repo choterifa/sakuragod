@@ -195,7 +195,56 @@
             </div>
         </div>
     </div>
+<!-- 
+    <button type="button" class="btn btn-dark my-1" data-bs-toggle="modal" data-bs-target="#Dobleclick"
+        data-taskid="0">Agregar Categoria
+    </button> -->
 
+<!-- Modal para ver prodcutos -->
+<div class="modal fade " data-bs-backdrop="static" id="Dobleclick" tabindex="-1">
+
+    <div class="modal-dialog modal-dialog-centered" style="width: 410px;">
+        <div class="modal-content">
+
+            <div class="modal-header"><!--Header-->
+                <h5 class="modal-title">Doble click para editar</h5> 
+                <button type="button" class="btn-close" data-bs-dismiss="modal">
+                </button>
+            </div>
+
+            <div class="modal-body"> <!--Formulario-->
+               <video id="DobleclickVideo" loop src="../static/videos/Dobleclick.mp4"   class="w-100"></video>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Obtener el elemento del video
+        var video = document.getElementById('DobleclickVideo');
+
+        // Esperar 2 segundos antes de empezar a reproducir el video
+        setTimeout(function () {
+            video.play();
+        }, 500); // 2000 ms = 2 segundos
+    });
+</script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Verificar si el modal ya se ha mostrado en esta sesión
+    if (!sessionStorage.getItem('modalShown')) {
+        // Mostrar el modal
+        var myModal = new bootstrap.Modal(document.getElementById('Dobleclick'));
+        myModal.show();
+
+        // Marcar el modal como mostrado en sessionStorage
+        sessionStorage.setItem('modalShown', 'true');
+    }
+});
+</script>
 
     <!--Musica-->
     <!-- <audio id="audio-fondo" autoplay loop>

@@ -26,14 +26,14 @@
     {% endif %}
 
 
-    <h1 class="inventario__titulo text-center">Ventas</h1>
+    <h1 class="inventario__titulo text-center">Registro de Ventas</h1>
 
-    <button type="button" class="btn_agregar btn btn-dark my-2" data-bs-toggle="modal" data-bs-target="#abrirModalVenta"
-        data-taskid="0">Venta directa
+    <button type="button" class="btn_agregar btn btn-danger my-2" data-bs-toggle="modal" data-bs-target="#abrirModalVenta"
+        data-taskid="0">Registrar Venta
     </button>
-
+<!-- 
     <a type="button" href="/apartados" class="btn btn-warning my-2">Apartar producto
-    </a>
+    </a> -->
 
     <!--Nueva tabla-->
     <table class="table  table-hover table-striped align-middle mt-2">
@@ -42,13 +42,13 @@
                 <th scope="col">Nº Venta</th> <!--ID venta el de producto es [1]-->
                 <th scope="col">Producto Vendido</th>
                 <th scope="col">Cantidad</th>
-                <th scope="col">Hora</th>
+                <!-- <th scope="col">Hora</th> -->
                 <th scope="col">Fecha</th>
-                <th scope="col">Monto</th>
+                <th scope="col">Total</th>
                 <!-- <th scope="col">Ganancia</th> -->
                 <!-- <th scope="col">Reinversion</th> -->
                 <th scope="col">Forma de pago</th>
-                <th scope="col">Forma de venta</th><!--10 elementos-->
+                <!-- <th scope="col">Forma de venta</th> -->
                 <th scope="col">Editar</th>
             </tr>
         </thead>
@@ -64,13 +64,13 @@
                 <td>{{ indice[0] }}</td>
                 <td>{{ indice[2] }}</td>
                 <td>{{ indice[3] }}</td>
-                <td>{{ indice[4] }}</td><!--Hora en 12-->
+                <!-- <td>{{ indice[4] }}</td>Hora en 12 -->
                 <td>{{ indice[5] }}</td>
                 <td>{{ indice[6] }}</td>
                 <!-- <td>{{ indice[7] }}</td> -->
                 <!-- <td>{{ indice[8] }}</td> -->
                 <td>{{ indice[10] }}</td>
-                <td>{{ indice[12] }}</td>
+                <!-- <td>{{ indice[12] }}</td> -->
                 <!--Seccion de edicion (Editar/Eliminar)-->
                 <td style="width: 200px;">
                     <div class="editar__botones">
@@ -78,29 +78,20 @@
 
                         <button onclick="setProductId('{{ indice[0] }}')" data-bs-toggle="modal"
                             data-bs-target="#agregarMas" type="button" id="ver__btn"
-                            class="btn border-secondary mas  btn__editar ">Agregar
+                            class="btn btn-dark mas  btn__editar ">Agregar
                             más</button>
 
 
                         <!--pasar idventa, proudcto cantidad-->
                         <button onclick="setProductId2('{{ indice[0] }}', '{{ indice[1] }}', '{{ indice[3] }}')"
                             data-bs-toggle="modal" data-bs-target="#cantidadDevuelta" type="button"
-                            class="btn border-secondary btn__editar devolver"><i
+                            class="btn btn-warning btn__editar devolver"><i
                                 class="bi bi-arrow-counterclockwise"></i>
                         </button>
 
 
-
-                        <!--El que abre el modal-->
-                        <!-- <form action="/marcar_devuelto" method="POST" id="eliminarp">
-                            <input type="hidden" name="id_venta" value="{{indice[0]}} ">
-                            <input type="hidden" name="id_producto" value="{{indice[1]}} ">
-                            <button type="submit" class="btn border-secondary devolver cancelar"><i
-                                    class="bi bi-arrow-counterclockwise"></i></button>
-                        </form> -->
-
                         <style>
-                            .devolver:hover {
+                            /* .devolver:hover {
                                 background-color: #f6c344;
                                 color: white !important;
                                 border-color: rgba(255, 0, 0, 0) !important;
@@ -110,7 +101,7 @@
                                 background-color: #34cc2a;
                                 color: white !important;
                                 border-color: rgba(255, 0, 0, 0) !important;
-                            }
+                            } */
                         </style>
                     </div>
 
@@ -123,9 +114,11 @@
     </table>
 
     <!--Nueva tabla-->
-    <h2 class="inventario__titulo mt-5 ">Devueltos</h2>
+    <br>
+    <br>
+    <h2 class=" mt-5 ">Devueltos</h2>
 
-    <table class="table  table-hover table-striped align-middle mt-2">
+    <table class="table  table-hover table-striped align-middle mt-3">
         <thead>
             <tr>
                 <th scope="col">ID</th> <!--ID venta el de producto es [1]-->
@@ -170,7 +163,7 @@
         <div class="modal-content ">
 
             <div class="modal-header"><!--Header-->
-                <h5 class="modal-title">Generar Venta</h5> <!--id-->
+                <h5 class="modal-title">Registrar Venta</h5> <!--id-->
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                 </button>
             </div>
@@ -179,7 +172,7 @@
                 <form id="taskForm" method="POST" action="{{ url_for('agregar_venta')}}"> <!--Añadir producto o-->
                     <div class="">
                         <label for="cliente">Producto:</label>
-                        <select class="form-control " id="producto" name="producto" required>
+                        <select class="form-select " id="producto" name="producto" required>
                             <option selected disabled value="">Selecciona una opción</option>
                             {% for producto in productos %}
                             <option value="{{ producto[0] }}">{{ producto[1] }} </option>
@@ -188,7 +181,7 @@
                     </div>
                     <div class="">
                         <label for="forma_pago">Forma de pago:</label>
-                        <select class="form-control " id="forma_pago" name="forma_pago" required>
+                        <select class="form-select " id="forma_pago" name="forma_pago" required>
                             <option selected disabled value="">Selecciona una opción</option>
                             {% for forma in forma_pago %}
                             <option value="{{ forma[0] }}">{{ forma[1] }} </option>
@@ -198,13 +191,20 @@
                     <div class="">
                         <label for="cantidad">Cantidad:</label>
                         <input type="number" onpaste="return false;" class="form-control" id="cantidad" name="cantidad"
-                            min="0" max="5" placeholder="Max 5" required>
+                            min="0" max="1" placeholder="Max 1" required>
                     </div>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary">Guardar</button>
                         <button type="reset" class="btn btn-secondary">Resetear</button>
                     </div>
                 </form>
+                <style>
+
+                    .form-control, .form-select{
+                        margin-bottom: 5px;
+                    }
+
+                </style>
             </div>
 
         </div>
@@ -237,7 +237,7 @@
                     <div class="">
                         <label for="cantidad">Cantidad:</label>
                         <input type="number" onpaste="return false;" class="form-control" id="cantidad" name="cantidad"
-                            min="0" max="5" placeholder="Max 5" required>
+                            min="0" max="1" placeholder="Max 1" required>
                     </div>
                     <div class="text-center mt-2">
                         <button type="submit" class="btn btn-primary">Guardar</button>

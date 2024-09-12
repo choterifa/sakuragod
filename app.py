@@ -1,4 +1,3 @@
-from datetime import datetime
 import re
 from flask import request, redirect, url_for
 from flask import (
@@ -24,6 +23,9 @@ app.config["MYSQL_USER"] = config.MYSQL_USER
 app.config["MYSQL_DB"] = config.MYSQL_DB2  # cambio de BD
 app.config["MYSQL_PASSWORD"] = config.MYSQL_PASSWORD
 app.config["SECRET_KEY"] = config.HEX_SEC_KEY
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(
+    minutes=10)  # Duración de la sesión
+
 mysql = MySQL(app)
 
 
@@ -71,6 +73,7 @@ def editar_perfil():
     login = cur.fetchone()
 
     return render_template("editar_perfil.html", login=login)
+
 
 
 @app.route('/editar_login', methods=['POST'])
@@ -276,28 +279,39 @@ def tablero():
         WHERE CURDATE() = Fecha_Venta ;
         """)
         Ganancia_Total = cur.fetchone()[0]
-        # Objetivo del dai
-        cur.execute(
-            "SELECT COALESCE(Objetivo, 0) FROM objetivo_ventas WHERE Fecha = CURDATE()"
-        )
-        objetivo_hoy = cur.fetchone()[0]
+ 
+        try:
+            cur.execute(
+                "SELECT COALESCE(Objetivo, 0) FROM objetivo_ventas WHERE Fecha = CURDATE()"
+            )
+            objetivo_hoy = cur.fetchone()[0]
 
-        # Calcular el porcentaje
-        if objetivo_hoy > 0:
-            porcentaje = (ventas_dia / objetivo_hoy) * 100
-            # Redondear al número entero más próximo
-            porcentaje = round(porcentaje)
-            restante = 100 - porcentaje
-            if restante < 0:
-                restante = 0  # Que no sea negativo
-        else:
+            # Calcular el porcentaje
+            if objetivo_hoy > 0:
+                porcentaje = (ventas_dia / objetivo_hoy) * 100
+                # Redondear al número entero más próx   imo
+                porcentaje = round(porcentaje)
+                restante = 100 - porcentaje
+                if restante < 0:
+                    restante = 0  # Que no sea negativo
+            else:
+                porcentaje = 0
+                restante = 100  # Si el objetivo es cero, el porcentaje restante es 100%
+            
+            print(porcentaje, restante)
+        except Exception as e:
+            # Manejo de excepciones
+            print(f"Error al calcular el porcentaje: {e}")
+            cur.execute(
+                "INSERT INTO objetivo_ventas(Fecha , Objetivo  ) VALUES (CURDATE(), 0);"
+            )
+            mysql.connection.commit()
             porcentaje = 0
-            restante = 100  # Si el objetivo es cero, el porcentaje restante es 100%
-        print(porcentaje, restante)
+            restante = 100  # Valor por defecto en caso de error
 
         cur.close()
         return render_template("tablero.html", Ganancia_Total=Ganancia_Total, ventas_dia_cantidad=ventas_dia_cantidad, restante=restante, porcentaje=porcentaje, email=session["email"], ventas_dia=ventas_dia, dineroEnApartados=dineroEnApartados, clientes=clientes, reeinvertir=reeinvertir, ingresos_del_corte=ingresos_del_corte, ganancias=ganancias,
-                               envios=envios, mas_vendidos=mas_vendidos, apartados=apartados, deudores=deudores, total_producto=total_producto, total_clientes=total_clientes)
+                        envios=envios, mas_vendidos=mas_vendidos, apartados=apartados, deudores=deudores, total_producto=total_producto, total_clientes=total_clientes)
     else:
         return render_template("inicio/iniciar_sesion.html")
 
@@ -1058,8 +1072,7 @@ def apartados():
             apartados.ID_Status,
             status_apartados.Status_Apartado,
             producto.ID_Producto,
-            producto.Nombre,
-            apartados.Cantidad_Comprada
+            producto.Nombre
         FROM
             clientes
             INNER JOIN relacion_c_p_a_e ON relacion_c_p_a_e.ID_Cliente = clientes.ID_Cliente
@@ -1264,11 +1277,13 @@ def abonar_apartado():
 @app.route('/categorias', methods=['GET', 'POST'])
 def categorias():
     if "email" in session:
+        cur = mysql.connection.cursor()
+
+    
         # verProductos = request.args.get('verProductos')
         idCategoria = request.form.get('idcategoria')
         # print("la categora es:", idCategoria)
 
-        cur = mysql.connection.cursor()
         cur.execute("""
         SELECT categorias.ID_C, categorias.Categoria, producto.ID_Producto, producto.Nombre, producto.Existencias
         FROM categorias
@@ -1293,6 +1308,8 @@ def categorias():
         categoria_eliminada = get_flashed_messages(
             category_filter=['categoria_eliminada'])
         return render_template('categorias.html', categoria_eliminada=categoria_eliminada, categoria_editada=categoria_editada, categorias=categorias, verProductos=verProductos, agregar_categoria=agregar_categoria)
+
+
 
     else:
         return render_template("inicio/iniciar_sesion.html")
@@ -1390,6 +1407,7 @@ def iniciar_sesion():
             if existing_email[3] == contraseña:
                 # Contraseña correcta
                 # Crear session email con el email
+                session.permanent = True
                 session["email"] = correo
                 return render_template("inicio/iniciar_sesion.html", user=correo, registration_login=True)
             else:
@@ -1482,9 +1500,16 @@ def agregar_producto():
         existencias_deseadas = request.form['existencias_deseadas'].strip()
         proveedor = request.form['proveedor']
         categoria = request.form['categoria']
+        
+        precio_compra = float(precio_compra)
+        precio_venta = float(precio_venta)
 
         if existencias_deseadas == '':
             existencias_deseadas = None
+
+        if precio_compra >= precio_venta:
+            flash("menor","precioIncorrecto")
+            return redirect(url_for('inventario'))
 
         cur = mysql.connection.cursor()
 
@@ -1543,10 +1568,16 @@ def editar_producto(id):
         existencias_deseadas = request.form['existencias_deseadas']
         proveedor = request.form['proveedor']
         categoria = request.form['categoria']
+        precio_compra = float(precio_compra)
+        precio_venta = float(precio_venta)
 
         if existencias_deseadas == '':
             existencias_deseadas = None
 
+        if precio_compra >= precio_venta:
+            flash("menor","precioIncorrecto")
+            return redirect(url_for('inventario'))
+        
         cur = mysql.connection.cursor()
         try:
             # Verificar si el nuevo nombre del producto ya existe, excluyendo el producto que se está editando
@@ -1583,20 +1614,6 @@ def editar_producto(id):
         return redirect(url_for('inventario'))
 
     return redirect(url_for('inventario'))
-
-
-# @app.route('/reabastecer/<int:id>', methods=['POST'])
-# def reabastecer(id):
-#     cur = mysql.connection.cursor()
-#     if request.method == 'POST':
-#         resurtirCantidad = request.form['resurtirCantidad']
-#         cur.execute(
-#             "UPDATE producto SET  Existencias = %s WHERE ID_Producto = %s",
-#             (resurtirCantidad, id)
-#         )
-#         mysql.connection.commit()
-#         cur.close()
-#     return redirect(url_for('inventario'))
 
 
 @app.route('/reabastecer', methods=['POST'])
@@ -1639,6 +1656,9 @@ def reabastecer():
                     "UPDATE proveedor SET Cantidad_Comprada = Cantidad_Comprada + %s, Monto_Comprado = Monto_Comprado + %s WHERE ID_Proveedor = %s",
                     (cantidad_reabastecida, monto_comprado, id_proveedor)
                 )
+                flash("reabastecido", "productos_reabastecidos")
+            else:
+                flash("reabastecida", "productos_noreabastecidos")
 
         mysql.connection.commit()
         cur.close()
@@ -2043,7 +2063,19 @@ def agregar_cliente():
         apellido_p = request.form['apellido_p'].strip()
         apellido_m = request.form['apellido_m'].strip()
         telefono = request.form['telefono'].strip()
+        
         cur = mysql.connection.cursor()
+        
+        # Validar si ya existe el teléfono
+        cur.execute("""
+            SELECT * FROM clientes 
+            WHERE Celular = %s
+        """, (telefono,))
+        existing_cliente = cur.fetchone()
+
+        if existing_cliente:
+            flash("El teléfono ya esta asociado a un cliente", "errorTelefono")
+            return redirect(url_for('clientes'))
 
         # Validar si ya existe (datos duplicados)
         cur.execute("""
@@ -2299,15 +2331,14 @@ def agregar_envio():
                     END, '-', dia_envio.Dia_Envio), '%Y-%m-%d'), CURDATE())
             """)
             mysql.connection.commit()
-            flash("editado.","envio_creado")
-            
+            flash("editado.", "envio_creado")
+
         else:
             flash("El cliente no tiene un apartado, créalo antes.",
                   "no_tiene_apartado")
             cur.close()
 
     return redirect(url_for('envios'))
-
 
 
 @app.route('/agregar_apartado', methods=['POST'])  # insertar datos
@@ -2503,7 +2534,7 @@ def marcar_cancelado():
             envios.ID_Envios = %s;
     """, (id,))
     mysql.connection.commit()
-    flash("cancelado","envio_cancelado")
+    flash("cancelado", "envio_cancelado")
     cur.close()
     return redirect(url_for('envios'))
 
@@ -2705,9 +2736,8 @@ def ver_productos_categoria():
 def cerrar_sesion():
     if "email" in session:
         session.pop("email")
-        return render_template("inicio/iniciar_sesion.html")
-    else:
-        return redirect(url_for("iniciar_sesion"))
+    return redirect(url_for("iniciar_sesion"))
+
 
 
 if __name__ == '__main__':
